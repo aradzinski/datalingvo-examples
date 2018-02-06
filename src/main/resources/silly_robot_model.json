@@ -1,0 +1,74 @@
+/*
+ * 2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ *       ___      _          __ _
+ *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
+ *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
+ *    / /_// (_| | || (_| / /__| | | | | (_| |\ V / (_) |
+ *   /___,' \__,_|\__\__,_\____/_|_| |_|\__, | \_/ \___/
+ *                                      |___/
+ *
+ * "Silly Robot" example model.
+ */
+{
+    "id": "dl.control.ex",
+    "name": "Silly Robot Example Model",
+    "version": "1.0",
+    "metadata": {
+        "DESCRIPTION": "Silly Robot example model.",
+        "VENDOR_NAME": "DataLingvo, Inc",
+        "VENDOR_URL": "https://www.datalingvo.com",
+        "VENDOR_CONTACT": "Support",
+        "VENDOR_EMAIL": "info@datalingvo.com",
+        "DOCS_URL": "https://www.datalingvo.com"
+    },
+    "examples": [
+        "Turn on the radio",
+        "Turn off the radio",
+        "What is current state of the radio?",
+        "Start the washing machine"
+    ],
+    "elements": [
+        {
+            "id": "ctrl:start",
+            "group": "operation",
+            "synonyms": [
+                "{start|launch|go|{turn|put} on}"
+            ],
+            "metadata": {
+                "DESCRIPTION": "Start command."
+            }
+        },
+        {
+            "id": "ctrl:stop",
+            "group": "operation",
+            "synonyms": [
+                "{stop|halt|abort|{turn|put} off}"
+            ],
+            "metadata": {
+                "DESCRIPTION": "Stop command."
+            }
+        },
+        {
+            "id": "ctrl:state",
+            "group": "operation",
+            "synonyms": [
+                "{state|status|condition|check|verify|review}"
+            ],
+            "metadata": {
+                "DESCRIPTION": "State command."
+            }
+        },
+        {
+            "id": "ctrl:robot",
+            "group": "subject",
+            "synonyms": [
+                "%com.datalingvo.examples.sillyrobot.SillyRobotProvider#selectToken%"
+            ],
+            "metadata": {
+                "DESCRIPTION": "Object to control."
+            }
+        }
+
+    ],
+    "defaultTrivia": "true"
+}

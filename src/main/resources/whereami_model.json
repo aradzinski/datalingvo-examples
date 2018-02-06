@@ -1,0 +1,42 @@
+/*
+ * 2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ *       ___      _          __ _
+ *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
+ *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
+ *    / /_// (_| | || (_| / /__| | | | | (_| |\ V / (_) |
+ *   /___,' \__,_|\__\__,_\____/_|_| |_|\__, | \_/ \___/
+ *                                      |___/
+ *
+ * "Where Am I" example model.
+ */
+{
+    "id": "dl.whereami.ex",
+    "name": "Current GEO Location Example Model",
+    "version": "1.0",
+    "metadata": {
+        "DESCRIPTION": "Current user GEO-location example model.",
+        "VENDOR_NAME": "DataLingvo, Inc",
+        "VENDOR_URL": "https://www.datalingvo.com",
+        "VENDOR_CONTACT": "Support",
+        "VENDOR_EMAIL": "info@datalingvo.com",
+        "DOCS_URL": "https://www.datalingvo.com"
+    },
+    "examples": [
+        "Where am I?",
+        "What's my current position?"
+    ],
+    "elements": [
+        {
+            "id": "wai:where",
+            "synonyms": [
+                "where am i",
+                "where i am",
+                "{what is|*} {my|*} {current|actual|*} {geo|geographical|*} {position|location|coordinates|place}"
+            ],
+            "metadata": {
+                "DESCRIPTION": "Location question."
+            }
+        }
+    ],
+    "defaultTrivia": "true"
+}
