@@ -17,7 +17,7 @@
     <repositories>
         <repository>
             <id>datalingvo</id>
-            <url>http://maven.datalingvo.com/repository/datalingvo/</url>
+            <url>http://www.datalingvo.com:9090/repository/datalingvo/</url>
         </repository>
     </repositories>
 
