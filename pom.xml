@@ -17,7 +17,7 @@
     <repositories>
         <repository>
             <id>datalingvo</id>
-            <url>http://www.datalingvo.com:9091/repository/datalingvo/</url>
+            <url>http://www.datalingvo.com:9090/repository/datalingvo/</url>
         </repository>
     </repositories>
 
