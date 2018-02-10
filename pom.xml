@@ -14,11 +14,6 @@
         <scala.plugin.version>3.3.1</scala.plugin.version>
     </properties>
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.datalingvo</groupId>
-    <artifactId>datalingvo-examples</artifactId>
-    <version>1.0.0</version>
-
     <repositories>
         <repository>
             <id>central</id>
@@ -29,6 +24,11 @@
             <url>http://datalingvo.com:9090/repository/datalingvo/</url>
         </repository>
     </repositories>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.datalingvo</groupId>
+    <artifactId>datalingvo-examples</artifactId>
+    <version>1.0.0</version>
 
     <dependencies>
         <dependency>
