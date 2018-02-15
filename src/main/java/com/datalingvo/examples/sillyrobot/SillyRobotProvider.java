@@ -72,7 +72,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
     private DLQueryResult doState(DLTokenSolverContext ctx) {
         String subj = getSubject(ctx);
 
-        return DLQueryResult.speech(cap(subj) + (mem.contains(subj) ? " is started." : " is not started."));
+        return DLQueryResult.enUsSpeak(cap(subj) + (mem.contains(subj) ? " is started." : " is not started."));
     }
 
     /**
@@ -83,7 +83,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
     private DLQueryResult doStart(DLTokenSolverContext ctx) {
         String subj = getSubject(ctx);
 
-        return DLQueryResult.speech(cap(subj) + (!mem.add(subj) ? " is already started." : " has been started."));
+        return DLQueryResult.enUsSpeak(cap(subj) + (!mem.add(subj) ? " is already started." : " has been started."));
     }
 
     /**
@@ -94,7 +94,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
     private DLQueryResult doStop(DLTokenSolverContext ctx) {
         String subj = getSubject(ctx);
 
-        return DLQueryResult.speech(cap(subj) + (!mem.remove(subj) ? " has not been started." : " has been stopped."));
+        return DLQueryResult.enUsSpeak(cap(subj) + (!mem.remove(subj) ? " has not been started." : " has been stopped."));
     }
 
     /**
