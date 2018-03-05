@@ -1,14 +1,16 @@
-<img src="images/datalingvo2.png" width="350"/>
+<img src="images/datalingvo2.png" width="150"/>
 
-## DataLingvo. How to start.
+## Getting Started
+Welcome to DataLingvo - the easiest way to built advanced natural language
+interface to any device, data source or a service. This repo contains Java and Scala
+examples. In this quick how-to tutorial you'll learn how to get up and running with a
+simple example.
 
-Shortest an easiest way to start working with [DataLingvo](https://datalingvo.com) is configuring and start `HelloWorld` example.
-
-Required tools and skills:
- - Java 8 and maven 3x (tested under maven 3.5.2) must be installed.
- - You should be able to create java project based on maven configuration file using any IDE (IDEA, Eclipse etc)
-
-It takes 3-5 minutes and includes following steps:
+### Prerequisites
+Here's the list of tools and basic skills that you will need to get started with DataLingvo:
+ - DataLingvo uses Java and you need to have <a target=_new href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java SE Runtime Environment</a> (JRE) ver. 8 or later installed.
+ - You'll need <a target=_ href="https://git-scm.com/downloads">Git</a> and <a target=_ href="https://maven.apache.org/install.html">Maven</a> to be installed as well.
+ - Know how to create Maven-based project in your favorite Java IDE.
 
 ### 1. Registration
  - Register user in [DataLingvo](https://datalingvo.com).
