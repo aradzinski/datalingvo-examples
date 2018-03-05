@@ -63,34 +63,10 @@ start asking questions:
  - Click `Add` button.
  - **NOTE:** first data source will be automatically enabled and selected.
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-
-### 5. Configuring datasource 
- - Go back to `DataLingvo` console [Admin studio](https://datalingvo.com/client/src/datalingvo.html#/studio)
- - Click button `Add datasource`
- - Set any preferable `Name` and `Description` in these fields. 
- - Select `Model`.
- - `Configuration` field leave empty. 
- - Click button `Add`.
-Added datasource should be appear in the table `Data Sources`. Click `Select` button to set it active. 
-
-### 6. Ask first question 
- - Go to the page [Ask](https://datalingvo.com/client/src/datalingvo.html#/ask) and type any test question. 
- For example: *`test question`*.
- - After few second you should receive response `Hello World!`.
-
-So, your first example works fine.
-
-Continue with other examples of cloned project `datalingvo-examples` and [Developers guide](TODO:LINK!).		
+### Ask Questions
+Everything's ready - just go head and start exploring:
+ - Go to [home](https://datalingvo.com/client/src/datalingvo.html#/ask) page and ask the question:
+<img src="images/howto1.png" width="262px">
+ - You should get the following answer:
+<img src="images/howto2.png" width="620px">
 
