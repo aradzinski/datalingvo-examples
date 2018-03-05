@@ -70,5 +70,10 @@ Everything's ready - just go head and start exploring:
 
  - You should get the following answer: 
 <img src="images/howto2.png" width="620px">
+
+### Explore!
+Now that you have the basic example running you can explore all other examples in the
+project. Configure and run them exactly the same way and head over to
+[Developers Guide](https://datalingvo.com/client/src/datalingvo.html#/devguide) for in-depth explanations.
  
 
