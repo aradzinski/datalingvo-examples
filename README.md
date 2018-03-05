@@ -29,7 +29,7 @@ $ git clone https://github.com/aradzinski/datalingvo-examples.git
 ### Get Company Probe Token
 To configure your example you'll need a <b>secret probe token</b> that has been created and
 associated with your company. Here's how to get it:
- - Go to https://www.datalingvo.com and [sign in](https://datalingvo.com/client/src/datalingvo.html#/signin).
+ - Go to [www.datalingvo.com](https://www.datalingvo.com) and [sign in](https://datalingvo.com/client/src/datalingvo.html#/signin).
  - Open up [Account](https://datalingvo.com/client/src/datalingvo.html#/account) page that can found by clicking on the avatar at the top right corner of your browser window.
  - Scroll down to the <b>Data Probe</b> / <b>Probe Token</b> section.
  - Click `Show Probe Token` button.</li>
@@ -52,7 +52,16 @@ any user questions. Lets create Maven-based project, configure and run it:
     10:07:20 INFO  Down-link 'downlink.datalingvo.com:80' established.
     10:07:23 INFO  Up-link 'uplink.datalingvo.com:80' established.
     ``` 
- 
+
+### Adding Data Source
+At this point you have a running local data probe that is connected to DataLingvo servers.
+All you have to do now is to add a data source in the [Admin Studio](https://datalingvo.com/client/src/datalingvo.html#/studio) and
+start asking questions:
+ - Go back to [www.datalingvo.com](https://www.datalingvo.com) and open up [Admin Studio](https://datalingvo.com/client/src/datalingvo.html#/studio) (top navbar menu).
+ - Navigate down to *Data Sources* and click `Add Data Source` button.
+ - Set any *Name* and *Description* and select 'Hello World Example' model.
+ - Click `Add` button.
+ - *NOTE:* first data source will be automatically enabled and selected.
  
  
  
