@@ -41,8 +41,8 @@ any user questions. Lets create Maven-based project, configure and run it:
  - Create Maven project based on `pom.xml` using your favorite Java IDE.
  - Create *Run Configuration* for `HelloWorldProbeRunner` class.
  - Specify two system properties for that configuration:
- -- `DATALINGVO_PROBE_TOKEN`=`your_probe_token`
- -- `DATALINGVO_PROBE_ID`=`hello.world`
+   - `DATALINGVO_PROBE_TOKEN`=`your_probe_token`
+   - `DATALINGVO_PROBE_ID`=`hello.world`
  - Start `HelloWorldProbeRunner` example and ensure that you get the output that looks like this:
     ```shell
     +--------------------------+
