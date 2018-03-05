@@ -34,24 +34,38 @@ associated with your company. Here's how to get it:
  - Scroll down to the <b>Data Probe</b> / <b>Probe Token</b> section.
  - Click `Show Probe Token` button.</li>
  - Click `Copy` button to save your probe token into the clipboard. You should store it securely in a safe place.
-
-### 4. Configuring and run `HelloWorld` example runner
- - Create `datalingvo-examples` project based on pom.xml file of cloned project using any IDE like IDEA or Eclipse and build it.
- - Configure VM options of 'HelloWorld' example (class: `com.datalingvo.examples.helloworld.HelloWorldProbeRunner`)
  
-Required  VM options:
-  - DATALINGVO_PROBE_TOKEN=\<TOKEN>
-  - DATALINGVO_PROBE_EMAIL=\<EMAIL> 
-  - DATALINGVO_PROBE_ID=\<ID>
-   
-where 
- - \<TOKEN> - company secret token, which was copied in the p. `2. Getting company secret token`
- - \<EMAIL> is your email which used for registration in `DatLingvo` system.
- - \<ID> - unique identifier of probe. Set is as any value now.
+### Run 'HelloWorld' Data Probe
+We are going to use *HelloWorld* example, located in `com.datalingvo.examples.helloworld` package, that simply answers 'Hello World' for
+any user questions. Lets create Maven-based project, configure and run it:
+ - Create Maven project based on `pom.xml` using your favorite Java IDE.
+ - Create *Run Configuration* for `HelloWorldProbeRunner` class.
+ - Specify two system properties for that configuration:
+ -- `DATALINGVO_PROBE_TOKEN`=`your_probe_token`
+ -- `DATALINGVO_PROBE_ID`=`hello.world`
+ - Start `HelloWorldProbeRunner` example and ensure that you get the output that looks like this:
+    ```shell
+    +--------------------------+
+    | Probe started [2.05 sec] |
+    +--------------------------+
+    
+    10:07:20 INFO  Down-link 'downlink.datalingvo.com:80' established.
+    10:07:23 INFO  Up-link 'uplink.datalingvo.com:80' established.
+    ``` 
  
-Example of configured VM options: -DDATALINGVO_PROBE_TOKEN=key-content -DDATALINGVO_PROBE_EMAIL=your-email.gmail.com  -DDATALINGVO_PROBE_ID=helloworld.id
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
-Run and be sure that it started without errors and warnings. 
 
 ### 5. Configuring datasource 
  - Go back to `DataLingvo` console [Admin studio](https://datalingvo.com/client/src/datalingvo.html#/studio)
