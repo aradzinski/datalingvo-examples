@@ -1,3 +1,5 @@
+<img src="images/datalingvo2.png" width="350"/>
+
 ## DataLingvo. How to start.
 
 Shortest an easiest way to start working with [DataLingvo](https://datalingvo.com) is configuring and start `HelloWorld` example.
