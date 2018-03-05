@@ -8,12 +8,12 @@ simple example.
 
 ### Prerequisites
 Here's the list of tools and basic skills that you will need to get started with DataLingvo:
- - DataLingvo uses Java and you need to have <a target=_new href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java SE Runtime Environment</a> (JRE) ver. 8 or later installed.
- - You'll need <a target=_ href="https://git-scm.com/downloads">Git</a> and <a target=_ href="https://maven.apache.org/install.html">Maven</a> to be installed as well.
+ - DataLingvo uses Java and you need to have [Java SE Runtime Environment](http://www.oracle.com/technetwork/java/javase/downloads/index.html) (JRE) ver. 8 or later installed.
+ - You'll need [Git]("https://git-scm.com/downloads) and [Maven](https://maven.apache.org/install.html) to be installed as well.
  - Know how to create Maven-based project in your favorite Java IDE.
 
 ### Create Account
-If you haven't done it already go ahead and [sign up]()https://www.datalingvo.com/client/src/datalingvo.html#/signup)
+If you haven't done it already go ahead and [sign up](https://www.datalingvo.com/client/src/datalingvo.html#/signup)
 with DataLingvo to create your <b>free account.</b> All newly created accounts automatically
 get administrative privileges. When signing in for the first time you'll be asked to change
 your temporary password.
