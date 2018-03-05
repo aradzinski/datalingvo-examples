@@ -67,6 +67,7 @@ start asking questions:
 Everything's ready - just go head and start exploring:
  - Go to [home](https://datalingvo.com/client/src/datalingvo.html#/ask) page and ask the question: 
 <img src="images/howto1.png" width="262px">
+
  - You should get the following answer: 
 <img src="images/howto2.png" width="620px">
  
