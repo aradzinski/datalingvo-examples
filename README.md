@@ -14,7 +14,7 @@ Here's the list of tools and basic skills that you will need to get started with
 
 ### Create Account
 If you haven't done it already go ahead and [sign up](https://www.datalingvo.com/client/src/datalingvo.html#/signup)
-with DataLingvo to create your <b>free account.</b> All newly created accounts automatically
+with DataLingvo to create your **free account.** All newly created accounts automatically
 get administrative privileges. When signing in for the first time you'll be asked to change
 your temporary password.
 
@@ -31,15 +31,15 @@ To configure your example you'll need a <b>secret probe token</b> that has been 
 associated with your company. Here's how to get it:
  - Go to [www.datalingvo.com](https://www.datalingvo.com) and [sign in](https://datalingvo.com/client/src/datalingvo.html#/signin).
  - Open up [Account](https://datalingvo.com/client/src/datalingvo.html#/account) page that can found by clicking on the avatar at the top right corner of your browser window.
- - Scroll down to the <b>Data Probe</b> / <b>Probe Token</b> section.
+ - Scroll down to the **Data Probe** / **Probe Token** section.
  - Click `Show Probe Token` button.</li>
  - Click `Copy` button to save your probe token into the clipboard. You should store it securely in a safe place.
  
 ### Run 'HelloWorld' Data Probe
-We are going to use *HelloWorld* example, located in `com.datalingvo.examples.helloworld` package, that simply answers 'Hello World' for
+We are going to use **HelloWorld** example, located in `com.datalingvo.examples.helloworld` package, that simply answers 'Hello World' for
 any user questions. Lets create Maven-based project, configure and run it:
  - Create Maven project based on `pom.xml` using your favorite Java IDE.
- - Create *Run Configuration* for `HelloWorldProbeRunner` class.
+ - Create **Run Configuration** for `HelloWorldProbeRunner` class.
  - Specify two system properties for that configuration:
    - `DATALINGVO_PROBE_TOKEN`=`your_probe_token`
    - `DATALINGVO_PROBE_ID`=`hello.world`
@@ -58,10 +58,10 @@ At this point you have a running local data probe that is connected to DataLingv
 All you have to do now is to add a data source in the [Admin Studio](https://datalingvo.com/client/src/datalingvo.html#/studio) and
 start asking questions:
  - Go back to [www.datalingvo.com](https://www.datalingvo.com) and open up [Admin Studio](https://datalingvo.com/client/src/datalingvo.html#/studio) (top navbar menu).
- - Navigate down to *Data Sources* and click `Add Data Source` button.
- - Set any *Name* and *Description* and select 'Hello World Example' model.
+ - Navigate down to **Data Sources** and click `Add Data Source` button.
+ - Set any **Name** and **Description** and select 'Hello World Example' model.
  - Click `Add` button.
- - *NOTE:* first data source will be automatically enabled and selected.
+ - **NOTE:** first data source will be automatically enabled and selected.
  
  
  
