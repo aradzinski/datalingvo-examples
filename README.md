@@ -12,10 +12,29 @@ Here's the list of tools and basic skills that you will need to get started with
  - You'll need <a target=_ href="https://git-scm.com/downloads">Git</a> and <a target=_ href="https://maven.apache.org/install.html">Maven</a> to be installed as well.
  - Know how to create Maven-based project in your favorite Java IDE.
 
-### 1. Registration
- - Register user in [DataLingvo](https://datalingvo.com).
- 
-Note please that all next steps accessible only for administrative users. 
+### Create Account
+If you haven't done it already go ahead and
+<a target=_ href="https://www.datalingvo.com/client/src/datalingvo.html#/signup">sign up</a>
+with DataLingvo to create your <b>free account.</b> All newly created accounts automatically
+get administrative privileges. When signing in for the first time you'll be asked to change
+your temporary password.
+
+### Clone This Project
+Clone this project to a local folder:
+```shell
+$ mkdir datalingvo
+$ cd datalingvo
+$ git clone https://github.com/aradzinski/datalingvo-examples.git
+```
+
+### Get Company Probe Token
+To configure your example you'll need a <b>secret probe token</b> that has been created and
+associated with your company. Here's how to get it:
+ - Go to <a target=_ href="https://www.datalingvo.com">www.datalingvo.com</a> and <a target=_ href="https://datalingvo.com/client/src/datalingvo.html#/signin">sign in</a>.
+ - Open up <a href="https://datalingvo.com/client/src/datalingvo.html#/account">Account</a> page that can found by clicking on the avatar at the top right corner of your browser window.
+ - Scroll down to the <b>Data Probe</b> / <b>Probe Token</b> section.
+ - Click 'Show Probe Token' button.</li>
+ - Click 'Copy' button to save your probe token into the clipboard. You should store it securely in a safe place.
 
 ### 2. Getting company secret token
  - [Login](https://datalingvo.com/client/src/datalingvo.html#/signin) into the system. 
@@ -23,15 +42,6 @@ Note please that all next steps accessible only for administrative users.
  - Scroll to the `Data Probe` chapter.
  - Click `Show token` button. 
  - Click `Copy` button and save copied to the clipboard key into your secret file. 
-
-### 3. Getting `datalingvo-examples` project 
- - Clone project `datalingvo-examples` on your local machine from `https://github.com/aradzinski/datalingvo-examples.git`
-  
-Example for command line:
->cd<br/> 
->mkdir datalingvo-examples<br/> 
->cd datalingvo-examples<br/> 
->git clone https://github.com/aradzinski/datalingvo-examples.git .
 
 ### 4. Configuring and run `HelloWorld` example runner
  - Create `datalingvo-examples` project based on pom.xml file of cloned project using any IDE like IDEA or Eclipse and build it.
