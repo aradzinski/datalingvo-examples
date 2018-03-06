@@ -87,8 +87,8 @@ class EchoProvider extends DLSingleModelProviderAdapter {
       * @return Converted value.
       */
     private def mkMapJson(map: Map[String, java.io.Serializable]): String =
-    // Skip very long line keys for prettier display...
-    // Is this necessary?
+        // Skip very long line keys for prettier display...
+        // Is this necessary?
         map.toList.filter(p ⇒ p._1 != "AVATAR_URL" && p._1 != "USER_AGENT").
             sortBy(_._1).map(t ⇒ s""""${t._1}": ${mkJsonVal(t._2)}""").mkString("{", ",", "}")
     
@@ -118,7 +118,7 @@ class EchoProvider extends DLSingleModelProviderAdapter {
       * @return JSON presentation of data source.
       */
     private def mkTokenJson(tok: DLToken): String =
-    // Hand-rolled JSON for simplicity...
+        // Hand-rolled JSON for simplicity...
         s"""
            | {
            |    "id": ${mkJsonVal(tok.getId)},
