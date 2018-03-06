@@ -31,6 +31,7 @@ class ChatProvider extends DLSingleModelProviderAdapter {
         MODEL_ID,
         // Using inline JSON model.
         DLModelBuilder.newJsonStringModel(
+            // Hand-rolled JSON for simplicity...
             s"""
                | {
                |    "id": "$MODEL_ID",
