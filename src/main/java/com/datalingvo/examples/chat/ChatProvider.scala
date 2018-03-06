@@ -55,6 +55,6 @@ class ChatProvider extends DLSingleModelProviderAdapter {
             // Query function sends any user input to curation.
             .setQueryFunction((_: DLQueryContext) ⇒ { throw new DLCuration("Please curate!") }
         )
-            .build()
+        .build()
     )
 }

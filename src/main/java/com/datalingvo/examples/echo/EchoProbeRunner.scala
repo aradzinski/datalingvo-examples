@@ -1,5 +1,5 @@
 /*
- * 2013-2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ * 2014-2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
  *       ___      _          __ _
  *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
  *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
@@ -13,16 +13,26 @@ package com.datalingvo.examples.echo
 import com.datalingvo.probe.dev.{DLProbeConfig, DLProbeDevApp}
 
 /**
-  * In-process probe runner for echo model.
+  * In-process probe runner for this example.
   * <p>
   * Make sure to setup these system properties:
   * <ul>
-  *     <li><code>DATALINGVO_PROBE_ID</code> with probe ID (any user defined name).</li>
-  *     <li><code>DATALINGVO_PROBE_TOKEN</code> with probe token (see admin page).</li>
+  *     <li>
+  *         <code>DATALINGVO_PROBE_ID</code>=<code>probe ID</code>
+  *         (any user defined name).
+  *     </li>
+  *     <li>
+  *         <code>DATALINGVO_PROBE_TOKEN</code>=<code>probe token</code>
+  *         (see <a href="https://datalingvo.com/client/src/datalingvo.html#/account">Account</a> page).
+  *     </li>
   * </ul>
   */
 object EchoProbeRunner extends App {
-    val exitCode = DLProbeDevApp.start(new DLProbeConfig(new EchoProvider()))
+    // Create probe configuration with the provider instance.
+    val cfg = new DLProbeConfig(new EchoProvider())
+    
+    // Start probe and wait synchronously for its exit code.
+    val exitCode = DLProbeDevApp.start(cfg)
     
     System.exit(exitCode)
 }

@@ -1,5 +1,5 @@
 /*
- * 2013-2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ * 2014-2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
  *       ___      _          __ _
  *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
  *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
@@ -18,9 +18,14 @@ import scala.collection.JavaConverters._
 
 /**
   * Echo example model provider.
+  * <p>
+  * This example for any user input replies with JSON representation query context
+  * corresponding to that input. This is a simple demonstration of the JSON output
+  * and all DataLingvo provided information that a user defined model can operate on.
   */
 @DLActiveModelProvider
 class EchoProvider extends DLSingleModelProviderAdapter {
+    // Any immutable user defined ID.
     private final val MODEL_ID = "dl.echo.ex"
     
     /**
@@ -29,6 +34,7 @@ class EchoProvider extends DLSingleModelProviderAdapter {
       * @param s String to escape.
       * @return Escaped string.
       */
+    // TODO: instead of coding it here - borrow it from some well known library...
     def escapeJson(s: String): String = {
         val len = s.length
         
@@ -61,9 +67,10 @@ class EchoProvider extends DLSingleModelProviderAdapter {
     }
     
     /**
+      * Converts Java serializable into JSON value.
       *
-      * @param v
-      * @return
+      * @param v Value to convert.
+      * @return Converted value.
       */
     private def mkJsonVal(v: java.io.Serializable): String =
         if (v == null)
@@ -74,24 +81,27 @@ class EchoProvider extends DLSingleModelProviderAdapter {
             s""""${escapeJson(v.toString)}""""
     
     /**
+      * Converts Java map into JSON value.
       *
-      * @param map
-      * @return
+      * @param map Map to convert.
+      * @return Converted value.
       */
     private def mkMapJson(map: Map[String, java.io.Serializable]): String =
-        // Skip very long line keys for prettier display...
-        // Is this necessary?
+    // Skip very long line keys for prettier display...
+    // Is this necessary?
         map.toList.filter(p ⇒ p._1 != "AVATAR_URL" && p._1 != "USER_AGENT").
             sortBy(_._1).map(t ⇒ s""""${t._1}": ${mkJsonVal(t._2)}""").mkString("{", ",", "}")
     
     /**
-      * 
-      * @param ctx
-      * @return
+      * Makes JSON presentation of data source from given query context.
+      *
+      * @param ctx Query context.
+      * @return JSON presentation of data source.
       */
     private def mkDataSourceJson(ctx: DLQueryContext): String = {
         val ds = ctx.getDataSource
         
+        // Hand-rolled JSON for simplicity...
         s"""
            | {
            |    "name": ${mkJsonVal(ds.getName)},
@@ -102,11 +112,13 @@ class EchoProvider extends DLSingleModelProviderAdapter {
     }
     
     /**
+      * Makes JSON presentation of the given token.
       *
-      * @param tok
-      * @return
+      * @param tok A token.
+      * @return JSON presentation of data source.
       */
-    private def mkTokenJson(tok: DLToken): String = {
+    private def mkTokenJson(tok: DLToken): String =
+    // Hand-rolled JSON for simplicity...
         s"""
            | {
            |    "id": ${mkJsonVal(tok.getId)},
@@ -120,16 +132,17 @@ class EchoProvider extends DLSingleModelProviderAdapter {
            |    "metadata": ${mkMapJson(tok.getMetadata.asScala.toMap)}
            | }
          """.stripMargin
-    }
-
+    
     /**
+      * Makes JSON presentation of the NLP sentence from given query context.
       *
-      * @param ctx
-      * @return
+      * @param ctx Query context.
+      * @return JSON presentation of NLP sentence.
       */
     private def mkSentenceJson(ctx: DLQueryContext): String = {
         val sen = ctx.getSentence
         
+        // Hand-rolled JSON for simplicity...
         s"""
            | {
            |    "metadata": ${mkMapJson(sen.getMetadata.asScala.toMap)},
@@ -139,28 +152,30 @@ class EchoProvider extends DLSingleModelProviderAdapter {
            | }
          """.stripMargin
     }
-
+    
     setup(
         MODEL_ID,
+        // Using inline JSON model.
         DLModelBuilder.newJsonStringModel(
             s"""
-              | {
-              |    "id": "$MODEL_ID",
-              |    "name": "Echo Example Model",
-              |    "version": "1.0",
-              |    "metadata": {
-              |        "DESCRIPTION": "Echo example model.",
-              |        "VENDOR_NAME": "DataLingvo, Inc",
-              |        "VENDOR_URL": "https://www.datalingvo.com",
-              |        "VENDOR_CONTACT": "Support",
-              |        "VENDOR_EMAIL": "info@datalingvo.com",
-              |        "DOCS_URL": "https://www.datalingvo.com",
-              |        "ALLOW_NO_USER_TOKENS": true
-              |    },
-              |    "defaultTrivia": "false"
-              | }
+               | {
+               |    "id": "$MODEL_ID",
+               |    "name": "Echo Example Model",
+               |    "version": "1.0",
+               |    "metadata": {
+               |        "DESCRIPTION": "Echo example model.",
+               |        "VENDOR_NAME": "DataLingvo, Inc",
+               |        "VENDOR_URL": "https://www.datalingvo.com",
+               |        "VENDOR_CONTACT": "Support",
+               |        "VENDOR_EMAIL": "info@datalingvo.com",
+               |        "DOCS_URL": "https://www.datalingvo.com",
+               |        "ALLOW_NO_USER_TOKENS": true
+               |    },
+               |    "defaultTrivia": "false"
+               | }
             """.stripMargin)
             .setQueryFunction((ctx: DLQueryContext) ⇒ {
+                // Hand-rolled JSON for simplicity...
                 DLQueryResult.json(
                     s"""
                        |{
