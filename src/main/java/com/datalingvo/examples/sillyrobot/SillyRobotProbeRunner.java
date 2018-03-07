@@ -15,21 +15,32 @@ import com.datalingvo.probe.dev.DLProbeConfig;
 import com.datalingvo.probe.dev.DLProbeDevApp;
 
 /**
- * In-process probe runner for "Silly Robot" model.
+ * In-process probe runner for this example.
  * <p>
  * Make sure to setup these system properties:
  * <ul>
- *     <li>{@code DATALINGVO_PROBE_ID} with probe ID (any user defined name).</li>
- *     <li>{@code DATALINGVO_PROBE_TOKEN} with probe token (see admin page).</li>
+ *     <li>
+ *         <code>DATALINGVO_PROBE_ID</code>=<code>probe ID</code>
+ *         (any user defined name).
+ *     </li>
+ *     <li>
+ *         <code>DATALINGVO_PROBE_TOKEN</code>=<code>probe token</code>
+ *         (see <a href="https://datalingvo.com/client/src/datalingvo.html#/account">Account</a> page).
+ *     </li>
  * </ul>
  */
 public class SillyRobotProbeRunner {
     /**
+     * In-process probe entry point.
      *
      * @param args Command like arguments (none are required).
      */
     public static void main(String[] args) throws DLException {
-        int exitCode = DLProbeDevApp.start(new DLProbeConfig(new SillyRobotProvider()));
+        // Create probe configuration with the provider instance.
+        DLProbeConfig cfg = new DLProbeConfig(new SillyRobotProvider());
+
+        // Start probe and wait synchronously for its exit code.
+        int exitCode = DLProbeDevApp.start(cfg);
 
         System.exit(exitCode);
     }

@@ -21,6 +21,10 @@ import java.util.stream.*;
 
 /**
  * Silly Robot example model provider.
+ * <p>
+ * This simple example provides the model that allows you to "start" and "stop"
+ * arbitrary objects. You can say "start the car", "stop the car", or "can you turn on a washing machine?".
+ * The model will voice-reply the acknowledgement of the operation: "car has been started", etc.
  */
 @DLActiveModelProvider
 public class SillyRobotProvider extends DLSingleModelProviderAdapter {
@@ -28,72 +32,93 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
     private final Set<String> mem = new HashSet<>();
 
     /**
+     * Since the model operates on any arbitrary object we provide this method that is called
+     * to determine the model's element (instead of providing them via simple synonyms which is quite
+     * impossible for arbitrary objects). Even though this is a pretty laborious way to get elements,
+     * in some cases this is the only way out.
+     * <p>
+     * Note that this method is referenced in the JSON model configuration - that's how DataLingvo
+     * knows to call this method to parse input string for specific element.
      *
-     * @param toks
-     * @return
+     * @param toks Set of tokens to check of they constitute an element.
+     * @return {@code true} if all these tokens represent a known element for this model.
      */
     public static Boolean selectToken(List<DLElementSelectorToken> toks) {
+        // Filter all stopwords out.
         List<DLElementSelectorToken> all = toks.stream().filter(p -> !p.isStopWord()).collect(Collectors.toList());
-
+        // Gets all nouns.
         List<DLElementSelectorToken> nouns = all.stream().filter(DLPosBase::isNoun).collect(Collectors.toList());
+        // Get all adjectives.
         List<DLElementSelectorToken> adjs = all.stream().filter(DLPosBase::isAdjective).collect(Collectors.toList());
 
-        // Required: one optional adjective and one mandatory noun.
+        // Require one optional adjective and one mandatory noun.
         if (nouns.size() != 1 || adjs.size() > 1 || nouns.size() + adjs.size() != all.size())
             return false;
-        
+
         // If there is an adjective - it should be before the noun.
         return adjs.isEmpty() || all.indexOf(adjs.get(0)) < all.indexOf(nouns.get(0));
     }
 
     /**
+     * A shortcut to string capitalization.
      *
-     * @param s
-     * @return
+     * @param s String to capitalize.
+     * @return Capitalized string.
      */
     private String cap(String s) {
         return StringUtils.capitalize(s);
     }
 
     /**
+     * Gets the subject out of the solver context (1st token in the 2nd term - see solver definition).
+     * The subject is what technically found by {@link #selectToken(List)} method.
      *
-     * @param ctx
-     * @return
+     * @param ctx Solver context.
+     * @return Subject of the input string.
      */
     private String getSubject(DLTokenSolverContext ctx) {
         return ctx.getToken(1, 0).getNormalizedText();
     }
 
     /**
+     * Callback on state inquiry.
      *
-     * @param ctx
-     * @return
+     * @param ctx Solver context.
+     * @return Query result.
      */
     private DLQueryResult doState(DLTokenSolverContext ctx) {
+        // Subject of the sentence.
         String subj = getSubject(ctx);
 
+        // US English voice reply.
         return DLQueryResult.enUsSpeak(cap(subj) + (mem.contains(subj) ? " is started." : " is not started."));
     }
 
     /**
+     * Callback on start inquiry.
      *
-     * @param ctx
-     * @return
+     * @param ctx Solver context.
+     * @return Query result.
      */
     private DLQueryResult doStart(DLTokenSolverContext ctx) {
+        // Subject of the sentence.
         String subj = getSubject(ctx);
 
+        // US English voice reply.
         return DLQueryResult.enUsSpeak(cap(subj) + (!mem.add(subj) ? " is already started." : " has been started."));
     }
 
     /**
+     * Callback on stop inquiry.
      *
-     * @param ctx
-     * @return
+     * @param ctx Solver context.
+     * @return Query result.
      */
     private DLQueryResult doStop(DLTokenSolverContext ctx) {
+        // Subject of the sentence.
         String subj = getSubject(ctx);
 
+        // US English voice reply.
         return DLQueryResult.enUsSpeak(cap(subj) + (!mem.remove(subj) ? " has not been started." : " has been stopped."));
     }
 
@@ -105,28 +130,37 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
     public SillyRobotProvider() throws DLException {
         String path = DLModelBuilder.classPathFile("silly_robot_model.json");
 
+        // Create default token solver for intent-based matching.
         DLTokenSolver solver = new DLTokenSolver();
 
-        BiConsumer<String, IntentCallback> idNounMaker =
-            (verb, f) ->
+        // Lambda for adding intent to the solver.
+        BiConsumer<String, IntentCallback> intentMaker =
+            (id, f/* Callback. */) ->
                 solver.addIntent(
                     new INTENT(
                         5, // Max unused words count.
-                        // Index 0: non-interactive term that is either state, start or stop.
-                        new TERM(new RULE("id", "==", "ctrl:" + verb), 1, 1),
-                        // Index 1: interactive object term.
-                        new TERM("an object to " + verb, new RULE("id", "==", "ctrl:robot"), 1, 1)
+                        // Term idx=0:
+                        // A non-interactive term that is either 'state', 'start' or 'stop'.
+                        // ID of the element should be 'ctrl:start', 'ctrl:state', or 'ctrl:stop'.
+                        new TERM(new RULE("id", "==", "ctrl:" + id), 1, 1),
+                        // Term idx=1:
+                        // An interactive object term. If it's missing the system will ask for it.
+                        // ID of the element should be 'ctrl:subject'
+                        new TERM("an object to " + id, new RULE("id", "==", "ctrl:subject"), 1, 1)
                     ),
                     f
                 );
 
-        idNounMaker.accept("state", this::doState);
-        idNounMaker.accept("start", this::doStart);
-        idNounMaker.accept("stop", this::doStop);
+        // Add three intents for 'state', 'start' and 'stop' commands.
+        intentMaker.accept("state", this::doState);
+        intentMaker.accept("start", this::doStart);
+        intentMaker.accept("stop", this::doStop);
 
+        // Load model form JSON configuration and set query function implementation based
+        // on intent-based token solver.
         DLModel model = DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build();
 
-        // Initialize adapter.
+        // Initialize adapter with constructed model.
         setup("dl.control.ex", model);
     }
 }

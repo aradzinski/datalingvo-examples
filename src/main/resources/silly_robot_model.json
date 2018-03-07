@@ -59,7 +59,7 @@
             }
         },
         {
-            "id": "ctrl:robot",
+            "id": "ctrl:subject",
             "group": "subject",
             "synonyms": [
                 "%com.datalingvo.examples.sillyrobot.SillyRobotProvider#selectToken%"
