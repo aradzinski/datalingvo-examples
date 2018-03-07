@@ -8,7 +8,7 @@
  *                                      |___/
  */
 
-package com.datalingvo.examples.time.cities;
+package com.datalingvo.examples.misc.geo.cities;
 
 /**
  * City data object.

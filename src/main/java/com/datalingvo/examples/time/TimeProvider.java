@@ -1,5 +1,5 @@
 /*
- * 2013-2015 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ * 2014-2015 Copyright (C) DataLingvo, Inc. All Rights Reserved.
  *       ___      _          __ _
  *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
  *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
@@ -11,7 +11,7 @@
 package com.datalingvo.examples.time;
 
 import com.datalingvo.*;
-import com.datalingvo.examples.time.cities.*;
+import com.datalingvo.examples.misc.geo.cities.*;
 import com.datalingvo.mdllib.*;
 import com.datalingvo.mdllib.DLTokenSolver.*;
 import com.datalingvo.mdllib.tools.builder.*;
@@ -153,16 +153,15 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
 
         DLTokenSolver solver = new DLTokenSolver(
             "time-solver",
-            false,
-            __ -> { throw new DLRejection("Seems unrelated (check city name)."); }
+            true, // Allow for multi match. If two intents match - pick any random one...
+            () -> { throw new DLRejection("Seems confusing. Check spelling and city name."); }
         );
 
-        // Check for exactly one 'x:time' token and zero 'dl:geo' without looking into conversation.
-        // That's indication of asking for local time.
+        // Check for exactly one 'x:time' token without looking into conversation.
+        // That's an indication of asking for local time.
         solver.addIntent(
-            new INTENT(false, 3,
-                new TERM(new RULE("id", "==", "x:time"), 1, 1), // Index 0.
-                new TERM(new RULE("id", "==", "dl:geo"), 0, 0)  // Index 1.
+            new INTENT(false, true, 3,
+                new TERM(new RULE("id", "==", "x:time"), 1, 1) // Index 0.
             ),
             this::onLocalMatch
         );
@@ -170,9 +169,9 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
         // Check for exactly one 'x:time' and one optional 'dl:geo' CITY token including conversation
         // context. That can be either local or remote time.
         solver.addIntent(
-            new INTENT(true, 3,
+            new INTENT(3,
                 new TERM(new RULE("id", "==", "x:time"), 1, 1), // Index 0.
-                new TERM(new AND(                                // Index 1.
+                new TERM(new AND(                               // Index 1.
                     new RULE("id", "==", "dl:geo"),
                     new RULE("~GEO_KIND", "==", "CITY")
                 ), 0, 1)

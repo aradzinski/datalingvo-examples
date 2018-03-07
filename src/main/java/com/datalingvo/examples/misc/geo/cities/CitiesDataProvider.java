@@ -8,7 +8,7 @@
  *                                      |___/
  */
 
-package com.datalingvo.examples.time.cities;
+package com.datalingvo.examples.misc.geo.cities;
 
 import com.datalingvo.DLException;
 import org.apache.commons.lang3.tuple.Pair;

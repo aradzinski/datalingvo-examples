@@ -100,7 +100,7 @@ class EchoProvider extends DLSingleModelProviderAdapter {
       */
     private def mkDataSourceJson(ctx: DLQueryContext): String = {
         val ds = ctx.getDataSource
-        
+    
         // Hand-rolled JSON for simplicity...
         s"""
            | {
@@ -132,7 +132,7 @@ class EchoProvider extends DLSingleModelProviderAdapter {
            |    "metadata": ${mkMapJson(tok.getMetadata.asScala.toMap)}
            | }
          """.stripMargin
-    
+
     /**
       * Makes JSON presentation of the NLP sentence from given query context.
       *
@@ -141,7 +141,7 @@ class EchoProvider extends DLSingleModelProviderAdapter {
       */
     private def mkSentenceJson(ctx: DLQueryContext): String = {
         val sen = ctx.getSentence
-        
+    
         // Hand-rolled JSON for simplicity...
         s"""
            | {
@@ -152,27 +152,27 @@ class EchoProvider extends DLSingleModelProviderAdapter {
            | }
          """.stripMargin
     }
-    
+
     setup(
         MODEL_ID,
         // Using inline JSON model.
         DLModelBuilder.newJsonStringModel(
             s"""
-               | {
-               |    "id": "$MODEL_ID",
-               |    "name": "Echo Example Model",
-               |    "version": "1.0",
-               |    "metadata": {
-               |        "DESCRIPTION": "Echo example model.",
-               |        "VENDOR_NAME": "DataLingvo, Inc",
-               |        "VENDOR_URL": "https://www.datalingvo.com",
-               |        "VENDOR_CONTACT": "Support",
-               |        "VENDOR_EMAIL": "info@datalingvo.com",
-               |        "DOCS_URL": "https://www.datalingvo.com",
-               |        "ALLOW_NO_USER_TOKENS": true
-               |    },
-               |    "defaultTrivia": "false"
-               | }
+              | {
+              |    "id": "$MODEL_ID",
+              |    "name": "Echo Example Model",
+              |    "version": "1.0",
+              |    "metadata": {
+              |        "DESCRIPTION": "Echo example model.",
+              |        "VENDOR_NAME": "DataLingvo, Inc",
+              |        "VENDOR_URL": "https://www.datalingvo.com",
+              |        "VENDOR_CONTACT": "Support",
+              |        "VENDOR_EMAIL": "info@datalingvo.com",
+              |        "DOCS_URL": "https://www.datalingvo.com",
+              |        "ALLOW_NO_USER_TOKENS": true
+              |    },
+              |    "defaultTrivia": "false"
+              | }
             """.stripMargin)
             .setQueryFunction((ctx: DLQueryContext) ⇒ {
                 // Hand-rolled JSON for simplicity...

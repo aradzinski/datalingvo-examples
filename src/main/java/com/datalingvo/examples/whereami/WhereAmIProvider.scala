@@ -1,5 +1,5 @@
 /*
- * 2013-2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ * 2014-2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
  *       ___      _          __ _
  *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
  *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
@@ -53,7 +53,6 @@ class WhereAmIProvider extends DLSingleModelProviderAdapter {
     
     private val solver = new DLTokenSolver().addIntent(
         new INTENT(
-            true, // Include conversation.
             5, // Max number of free words.
             new TERM(new RULE("id", "==", "wai:where"), 1, 1)), // Term.
         onMatch _ // Callback on match.

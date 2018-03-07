@@ -1,0 +1,87 @@
+/*
+ * 2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ *       ___      _          __ _
+ *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
+ *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
+ *    / /_// (_| | || (_| / /__| | | | | (_| |\ V / (_) |
+ *   /___,' \__,_|\__\__,_\____/_|_| |_|\__, | \_/ \___/
+ *                                      |___/
+ *
+ * Alexa time example model.
+ * This is an exhaustive definition for documentation purposes.
+ * Only *mandatory* elements are required.
+ */
+
+{
+    "id": "dl.alexa.time.ex", /* Mandatory. */
+    "name": "Time Alexa Example Model", /* Mandatory. */
+    "version": "1.0", /* Mandatory. */
+    "metadata": {
+        "DESCRIPTION": "Global time alexa example model.",
+        "VENDOR_NAME": "DataLingvo, Inc",
+        "VENDOR_URL": "https://www.datalingvo.com",
+        "VENDOR_CONTACT": "Support",
+        "VENDOR_EMAIL": "info@datalingvo.com",
+        "DOCS_URL": "https://www.datalingvo.com",
+        "MAX_GEO_TOKENS": 1,
+        "ALLOW_NO_TOKENS": true
+    },
+    "examples": [
+        "What time is it now in New York City?",
+        "What's the time in Moscow?",
+        "Show me time of the day in London.",
+        "Give me San Francisco's current date and time."
+    ],
+    "macros": [
+        {
+            "name": "<OF>",
+            "macro": "{of|for|per}"
+        },
+        {
+            "name": "<CUR>",
+            "macro": "{current|present|now|local}"
+        },
+        {
+            "name": "<TIME>",
+            "macro": "{time <OF> day|day time|date|time|moment|datetime|hour|o'clock|clock|date time|date and time|time and date}"
+        }
+     ],
+    "elements": [ /* Mandatory. */
+        {
+            "id": "x:time", /* Mandatory. */
+            "group": "default",
+            "type": "STRING",
+            "parentId": null,
+            "excludedSynonyms": [
+
+            ],
+            "synonyms": [ /* Mandatory. */
+                "{<CUR>|*} <TIME>",
+                "what <TIME> {is it now|now|is it|*}"
+            ],
+            "relations": {
+
+            },
+            "metadata": {
+                "DESCRIPTION": "Date and/or time token indicator."
+            },
+            "values": [
+
+            ]
+        }
+    ],
+    "defaultTrivia": "true",
+    "curationHintHelp": null,
+    "trivia": [
+        
+    ],
+    "additionalStopwords": [
+
+    ],
+    "excludedStopwords": [
+
+    ],
+    "suspiciousWords": [
+
+    ]
+}

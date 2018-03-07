@@ -10,4 +10,30 @@
 
 package com.datalingvo.examples.weather;
 
+import com.datalingvo.*;
+import com.datalingvo.probe.dev.*;
 
+/**
+ * In-process probe runner for weather model.
+ * <p>
+ * Make sure to setup these system properties:
+ * <ul>
+ *     <li>{@code DATALINGVO_PROBE_ID} with probe ID (any user defined name).</li>
+ *     <li>{@code DATALINGVO_PROBE_TOKEN} with probe token (see admin page).</li>
+ * </ul>
+ */
+public class WeatherProbeRunner {
+    /**
+     *
+     * @param args Command like arguments (none are required).
+     */
+    public static void main(String[] args) throws DLException {
+        int exitCode = DLProbeDevApp.start(
+            new DLProbeConfig(
+                new WeatherProvider()
+            )
+        );
+
+        System.exit(exitCode);
+    }
+}

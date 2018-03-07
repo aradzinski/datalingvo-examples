@@ -281,11 +281,10 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     // Shortcut method for creating a intent with given weather token.
     private INTENT makeMatch(String tokId) {
         return new INTENT(
-            true /* Include conversation. */,
-            3 /* Max unused words. */,
-            new TERM(new RULE("id", "==", tokId), 1, 1),      // Index 0.
-            new TERM(new RULE("id", "==", "dl:date"), 0, 1),  // Index 1.
-            new TERM(new RULE("id", "==", "dl:geo"), 0, 1)    // Index 2.
+            3, // Max unused words.
+            new TERM(new RULE("id", "==", tokId), 1, 1),      // Index 0. Mandatory weather token.
+            new TERM(new RULE("id", "==", "dl:date"), 0, 1),  // Index 1. Optional date.
+            new TERM(new RULE("id", "==", "dl:geo"), 0, 1)    // Index 2. Optional location.
         );
     }
 
@@ -295,7 +294,7 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     public WeatherProvider() {
         String modelPath = DLModelBuilder.classPathFile("weather_model.json");
 
-        DLTokenSolver solver = new DLTokenSolver("solver", false, __ -> { throw new DLCuration(); });
+        DLTokenSolver solver = new DLTokenSolver("solver", false, () -> { throw new DLCuration(); });
 
         // Match exactly one weather token and optional 'dl:geo' and 'dl:date' tokens including
         // looking into conversation context.

@@ -8,13 +8,14 @@
  *                                      |___/
  */
 
-package com.datalingvo.examples.helloworld;
+package com.datalingvo.examples.alexa;
 
 import com.datalingvo.DLException;
-import com.datalingvo.probe.dev.*;
+import com.datalingvo.probe.dev.DLProbeConfig;
+import com.datalingvo.probe.dev.DLProbeDevApp;
 
 /**
- * In-process probe runner for "Hello World!" model.
+ * In-process probe runner for alexa time model.
  * <p>
  * Make sure to setup these system properties:
  * <ul>
@@ -22,14 +23,13 @@ import com.datalingvo.probe.dev.*;
  *     <li>{@code DATALINGVO_PROBE_TOKEN} with probe token (see admin page).</li>
  * </ul>
  */
-public class HelloWorldProbeRunner {
+public class AlexaTimeProbeRunner {
     /**
-     * In-process probe entry point.
-     * 
+     *
      * @param args Command like arguments (none are required).
      */
     public static void main(String[] args) throws DLException {
-        int exitCode = DLProbeDevApp.start(new DLProbeConfig(new HelloWorldProvider()));
+        int exitCode = DLProbeDevApp.start(new DLProbeConfig(new AlexaTimeProvider()));
 
         System.exit(exitCode);
     }

@@ -111,7 +111,6 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
             (verb, f) ->
                 solver.addIntent(
                     new INTENT(
-                        true, // Include conversation.
                         5, // Max unused words count.
                         // Index 0: non-interactive term that is either state, start or stop.
                         new TERM(new RULE("id", "==", "ctrl:" + verb), 1, 1),
