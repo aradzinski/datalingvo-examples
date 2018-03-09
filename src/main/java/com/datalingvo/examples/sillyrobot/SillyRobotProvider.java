@@ -17,7 +17,6 @@ import com.datalingvo.mdllib.tools.builder.*;
 import org.apache.commons.lang3.*;
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 /**
  * Silly Robot example model provider.
@@ -45,11 +44,11 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
      */
     public static Boolean selectToken(List<DLElementSelectorToken> toks) {
         // Filter all stopwords out.
-        List<DLElementSelectorToken> all = toks.stream().filter(p -> !p.isStopWord()).collect(Collectors.toList());
+        List<DLElementSelectorToken> all = filter(toks, p -> !p.isStopWord());
         // Gets all nouns.
-        List<DLElementSelectorToken> nouns = all.stream().filter(DLPosBase::isNoun).collect(Collectors.toList());
+        List<DLElementSelectorToken> nouns = filter(all, DLPosBase::isNoun);
         // Get all adjectives.
-        List<DLElementSelectorToken> adjs = all.stream().filter(DLPosBase::isAdjective).collect(Collectors.toList());
+        List<DLElementSelectorToken> adjs = filter(all, DLPosBase::isAdjective);
 
         // Require one optional adjective and one mandatory noun.
         if (nouns.size() != 1 || adjs.size() > 1 || nouns.size() + adjs.size() != all.size())
@@ -138,7 +137,9 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
             (id, f/* Callback. */) ->
                 solver.addIntent(
                     new INTENT(
-                        5, // Max unused words count.
+                        /* Default is to include conversation context. */
+                        /* Default is to do an exact match. */
+                        5, // Maximum free words count.
                         // Term idx=0:
                         // A non-interactive term that is either 'state', 'start' or 'stop'.
                         // ID of the element should be 'ctrl:start', 'ctrl:state', or 'ctrl:stop'.

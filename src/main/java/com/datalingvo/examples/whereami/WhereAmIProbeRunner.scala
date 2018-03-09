@@ -13,16 +13,26 @@ package com.datalingvo.examples.whereami
 import com.datalingvo.probe.dev.{DLProbeConfig, DLProbeDevApp}
 
 /**
-  * In-process probe runner for "Where Am I" model.
+  * In-process probe runner for this example.
   * <p>
   * Make sure to setup these system properties:
   * <ul>
-  *     <li><code>DATALINGVO_PROBE_ID</code> with probe ID (any user defined name).</li>
-  *     <li><code>DATALINGVO_PROBE_TOKEN</code> with probe token (see admin page).</li>
+  *     <li>
+  *         <code>DATALINGVO_PROBE_ID</code>=<code>probe ID</code>
+  *         (any user defined name).
+  *     </li>
+  *     <li>
+  *         <code>DATALINGVO_PROBE_TOKEN</code>=<code>probe token</code>
+  *         (see <a href="https://datalingvo.com/client/src/datalingvo.html#/account">Account</a> page).
+  *     </li>
   * </ul>
   */
 object WhereAmIProbeRunner extends App {
-    val exitCode = DLProbeDevApp.start(new DLProbeConfig(new WhereAmIProvider()))
+    // Create probe configuration with the provider instance.
+    val cfg = new DLProbeConfig(new WhereAmIProvider())
+    
+    // Start probe and wait synchronously for its exit code.
+    val exitCode = DLProbeDevApp.start(cfg)
     
     System.exit(exitCode)
 }

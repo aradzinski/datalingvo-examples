@@ -17,44 +17,53 @@ import com.datalingvo.mdllib.DLTokenSolver._
 
 /**
   * "Where Am I" example model provider.
+  * <p>
+  * Simple Scala example that answers "where am I" question about user's
+  * current location responding with a Google map.
   */
 @DLActiveModelProvider
 class WhereAmIProvider extends DLSingleModelProviderAdapter {
     /**
-      * 
-      * @param ctx
-      * @return
+      * Callback on matching intent.
+      *
+      * @param ctx Token solver context.
+      * @return Static Google map query result.
       */
     private def onMatch(ctx: DLTokenSolverContext): DLQueryResult = {
         val meta = ctx.getSentence.getMetadata
         
+        // Default to some Silicon Valley location in case user's coordinates
+        // cannot be determines.
         val lat = meta.getDoubleOrElse("LATITUDE", 37.7749)
         val lon = meta.getDoubleOrElse("LONGITUDE", 122.4194)
-    
+        
         DLQueryResult.jsonGmap(
             s"""
-                |{
-                |   "cssStyle": {
-                |        "width": "600px", 
-                |        "height": "300px"
-                |   },
-                |   "gmap": {
-                |        "center": "$lat,$lon",
-                |        "zoom": 14,
-                |        "scale": 2,
-                |        "size": "600x300",
-                |        "maptype": "terrain",
-                |        "markers": "color:red|$lat,$lon"
-                |    }
-                |}
+               |{
+               |   "cssStyle": {
+               |        "width": "600px",
+               |        "height": "300px"
+               |   },
+               |   "gmap": {
+               |        "center": "$lat,$lon",
+               |        "zoom": 14,
+               |        "scale": 2,
+               |        "size": "600x300",
+               |        "maptype": "terrain",
+               |        "markers": "color:red|$lat,$lon"
+               |    }
+               |}
             """.stripMargin
         )
     }
     
     private val solver = new DLTokenSolver().addIntent(
         new INTENT(
+            /* Default is to include conversation context. */
+            /* Default is to do an exact match. */
             5, // Max number of free words.
-            new TERM(new RULE("id", "==", "wai:where"), 1, 1)), // Term.
+            new TERM(new RULE("id", "==", "wai:where"), 1, 1)
+        ),
         onMatch _ // Callback on match.
     )
     
