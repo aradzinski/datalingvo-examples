@@ -59,10 +59,10 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
             DLQueryResult.html(
                 String.format(
                     "<b %s>Time:</b> <span style='color: #F1C40F'>%s</span><br/>" +
-                        "<b %s>City:</b> <span %s>%s</span><br/>" +
-                        "<b %s>Country:</b> <span %s>%s</span><br/>" +
-                        "<b %s>Timezone:</b> <span %s>%s</span><br/>" +
-                        "<b %s>Local Time:</b> <span %s>%s</span>",
+                    "<b %s>City:</b> <span %s>%s</span><br/>" +
+                    "<b %s>Country:</b> <span %s>%s</span><br/>" +
+                    "<b %s>Timezone:</b> <span %s>%s</span><br/>" +
+                    "<b %s>Local Time:</b> <span %s>%s</span>",
                     css1, ZonedDateTime.now(ZoneId.of(tmz)).format(FMT),
                     css1, css2, cityFmt,
                     css1, css2, cntrFmt,
@@ -75,18 +75,18 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
                 String.format(
                     "{" +
                         "\"cssStyle\": {" +
-                        "\"width\": \"600px\", " +
-                        "\"height\": \"300px\"" +
+                            "\"width\": \"600px\", " +
+                            "\"height\": \"300px\"" +
                         "}," +
                         "\"gmap\": {" +
-                        "\"center\": \"%f,%f\"," +
-                        "\"zoom\": 4," +
-                        "\"scale\": 2," +
-                        "\"size\": \"600x300\", " +
-                        "\"maptype\": \"terrain\", " +
-                        "\"markers\": \"color:red|%f,%f\"" +
+                            "\"center\": \"%f,%f\"," +
+                            "\"zoom\": 4," +
+                            "\"scale\": 2," +
+                            "\"size\": \"600x300\", " +
+                            "\"maptype\": \"terrain\", " +
+                            "\"markers\": \"color:red|%f,%f\"" +
                         "}" +
-                        "}",
+                    "}",
                     lat,
                     lon,
                     lat,
