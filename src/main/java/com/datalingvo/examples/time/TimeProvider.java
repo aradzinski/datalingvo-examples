@@ -1,5 +1,5 @@
 /*
- * 2014-2015 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ * 2014-2018 Copyright (C) DataLingvo, Inc. All Rights Reserved.
  *       ___      _          __ _
  *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
  *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
@@ -24,15 +24,21 @@ import static java.time.format.FormatStyle.*;
 
 /**
  * Time example model provider.
+ * <p>
+ * This example answers the questions about current time, either local or at some city.
+ * It provides HTML response with time and timezone information as well as Google map
+ * of the location (default or provided by the user).
  */
 @DLActiveModelProvider
 public class TimeProvider extends DLSingleModelProviderAdapter {
+    // Medium data formatter.
     static private final DateTimeFormatter FMT = DateTimeFormatter.ofLocalizedDateTime(MEDIUM);
 
+    // Map of cities and their geo and timezone information.
     static private Map<City, CityData> citiesData = CitiesDataProvider.get();
 
     /**
-     * Gets query result.
+     * Gets multipart query result.
      *
      * @param city Detected city.
      * @param cntry Detected country.
@@ -47,14 +53,16 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
         String css1 = "style='display: inline-block; min-width: 100px'";
         String css2 = "style='font-weight: 200'";
 
+        // Multipart result consists of HTML fragment and Google static map fragment.
         return DLQueryResult.jsonMultipart(
+            // HTML block with CSS formatting.
             DLQueryResult.html(
                 String.format(
                     "<b %s>Time:</b> <span style='color: #F1C40F'>%s</span><br/>" +
-                    "<b %s>City:</b> <span %s>%s</span><br/>" +
-                    "<b %s>Country:</b> <span %s>%s</span><br/>" +
-                    "<b %s>Timezone:</b> <span %s>%s</span><br/>" +
-                    "<b %s>Local Time:</b> <span %s>%s</span>",
+                        "<b %s>City:</b> <span %s>%s</span><br/>" +
+                        "<b %s>Country:</b> <span %s>%s</span><br/>" +
+                        "<b %s>Timezone:</b> <span %s>%s</span><br/>" +
+                        "<b %s>Local Time:</b> <span %s>%s</span>",
                     css1, ZonedDateTime.now(ZoneId.of(tmz)).format(FMT),
                     css1, css2, cityFmt,
                     css1, css2, cntrFmt,
@@ -62,22 +70,23 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
                     css1, css2, ZonedDateTime.now().format(FMT)
                 )
             ),
+            // Google static map fragment.
             DLQueryResult.jsonGmap(
                 String.format(
                     "{" +
                         "\"cssStyle\": {" +
-                            "\"width\": \"600px\", " +
-                            "\"height\": \"300px\"" +
+                        "\"width\": \"600px\", " +
+                        "\"height\": \"300px\"" +
                         "}," +
                         "\"gmap\": {" +
-                            "\"center\": \"%f,%f\"," +
-                            "\"zoom\": 4," +
-                            "\"scale\": 2," +
-                            "\"size\": \"600x300\", " +
-                            "\"maptype\": \"terrain\", " +
-                            "\"markers\": \"color:red|%f,%f\"" +
+                        "\"center\": \"%f,%f\"," +
+                        "\"zoom\": 4," +
+                        "\"scale\": 2," +
+                        "\"size\": \"600x300\", " +
+                        "\"maptype\": \"terrain\", " +
+                        "\"markers\": \"color:red|%f,%f\"" +
                         "}" +
-                    "}",
+                        "}",
                     lat,
                     lon,
                     lat,
@@ -96,6 +105,9 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
     private DLQueryResult localResult(DLSentence sen) {
         DLMetadata md = sen.getMetadata();
 
+        // Get local geo data from sentence metadata defaulting to
+        // Silicon Valley location in case we are missing that info in the
+        // sentence metadata.
         return remoteResult(
             md.getStringOrElse("CITY", ""),
             md.getStringOrElse("COUNTRY_CODE", "US"),
@@ -106,27 +118,32 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
+     * Callback on local time intent match.
      *
-     * @param ctx
-     * @return
+     * @param ctx Token solver context.
+     * @return Query result.
      */
     private DLQueryResult onLocalMatch(DLTokenSolverContext ctx) {
         return localResult(ctx.getSentence());
     }
 
     /**
+     * Callback on remote time intent match.
      *
-     * @param ctx
-     * @return
+     * @param ctx Token solver context.
+     * @return Query result.
      */
     private DLQueryResult onRemoteMatch(DLTokenSolverContext ctx) {
-        if (ctx.getTokens().get(1).isEmpty()) // GEO is optional.
-            // Use user location by default - just return the local or PST time.
+        // GEO is optional.
+        // If we don't have geo data - simply assume local time request.
+        if (ctx.getTokens().get(1).isEmpty())
+            // Use user location by default for cleaner UX - just return the local or PST time.
             return localResult(ctx.getSentence());
         else {
-            // Only one GEO token is allowed per model metadata.
+            // Only one GEO token is allowed per model metadata, so we don't have to check for it.
             DLToken geoTok = ctx.getTokens().get(1).get(0);
 
+            // GEO token metadata.
             DLMetadata meta = geoTok.getMetadata();
 
             // 'GEO_COUNTRY' and 'GEO_CITY' is mandatory metadata of 'dl:geo' token.
@@ -139,6 +156,7 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
                 return remoteResult(city, cntry, data.getTimezone(), data.getLatitude(), data.getLongitude());
             else
                 // We don't have timezone mapping for parsed GEO location.
+                // Instead of defaulting to a local time - we reject with a specific error message for cleaner UX.
                 throw new DLRejection(String.format("No timezone mapping for %s, %s.", city, cntry));
         }
     }
@@ -153,26 +171,35 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
 
         DLTokenSolver solver = new DLTokenSolver(
             "time-solver",
-            true, // Allow for multi match. If two intents match - pick any random one...
-            () -> { throw new DLRejection("Seems confusing. Check spelling and city name."); }
+            // Allow for multi matches. If two intents match - pick any random one...
+            true,
+            // Custom not-found function with tailored rejection message.
+            () -> { throw new DLRejection("Seems confusing - are you asking about time?</br>Check spelling and city name too."); }
         );
 
-        // Check for exactly one 'x:time' token without looking into conversation.
+        // Check for exactly one 'x:time' token **without** looking into conversation context.
         // That's an indication of asking for local time.
         solver.addIntent(
-            new INTENT(false, true, 3,
-                new TERM(new RULE("id", "==", "x:time"), 1, 1) // Index 0.
+            new INTENT(
+                false, // Don't include conversation context when matching.
+                true, // Only an exact match.
+                3, // Maximum 3 free words.
+                new TERM(new RULE("id", "==", "x:time"), 1, 1) // Term idx=0.
             ),
             this::onLocalMatch
         );
 
-        // Check for exactly one 'x:time' and one optional 'dl:geo' CITY token including conversation
+        // Check for exactly one 'x:time' and one optional 'dl:geo' CITY token **including** conversation
         // context. That can be either local or remote time.
         solver.addIntent(
-            new INTENT(3,
-                new TERM(new RULE("id", "==", "x:time"), 1, 1), // Index 0.
-                new TERM(new AND(                               // Index 1.
+            new INTENT(
+                /* Default is to include conversation context. */
+                /* Default is to do an exact match. */
+                3, // Maximum 3 free words.
+                new TERM(new RULE("id", "==", "x:time"), 1, 1), // Term idx=0.
+                new TERM(new AND(                               // Term idx=1.
                     new RULE("id", "==", "dl:geo"),
+                    // GEO locations can only be city (we can't get time for country or region or continent).
                     new RULE("~GEO_KIND", "==", "CITY")
                 ), 0, 1)
             ),
