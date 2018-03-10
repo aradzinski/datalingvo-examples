@@ -26,11 +26,11 @@ import static java.time.temporal.ChronoUnit.*;
 
 /**
  * Weather data provider using https://www.apixu.com service.
- *
+ * <p>
  * It provides weather for two formats:
  * 1. Current weather. Maximum detailed weather info for current datetime.
  * 2. Weather data by days for periods (note: forecast and history data have days period restrictions.)
- *
+ * </p>
  * Note:
  * 1. `hours` data skipped to simplify this example.
  * 2. If provider access plan is Free or Silver (https://www.apixu.com/pricing.aspx)
@@ -40,19 +40,14 @@ import static java.time.temporal.ChronoUnit.*;
  *    `Gold` and use your own token.
  */
 public class ApixuWeatherService {
-    /** */
     private static final int SUPPORTED_DAYS_BACK = 30;
-
-    /** */
     private static final int SUPPORTED_DAYS_FORWARD = 10;
 
-    /** */
     private static final Gson gson = new Gson();
-
-    /** */
     private final String apiKey;
 
     /**
+     * Creates service with given APIXU key.
      *
      * @param apiKey APIXU API key.
      */
@@ -61,6 +56,7 @@ public class ApixuWeatherService {
     }
 
     /**
+     * Gets whether data.
      *
      * @param respClass Response type.
      * @param geo Geo location.

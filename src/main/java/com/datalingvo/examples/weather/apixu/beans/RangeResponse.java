@@ -17,34 +17,18 @@ public class RangeResponse {
     private Location location;
     private DaysList forecast;
 
-    /**
-     *
-     * @return
-     */
     public Location getLocation() {
         return location;
     }
 
-    /**
-     *
-     * @param location
-     */
     public void setLocation(Location location) {
         this.location = location;
     }
 
-    /**
-     *
-     * @return
-     */
     public DaysList getForecast() {
         return forecast;
     }
-
-    /**
-     *
-     * @param forecast
-     */
+    
     public void setForecast(DaysList forecast) {
         this.forecast = forecast;
     }

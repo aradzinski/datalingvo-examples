@@ -1,0 +1,84 @@
+/*
+ * 2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ *       ___      _          __ _
+ *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
+ *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
+ *    / /_// (_| | || (_| / /__| | | | | (_| |\ V / (_) |
+ *   /___,' \__,_|\__\__,_\____/_|_| |_|\__, | \_/ \___/
+ *                                      |___/
+ *
+ * This is an exhaustive model JSON template for documentation purposes.
+ * Only --==MANDATORY==-- elements are required.
+ */
+
+{
+    "id": "user.defined.id", /* --==MANDATORY==-- */
+    "name": "User Defined Name", /* --==MANDATORY==-- */
+    "version": "1.0", /* --==MANDATORY==-- */
+
+    /* See model's metadata for exhaustive set of metadata properties. */
+    "metadata": {
+        /* Few examples. */
+        "DESCRIPTION": "Short model description.",
+        "VENDOR_NAME": "ACME Inc.",
+        "VENDOR_URL": "https://www.acme.com",
+        "VENDOR_CONTACT": "Support",
+        "VENDOR_EMAIL": "info@acme.com",
+        "DOCS_URL": "https://www.acme.com/docs",
+        "MAX_GEO_TOKENS": 1,
+        "ALLOW_NO_TOKENS": true
+    },
+    "examples": [
+        "Some example question",
+        "Another good example of the command"
+    ],
+    "macros": [
+        {
+            /* Good all-purpose macro. */
+            "name": "<OF>",
+            "macro": "{of|for|per}"
+        }
+    ],
+    /* See model's element documentation for explanation of its properties. */
+    "elements": [
+        {
+            "id": "x:id", /* --==MANDATORY==-- */
+            "group": "default",
+            "type": "STRING",
+            "parentId": null,
+            "excludedSynonyms": [
+
+            ],
+            "synonyms": [ /* --==MANDATORY==-- */
+                "A <OF> B",
+                "B <OF> A"
+            ],
+            "relations": {
+
+            },
+            "metadata": {
+                "DESCRIPTION": "Short description for this element."
+            },
+            "values": [
+
+            ]
+        }
+    ],
+    /* See model documentation for explanation. */
+    "defaultTrivia": "true",
+
+    /* See model documentation for explanation. */
+    "curationHintHelp": null,
+
+    /* See model documentation for explanation. */
+    "trivia": [],
+
+    /* See model documentation for explanation. */
+    "additionalStopwords": [],
+
+    /* See model documentation for explanation. */
+    "excludedStopwords": [],
+
+    /* See model documentation for explanation. */
+    "suspiciousWords": []
+}

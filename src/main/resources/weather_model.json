@@ -52,38 +52,26 @@
     "elements": [
         {
             "id": "wt:hist",
-            "group": "default",
-            "type": "STRING",
             "synonyms": [
                 "{<WEATHER>|*} <HISTORY>",
                 "<HISTORY> {<OF>|*} <WEATHER>"
             ],
-            "metadata": {
-                "DESCRIPTION": "Past weather conditions."
-            }
+            "metadata": { "DESCRIPTION": "Past weather conditions." }
         },
         {
             "id": "wt:curr",
-            "group": "default",
-            "type": "STRING",
             "synonyms": [
                 "{<CUR>|*} <WEATHER>"
             ],
-            "metadata": {
-                "DESCRIPTION": "Current weather conditions."
-            }
+            "metadata": { "DESCRIPTION": "Current weather conditions." }
         },
         {
             "id": "wt:fcast",
-            "group": "default",
-            "type": "STRING",
             "synonyms": [
                 "{<WEATHER>|*} <FORECAST>",
                 "<FORECAST> {<OF>|*} <WEATHER>"
             ],
-            "metadata": {
-                "DESCRIPTION": "Future weather forecast."
-            }
+            "metadata": { "DESCRIPTION": "Future weather forecast." }
         }
     ],
     "defaultTrivia": "true"

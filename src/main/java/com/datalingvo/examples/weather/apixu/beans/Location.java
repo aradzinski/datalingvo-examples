@@ -24,114 +24,58 @@ public class Location {
     @SerializedName("localtime_epoch") private String localtimeEpoch;
     private String localtime;
 
-    /**
-     *
-     * @return
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     *
-     * @param name
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getRegion() {
         return region;
     }
 
-    /**
-     *
-     * @param region
-     */
     public void setRegion(String region) {
         this.region = region;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getLatitude() {
         return latitude;
     }
 
-    /**
-     *
-     * @param latitude
-     */
     public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getLongitude() {
         return longitude;
     }
 
-    /**
-     *
-     * @param longitude
-     */
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getTzId() {
         return tzId;
     }
 
-    /**
-     *
-     * @param tzId
-     */
     public void setTzId(String tzId) {
         this.tzId = tzId;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getLocaltimeEpoch() {
         return localtimeEpoch;
     }
 
-    /**
-     *
-     * @param localtimeEpoch
-     */
     public void setLocaltimeEpoch(String localtimeEpoch) {
         this.localtimeEpoch = localtimeEpoch;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getLocaltime() {
         return localtime;
     }
 
-    /**
-     * 
-     * @param localtime
-     */
     public void setLocaltime(String localtime) {
         this.localtime = localtime;
     }

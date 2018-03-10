@@ -18,18 +18,10 @@ import com.google.gson.annotations.*;
 public class DaysList {
     @SerializedName("forecastday") private DayInfo[] forecastDay;
 
-    /**
-     *
-     * @return
-     */
     public DayInfo[] getForecastDay() {
         return forecastDay;
     }
 
-    /**
-     *
-     * @param forecastDay
-     */
     public void setForecastDay(DayInfo[] forecastDay) {
         this.forecastDay = forecastDay;
     }

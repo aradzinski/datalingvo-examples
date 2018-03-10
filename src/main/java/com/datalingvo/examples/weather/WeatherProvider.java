@@ -23,6 +23,10 @@ import java.util.stream.*;
 
 /**
  * Weather example model provider.
+ * <p>
+ * This is relatively complete weather service with elaborative HTML output and a non-trivial
+ * intent matching logic. It uses https://www.apixu.com RETS service for the actual
+ * weather information.
  */
 @DLActiveModelProvider
 public class WeatherProvider extends DLSingleModelProviderAdapter {
@@ -31,23 +35,30 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     // replace this demo token with your own.
     private ApixuWeatherService srv = new ApixuWeatherService("3f9b7de2d3894eb6b27150825171909");
 
+    // Date formats.
+    private final static DateFormat inFmt = new SimpleDateFormat("yyyy-MM-dd");
+    // We'll use string substitution here for '___' piece...
+    private final static DateFormat outFmt = new SimpleDateFormat("EE'<br/><span style=___>'MMM dd'</span>'");
+
     // Base CSS.
     private static final String CSS = "style='display: inline-block; min-width: 120px'";
 
     /**
+     * A shortcut to convert millis to the local date object.
      *
-     * @param ms
-     * @return
+     * @param ms Millis to convert.
+     * @return Local date object.
      */
     private LocalDate toLocalDate(long ms) {
         return Instant.ofEpochMilli(ms).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     /**
+     * Makes Google static map fragment for given coordinates.
      *
-     * @param lat
-     * @param lon
-     * @return
+     * @param lat Latitude.
+     * @param lon Longitude.
+     * @return Query result fragment.
      */
     private DLQueryResult makeMap(String lat, String lon) {
         double dLat = Double.parseDouble(lat);
@@ -77,14 +88,11 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
         );
     }
 
-    // Date formats.
-    private final static DateFormat inFmt = new SimpleDateFormat("yyyy-MM-dd");
-    private final static DateFormat outFmt = new SimpleDateFormat("EE'<br/><span style=___>'MMM dd'</span>'");
-
     /**
-     * 
-     * @param date
-     * @return
+     * Utility to prepare HTML table header with given date.
+     *
+     * @param date Date for the header.
+     * @return HTML fragment.
      */
     private String prepHeader(String date) {
         try {
@@ -101,9 +109,10 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
-     * 
-     * @param day
-     * @return
+     * Utility to prepare HTML table cell with given day data.
+     *
+     * @param day Day's weather holder.
+     * @return HTML fragment.
      */
     private String prepCell(Day day) {
         String css1 = "font-size: 90%; color: #fff; font-weight: 200; letter-spacing: 0.05em";
@@ -122,9 +131,10 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
+     * Makes query multipart result for given date range weather.
      *
-     * @param res
-     * @return
+     * @param res Weather holder for the range of dates.
+     * @return Query result.
      */
     private DLQueryResult makeRangeResult(RangeResponse res) {
         Location loc = res.getLocation();
@@ -134,7 +144,9 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
         String rows = Arrays.stream(res.getForecast().getForecastDay()).map(day ->
             prepCell(day.getDay())).collect(Collectors.joining(","));
 
+        // Multipart result (HTML block + HTML table + Google map).
         return DLQueryResult.jsonMultipart(
+            // HTML fragment.
             DLQueryResult.html(
                 String.format(
                     "<b %s>City:</b> <span style='color: #F1C40F'>%s</span><br/>" +
@@ -143,6 +155,7 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
                     CSS, loc.getLocaltime()
                 )
             ),
+            // HTML table fragment.
             DLQueryResult.jsonTable(
                 String.format(
                     "{" +
@@ -156,20 +169,24 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
                     rows
                 )
             ),
+            // Static Google map.
             makeMap(loc.getLatitude(), loc.getLongitude())
         );
     }
 
     /**
-     * 
-     * @param res
-     * @return
+     * Makes query multipart result for single date.
+     *
+     * @param res Weather holder for single date.
+     * @return Query result.
      */
     private DLQueryResult makeCurrentResult(CurrentResponse res) {
         Location loc = res.getLocation();
         Current cur = res.getCurrent();
 
+        // Multipart result (HTML block + Google map).
         return DLQueryResult.jsonMultipart(
+            // HTML block fragment.
             DLQueryResult.html(
                 String.format(
                     "<div style='font-weight: 200; letter-spacing: 0.02em'>" +
@@ -186,14 +203,16 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
                     CSS, loc.getLocaltime()
                 )
             ),
+            // Google map fragment.
             makeMap(loc.getLatitude(), loc.getLongitude())
         );
     }
 
     /**
+     * Extracts date range from given list of tokens.
      *
      * @param toks 'dl:date' tokens.
-     * @return
+     * @return Pair of dates or {@code null} if not found.
      */
     private Pair<LocalDate, LocalDate> prepDate(List<DLToken> toks) {
         if (!toks.isEmpty()) {
@@ -206,10 +225,11 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
+     * Extracts geo location suitable for APIXU service.
      *
      * @param toks 'dl:geo' tokens.
      * @param senMeta Sentence metadata.
-     * @return
+     * @return Geo location.
      */
     private String prepGeo(List<DLToken> toks, DLMetadata senMeta) throws DLRejection {
         Optional<DLToken> cityOpt =
@@ -229,11 +249,12 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
+     * Makes query result for given date range.
      *
-     * @param ctx
-     * @param from
-     * @param to
-     * @return
+     * @param ctx Token solver context.
+     * @param from From date.
+     * @param to To date.
+     * @return Query result.
      */
     private DLQueryResult onRangeMatch(DLTokenSolverContext ctx, LocalDate from, LocalDate to) {
         Pair<LocalDate, LocalDate> date = prepDate(ctx.getTokens().get(1));
@@ -247,9 +268,10 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
+     * Callback on forecast intent match.
      *
-     * @param ctx
-     * @return
+     * @param ctx Token solver context.
+     * @return Query result.
      */
     private DLQueryResult onForecastMatch(DLTokenSolverContext ctx) {
         // Look 5 days ahead by default.
@@ -257,9 +279,10 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
+     * Callback on history intent match.
      *
-     * @param ctx
-     * @return
+     * @param ctx Token solver context.
+     * @return Query result.
      */
     private DLQueryResult onHistoryMatch(DLTokenSolverContext ctx) {
         // Look 5 days back by default.
@@ -267,9 +290,10 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
+     * Callback on current date intent match.
      *
-     * @param ctx
-     * @return
+     * @param ctx Token solver context.
+     * @return Query result.
      */
     private DLQueryResult onCurrentMatch(DLTokenSolverContext ctx) {
         Pair<LocalDate, LocalDate> date = prepDate(ctx.getTokens().get(1));
@@ -281,7 +305,9 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     // Shortcut method for creating a intent with given weather token.
     private INTENT makeMatch(String tokId) {
         return new INTENT(
-            3, // Max unused words.
+            /* Default is to include conversation context. */
+            /* Default is to do an exact match. */
+            3, // Max free words.
             new TERM(new RULE("id", "==", tokId), 1, 1),      // Index 0. Mandatory weather token.
             new TERM(new RULE("id", "==", "dl:date"), 0, 1),  // Index 1. Optional date.
             new TERM(new RULE("id", "==", "dl:geo"), 0, 1)    // Index 2. Optional location.

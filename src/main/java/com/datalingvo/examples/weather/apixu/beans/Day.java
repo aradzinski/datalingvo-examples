@@ -32,242 +32,122 @@ public class Day {
     private Condition condition;
     private Double uv;
 
-    /**
-     *
-     * @return
-     */
     public Double getMaxTempC() {
         return maxTempC;
     }
 
-    /**
-     *
-     * @param maxTempC
-     */
     public void setMaxTempC(Double maxTempC) {
         this.maxTempC = maxTempC;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getMaxTempF() {
         return maxTempF;
     }
 
-    /**
-     *
-     * @param maxTempF
-     */
     public void setMaxTempF(Double maxTempF) {
         this.maxTempF = maxTempF;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getMinTempC() {
         return minTempC;
     }
 
-    /**
-     *
-     * @param minTempC
-     */
     public void setMinTempC(Double minTempC) {
         this.minTempC = minTempC;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getMinTempF() {
         return minTempF;
     }
 
-    /**
-     *
-     * @param minTempF
-     */
     public void setMinTempF(Double minTempF) {
         this.minTempF = minTempF;
     }
 
-    /**
-     * 
-     * @return
-     */
     public Double getAvgTempC() {
         return avgTempC;
     }
 
-    /**
-     *
-     * @param avgTempC
-     */
     public void setAvgTempC(Double avgTempC) {
         this.avgTempC = avgTempC;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getAvgTempF() {
         return avgTempF;
     }
 
-    /**
-     * 
-     * @param avgTempF
-     */
     public void setAvgTempF(Double avgTempF) {
         this.avgTempF = avgTempF;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getMaxWindMph() {
         return maxWindMph;
     }
 
-    /**
-     *
-     * @param maxWindMph
-     */
     public void setMaxWindMph(Double maxWindMph) {
         this.maxWindMph = maxWindMph;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getMaxWindKph() {
         return maxWindKph;
     }
 
-    /**
-     *
-     * @param maxWindKph
-     */
     public void setMaxWindKph(Double maxWindKph) {
         this.maxWindKph = maxWindKph;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getTotalPrecipMm() {
         return totalPrecipMm;
     }
 
-    /**
-     *
-     * @param totalPrecipMm
-     */
     public void setTotalPrecipMm(Double totalPrecipMm) {
         this.totalPrecipMm = totalPrecipMm;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getTotalPrecipIn() {
         return totalPrecipIn;
     }
 
-    /**
-     *
-     * @param totalPrecipIn
-     */
     public void setTotalPrecipIn(Double totalPrecipIn) {
         this.totalPrecipIn = totalPrecipIn;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getAvgVisKm() {
         return avgVisKm;
     }
 
-    /**
-     *
-     * @param avgVisKm
-     */
     public void setAvgVisKm(Double avgVisKm) {
         this.avgVisKm = avgVisKm;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getAvgVisMiles() {
         return avgVisMiles;
     }
 
-    /**
-     * 
-     * @param avgVisMiles
-     */
     public void setAvgVisMiles(Double avgVisMiles) {
         this.avgVisMiles = avgVisMiles;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getAvgHumidity() {
         return avgHumidity;
     }
 
-    /**
-     *
-     * @param avgHumidity
-     */
     public void setAvgHumidity(int avgHumidity) {
         this.avgHumidity = avgHumidity;
     }
 
-    /**
-     *
-     * @return
-     */
     public Condition getCondition() {
         return condition;
     }
 
-    /**
-     *
-     * @param condition
-     */
     public void setCondition(Condition condition) {
         this.condition = condition;
     }
 
-    /**
-     *
-     * @return
-     */
     public Double getUv() {
         return uv;
     }
 
-    /**
-     *
-     * @param uv
-     */
     public void setUv(Double uv) {
         this.uv = uv;
     }

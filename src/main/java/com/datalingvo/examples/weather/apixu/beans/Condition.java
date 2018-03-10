@@ -18,50 +18,26 @@ public class Condition {
     private String icon;
     private int code;
 
-    /**
-     *
-     * @return
-     */
     public String getText() {
         return text;
     }
 
-    /**
-     *
-     * @param text
-     */
     public void setText(String text) {
         this.text = text;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getIcon() {
         return icon;
     }
 
-    /**
-     *
-     * @param icon
-     */
     public void setIcon(String icon) {
         this.icon = icon;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getCode() {
         return code;
     }
 
-    /**
-     *
-     * @param code
-     */
     public void setCode(int code) {
         this.code = code;
     }

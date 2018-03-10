@@ -8,14 +8,12 @@
  *                                      |___/
  *
  * Time example model.
- * This is an exhaustive definition for documentation purposes.
- * Only *mandatory* elements are required.
  */
 
 {
-    "id": "dl.time.ex", /* Mandatory. */
-    "name": "Time Example Model", /* Mandatory. */
-    "version": "1.0", /* Mandatory. */
+    "id": "dl.time.ex",
+    "name": "Time Example Model",
+    "version": "1.0",
     "metadata": {
         "DESCRIPTION": "Global time example model.",
         "VENDOR_NAME": "DataLingvo, Inc",
@@ -47,42 +45,16 @@
             "macro": "{time <OF> day|day time|date|time|moment|datetime|hour|o'clock|clock|date time|date and time|time and date}"
         }
      ],
-    "elements": [ /* Mandatory. */
+    "elements": [
         {
-            "id": "x:time", /* Mandatory. */
-            "group": "default",
-            "type": "STRING",
-            "parentId": null,
-            "excludedSynonyms": [
-
-            ],
-            "synonyms": [ /* Mandatory. */
+            "id": "x:time",
+            "synonyms": [
                 "{<CUR>|*} <TIME>",
                 "what <TIME> {is it now|now|is it|*}"
             ],
-            "relations": {
-
-            },
             "metadata": {
                 "DESCRIPTION": "Date and/or time token indicator."
-            },
-            "values": [
-
-            ]
+            }
         }
-    ],
-    "defaultTrivia": "true",
-    "curationHintHelp": null,
-    "trivia": [
-        
-    ],
-    "additionalStopwords": [
-
-    ],
-    "excludedStopwords": [
-
-    ],
-    "suspiciousWords": [
-
     ]
 }

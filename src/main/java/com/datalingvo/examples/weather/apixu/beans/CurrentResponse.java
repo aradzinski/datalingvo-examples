@@ -17,34 +17,18 @@ public class CurrentResponse {
     private Location location;
     private Current current;
 
-    /**
-     *
-     * @return
-     */
     public Location getLocation() {
         return location;
     }
 
-    /**
-     *
-     * @param location
-     */
     public void setLocation(Location location) {
         this.location = location;
     }
 
-    /**
-     *
-     * @return
-     */
     public Current getCurrent() {
         return current;
     }
 
-    /**
-     * 
-     * @param current
-     */
     public void setCurrent(Current current) {
         this.current = current;
     }

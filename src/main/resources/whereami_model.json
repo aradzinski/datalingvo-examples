@@ -33,9 +33,7 @@
                 "where i am",
                 "{what is|*} {my|*} {current|actual|*} {geo|geographical|*} {position|location|coordinates|place}"
             ],
-            "metadata": {
-                "DESCRIPTION": "Location question."
-            }
+            "metadata": { "DESCRIPTION": "Location question." }
         }
     ],
     "defaultTrivia": "true"

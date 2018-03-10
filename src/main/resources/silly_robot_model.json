@@ -34,9 +34,7 @@
             "synonyms": [
                 "{start|launch|go|{turn|put} on}"
             ],
-            "metadata": {
-                "DESCRIPTION": "Start command."
-            }
+            "metadata": { "DESCRIPTION": "Start command." }
         },
         {
             "id": "ctrl:stop",
@@ -44,9 +42,7 @@
             "synonyms": [
                 "{stop|halt|abort|{turn|put} off}"
             ],
-            "metadata": {
-                "DESCRIPTION": "Stop command."
-            }
+            "metadata": { "DESCRIPTION": "Stop command." }
         },
         {
             "id": "ctrl:state",
@@ -54,19 +50,15 @@
             "synonyms": [
                 "{state|status|condition|check|verify|review}"
             ],
-            "metadata": {
-                "DESCRIPTION": "State command."
-            }
+            "metadata": { "DESCRIPTION": "State command." }
         },
         {
             "id": "ctrl:subject",
             "group": "subject",
-            "synonyms": [
+            "synonyms": [ /* Note the code-based element selector. */
                 "%com.datalingvo.examples.sillyrobot.SillyRobotProvider#selectToken%"
             ],
-            "metadata": {
-                "DESCRIPTION": "Object to control."
-            }
+            "metadata": { "DESCRIPTION": "Object to control." }
         }
 
     ],

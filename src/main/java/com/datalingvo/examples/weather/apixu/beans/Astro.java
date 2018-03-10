@@ -19,66 +19,34 @@ public class Astro {
     private String moonrise;
     private String moonset;
 
-    /**
-     *
-     * @return
-     */
     public String getSunrise() {
         return sunrise;
     }
 
-    /**
-     *
-     * @param sunrise
-     */
     public void setSunrise(String sunrise) {
         this.sunrise = sunrise;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getSunset() {
         return sunset;
     }
 
-    /**
-     *
-     * @param sunset
-     */
     public void setSunset(String sunset) {
         this.sunset = sunset;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getMoonrise() {
         return moonrise;
     }
 
-    /**
-     *
-     * @param moonrise
-     */
     public void setMoonrise(String moonrise) {
         this.moonrise = moonrise;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getMoonset() {
         return moonset;
     }
 
-    /**
-     * 
-     * @param moonset
-     */
     public void setMoonset(String moonset) {
         this.moonset = moonset;
     }

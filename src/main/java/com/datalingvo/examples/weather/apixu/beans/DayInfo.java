@@ -21,66 +21,34 @@ public class DayInfo {
     private Day day;
     private Astro astro;
 
-    /**
-     *
-     * @return
-     */
     public String getDate() {
         return date;
     }
 
-    /**
-     *
-     * @param date
-     */
     public void setDate(String date) {
         this.date = date;
     }
 
-    /**
-     *
-     * @return
-     */
     public String getDateEpoch() {
         return dateEpoch;
     }
 
-    /**
-     *
-     * @param dateEpoch
-     */
     public void setDateEpoch(String dateEpoch) {
         this.dateEpoch = dateEpoch;
     }
 
-    /**
-     *
-     * @return
-     */
     public Day getDay() {
         return day;
     }
 
-    /**
-     *
-     * @param day
-     */
     public void setDay(Day day) {
         this.day = day;
     }
 
-    /**
-     *
-     * @return
-     */
     public Astro getAstro() {
         return astro;
     }
 
-    /**
-     *
-     * @param astro
-     */
     public void setAstro(Astro astro) {
         this.astro = astro;
     }
