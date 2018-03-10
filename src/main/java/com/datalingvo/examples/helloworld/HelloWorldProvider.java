@@ -1,5 +1,5 @@
 /*
- * 2014-2015 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ * 2014-2018 Copyright (C) DataLingvo, Inc. All Rights Reserved.
  *       ___      _          __ _
  *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
  *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
@@ -39,10 +39,10 @@ public class HelloWorldProvider extends DLSingleModelProviderAdapter {
                 // Return HTML result.
                 .setQueryFunction(ctx -> DLQueryResult.html(
                     "Hello World!<br/>" +
-                        "See more <a target=_new href='https://youtu.be/zecueq-mo4M'>examples</a> of Hello World!"
-                    )
+                    "See more <a target=_new href='https://youtu.be/zecueq-mo4M'>examples</a> of Hello World!"
                 )
-                .build()
+            )
+            .build()
         );
     }
 }
