@@ -1,5 +1,5 @@
 /*
- * 2014-2015 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ * 2014-2018 Copyright (C) DataLingvo, Inc. All Rights Reserved.
  *       ___      _          __ _
  *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
  *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
@@ -31,7 +31,7 @@ import com.datalingvo.probe.dev.*;
 public class HelloWorldProbeRunner {
     /**
      * In-process probe entry point.
-     *
+     * 
      * @param args Command like arguments (none are required).
      */
     public static void main(String[] args) throws DLException {

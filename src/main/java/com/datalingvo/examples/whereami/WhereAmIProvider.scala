@@ -36,23 +36,23 @@ class WhereAmIProvider extends DLSingleModelProviderAdapter {
         // cannot be determines.
         val lat = meta.getDoubleOrElse("LATITUDE", 37.7749)
         val lon = meta.getDoubleOrElse("LONGITUDE", 122.4194)
-        
+    
         DLQueryResult.jsonGmap(
             s"""
-               |{
-               |   "cssStyle": {
-               |        "width": "600px",
-               |        "height": "300px"
-               |   },
-               |   "gmap": {
-               |        "center": "$lat,$lon",
-               |        "zoom": 14,
-               |        "scale": 2,
-               |        "size": "600x300",
-               |        "maptype": "terrain",
-               |        "markers": "color:red|$lat,$lon"
-               |    }
-               |}
+                |{
+                |   "cssStyle": {
+                |        "width": "600px", 
+                |        "height": "300px"
+                |   },
+                |   "gmap": {
+                |        "center": "$lat,$lon",
+                |        "zoom": 14,
+                |        "scale": 2,
+                |        "size": "600x300",
+                |        "maptype": "terrain",
+                |        "markers": "color:red|$lat,$lon"
+                |    }
+                |}
             """.stripMargin
         )
     }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+  2018 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+       ___      _          __ _
+      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
+     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
+    / /_// (_| | || (_| / /__| | | | | (_| |\ V / (_) |
+   /___,' \__,_|\__\__,_\____/_|_| |_|\__, | \_/ \___/
+                                      |___/
+-->
+
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{MM.dd.yyyy HH:mm:ss.SSS} [%t] %-5level %logger{1} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="TRACE">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

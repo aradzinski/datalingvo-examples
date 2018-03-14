@@ -53,7 +53,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
         // Require one optional adjective and one mandatory noun.
         if (nouns.size() != 1 || adjs.size() > 1 || nouns.size() + adjs.size() != all.size())
             return false;
-
+        
         // If there is an adjective - it should be before the noun.
         return adjs.isEmpty() || all.indexOf(adjs.get(0)) < all.indexOf(nouns.get(0));
     }
