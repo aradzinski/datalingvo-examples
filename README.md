@@ -49,8 +49,8 @@ any user questions. Lets create Maven-based project, configure and run it:
     | Probe started [2.05 sec] |
     +--------------------------+
     
-    10:07:20 INFO  Down-link 'downlink.datalingvo.com:80' established.
-    10:07:23 INFO  Up-link 'uplink.datalingvo.com:80' established.
+    10:07:20 INFO  Down-link 'downlink.datalingvo.com:8100' established.
+    10:07:23 INFO  Up-link 'uplink.datalingvo.com:8101' established.
     ``` 
 
 ### Adding Data Source
