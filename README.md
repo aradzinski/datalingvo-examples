@@ -2,8 +2,11 @@
 
 ## Getting Started
 Welcome to DataLingvo - the easiest way to built advanced natural language
-interface to any device, data source or a service. This repo contains Java and Scala
-examples. In this quick how-to tutorial you'll learn how to get up and running with a
+interface to any device, data source or a service. 
+
+This repo contains Java and Scala
+examples of various data models from very simple (like `HelloWorld` example) to more 
+complete ones (like `Weather` example). In this short tutorial you'll learn how to get up and running with a
 simple example.
 
 ### Prerequisites
@@ -74,3 +77,5 @@ Everything's ready - just go head and start exploring:
 Now that you have the basic example running you can explore all other examples in the
 project. Configure and run them exactly the same way and head over to
 [Developers Guide](https://datalingvo.com/client/src/datalingvo.html#/devguide) for in-depth explanations.
+ 
+
