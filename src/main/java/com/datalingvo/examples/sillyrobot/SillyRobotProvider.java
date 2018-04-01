@@ -17,6 +17,7 @@ import com.datalingvo.mdllib.tools.builder.*;
 import org.apache.commons.lang3.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 /**
  * Silly Robot example model provider.
@@ -29,6 +30,17 @@ import java.util.function.*;
 public class SillyRobotProvider extends DLSingleModelProviderAdapter {
     // Robot's memory.
     private final Set<String> mem = new HashSet<>();
+
+    /**
+     * Convenient filtering routine.
+     *
+     * @param items Items to filter.
+     * @param predicate Predicate to filter by.
+     * @return Filtered list.
+     */
+    static private <T> List<T> filter(List<T> items, Predicate<? super T> predicate) {
+        return items.stream().filter(predicate).collect(Collectors.toList());
+    }
 
     /**
      * Since the model operates on any arbitrary object we provide this method that is called
@@ -53,7 +65,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
         // Require one optional adjective and one mandatory noun.
         if (nouns.size() != 1 || adjs.size() > 1 || nouns.size() + adjs.size() != all.size())
             return false;
-        
+
         // If there is an adjective - it should be before the noun.
         return adjs.isEmpty() || all.indexOf(adjs.get(0)) < all.indexOf(nouns.get(0));
     }
