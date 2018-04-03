@@ -35,14 +35,14 @@ public class HelloWorldProvider extends DLSingleModelProviderAdapter {
         setup(
             MODEL_ID,
             // Minimally defined model...
-            DLModelBuilder.newModel(MODEL_ID, "HelloWorld Example Model", "1.0")
+            DLModelBuilder
+                .newModel(MODEL_ID, "HelloWorld Example Model", "1.0")
                 // Return HTML result.
                 .setQueryFunction(ctx -> DLQueryResult.html(
                     "Hello World!<br/>" +
                     "See more <a target=_new href='https://youtu.be/zecueq-mo4M'>examples</a> of Hello World!"
-                )
-            )
-            .build()
+                ))
+                .build()
         );
     }
 }
