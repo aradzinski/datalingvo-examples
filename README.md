@@ -84,8 +84,8 @@ Whether you started **HelloWorld** data probe from command line or using IDE pro
 | Probe started [2.05 sec] |
 +--------------------------+
 
-04.06.2018 10:06:04 'downlink.datalingvo.com:80' established.
-04.06.2018 10:06:04 'uplink.datalingvo.com:80' established.
+04.06.2018 10:06:04 Down-link 'downlink.datalingvo.com:80' established.
+04.06.2018 10:06:04 Up-link 'uplink.datalingvo.com:80' established.
 ``` 
 
 That's all there is to start a local data probe with a specific data model.
