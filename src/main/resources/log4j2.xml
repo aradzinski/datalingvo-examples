@@ -14,11 +14,11 @@
 <Configuration>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{MM.dd.yyyy HH:mm:ss.SSS} [%t] %-5level %logger{1} - %msg%n"/>
+            <PatternLayout pattern="%d{MM.dd.yyyy HH:mm:ss.SSS} %-5level %logger{1} - %msg%n"/>
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="TRACE">
+        <Root level="INFO">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
