@@ -66,7 +66,7 @@ $ mvn exec:java@hello -DDATALINGVO_PROBE_TOKEN=XXX -DDATALINGVO_PROBE_ID=hello.p
 ```
 Where:
  * `hello` - name of the probe to start (you can also use `time`, `weather`, `chat`, `echo`, `robot`, or `whereami`).
- * `XXX` - probe token you obtain in the previous step.
+ * `XXX` - probe token you obtained in the previous step.
  * `hello.probe.id` - arbitrary user-defined probe ID.
  
 #### Run From Maven Project
