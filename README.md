@@ -17,7 +17,7 @@ Here's what you will need to get started with DataLingvo:
 with DataLingvo to create your **free account.** All newly created accounts automatically get administrative privileges. 
 
 ### Get Company Probe Token
-Secret <b>probe token</b> that has been associated with your company - here's how to get it:
+Secret <b>probe token</b> has been associated with your company - here's how to get it:
  - Go to [www.datalingvo.com](https://www.datalingvo.com) and [sign in](https://datalingvo.com/client/src/datalingvo.html#/signin).
  - Click on avatar at the top right corner and select **Account** from dropdown menu.
  - On **Account** page scroll down to the **Probe Token** section.
