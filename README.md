@@ -43,16 +43,6 @@ Go to the project root and build data probe:
 ```shell
 $ mvn clean package
 ```
-You should see the success Maven build output at the end:
-```shell
-...
-[INFO] -------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] -------------------------------------------------
-[INFO] Total time: 6.285 s
-[INFO] Finished at: 2017-04-05T09:47:27-07:00
-[INFO] -------------------------------------------------
-```
 **NOTE**: if data probe build failed clear Maven local cache and re-run the command:
 ```shell
 $ mvn dependency:purge-local-repository -DactTransitively=false -DreResolve=false --fail-at-end
