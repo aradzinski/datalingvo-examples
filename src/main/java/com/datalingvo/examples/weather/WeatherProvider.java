@@ -25,7 +25,7 @@ import java.util.stream.*;
  * Weather example model provider.
  * <p>
  * This is relatively complete weather service with elaborative HTML output and a non-trivial
- * intent matching logic. It uses https://www.apixu.com RETS service for the actual
+ * intent matching logic. It uses https://www.apixu.com REST service for the actual
  * weather information.
  */
 @DLActiveModelProvider
@@ -304,13 +304,10 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
 
     // Shortcut method for creating a intent with given weather token.
     private INTENT makeMatch(String tokId) {
-        return new INTENT(
-            /* Default is to include conversation context. */
-            /* Default is to do an exact match. */
-            3, // Max free words.
-            new TERM(new RULE("id", "==", tokId), 1, 1),      // Index 0. Mandatory weather token.
-            new TERM(new RULE("id", "==", "dl:date"), 0, 1),  // Index 1. Optional date.
-            new TERM(new RULE("id", "==", "dl:geo"), 0, 1)    // Index 2. Optional location.
+        return new CONV_INTENT(
+            new TERM("id == " + tokId, 1, 1),      // Index 0. Mandatory weather token.
+            new TERM("id == dl:date", 0, 1),  // Index 1. Optional date.
+            new TERM("id == dl:geo", 0, 1)    // Index 2. Optional location.
         );
     }
 

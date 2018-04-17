@@ -35,8 +35,7 @@ public class HelloWorldProvider extends DLSingleModelProviderAdapter {
         setup(
             MODEL_ID,
             // Minimally defined model...
-            DLModelBuilder
-                .newModel(MODEL_ID, "HelloWorld Example Model", "1.0")
+            DLModelBuilder.newModel(MODEL_ID, "HelloWorld Example Model", "1.0")
                 // Return HTML result.
                 .setQueryFunction(ctx -> DLQueryResult.html(
                     "Hello World!<br/>" +

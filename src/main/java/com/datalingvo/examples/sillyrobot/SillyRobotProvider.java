@@ -65,7 +65,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
         // Require one optional adjective and one mandatory noun.
         if (nouns.size() != 1 || adjs.size() > 1 || nouns.size() + adjs.size() != all.size())
             return false;
-
+        
         // If there is an adjective - it should be before the noun.
         return adjs.isEmpty() || all.indexOf(adjs.get(0)) < all.indexOf(nouns.get(0));
     }
@@ -148,18 +148,15 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
         BiConsumer<String, IntentCallback> intentMaker =
             (id, f/* Callback. */) ->
                 solver.addIntent(
-                    new INTENT(
-                        /* Default is to include conversation context. */
-                        /* Default is to do an exact match. */
-                        5, // Maximum free words count.
+                    new CONV_INTENT(
                         // Term idx=0:
                         // A non-interactive term that is either 'state', 'start' or 'stop'.
                         // ID of the element should be 'ctrl:start', 'ctrl:state', or 'ctrl:stop'.
-                        new TERM(new RULE("id", "==", "ctrl:" + id), 1, 1),
+                        new TERM("id == ctrl:" + id, 1, 1),
                         // Term idx=1:
                         // An interactive object term. If it's missing the system will ask for it.
                         // ID of the element should be 'ctrl:subject'
-                        new TERM("an object to " + id, new RULE("id", "==", "ctrl:subject"), 1, 1)
+                        new TERM("an object to " + id, "id == ctrl:subject", 1, 1)
                     ),
                     f
                 );

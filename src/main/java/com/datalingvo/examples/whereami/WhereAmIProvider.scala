@@ -58,12 +58,7 @@ class WhereAmIProvider extends DLSingleModelProviderAdapter {
     }
     
     private val solver = new DLTokenSolver().addIntent(
-        new INTENT(
-            /* Default is to include conversation context. */
-            /* Default is to do an exact match. */
-            5, // Max number of free words.
-            new TERM(new RULE("id", "==", "wai:where"), 1, 1)
-        ),
+        new CONV_INTENT("id == wai:where", 1, 1),
         onMatch _ // Callback on match.
     )
     

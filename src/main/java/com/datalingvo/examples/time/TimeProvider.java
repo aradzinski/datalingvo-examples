@@ -110,7 +110,7 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
         // sentence metadata.
         return remoteResult(
             md.getStringOrElse("CITY", ""),
-            md.getStringOrElse("COUNTRY_CODE", "US"),
+            md.getStringOrElse("COUNTRY_NAME", "United States"),
             md.getStringOrElse("TMZ_NAME", "America/Los_Angeles"),
             md.getDoubleOrElse("LATITUDE", 37.7749),
             md.getDoubleOrElse("LONGITUDE", 122.4194)
@@ -174,40 +174,33 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
             // Allow for multi matches. If two intents match - pick any random one...
             true,
             // Custom not-found function with tailored rejection message.
-            () -> { throw new DLRejection("Seems confusing - are you asking about time?</br>Check spelling and city name too."); }
+            () -> { throw new DLRejection("Are you asking about time?<br>Check spelling and city name too."); }
         );
 
         // Check for exactly one 'x:time' token **without** looking into conversation context.
-        // That's an indication of asking for local time.
+        // That's an indication of asking for local time only.
         solver.addIntent(
-            new INTENT(
-                false, // Don't include conversation context when matching.
-                true, // Only an exact match.
-                3, // Maximum 3 free words.
-                new TERM(new RULE("id", "==", "x:time"), 1, 1) // Term idx=0.
-            ),
+            new NON_CONV_INTENT("id == x:time", 1, 1), // Term idx=0.
             this::onLocalMatch
         );
 
         // Check for exactly one 'x:time' and one optional 'dl:geo' CITY token **including** conversation
         // context. That can be either local or remote time.
         solver.addIntent(
-            new INTENT(
-                /* Default is to include conversation context. */
-                /* Default is to do an exact match. */
-                3, // Maximum 3 free words.
-                new TERM(new RULE("id", "==", "x:time"), 1, 1), // Term idx=0.
-                new TERM(new AND(                               // Term idx=1.
-                    new RULE("id", "==", "dl:geo"),
-                    // GEO locations can only be city (we can't get time for country or region or continent).
-                    new RULE("~GEO_KIND", "==", "CITY")
-                ), 0, 1)
+            new CONV_INTENT(
+                new TERM("id == x:time", 1, 1), // Term idx=0.
+                new TERM(
+                    new AND(                    // Term idx=1.
+                        "id == dl:geo",
+                        // GEO locations can only be city (we can't get time for country or region or continent).
+                        "~GEO_KIND == CITY"
+                    ), 0, 1
+                )
             ),
             this::onRemoteMatch
         );
 
-        DLModel model =
-            DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build();
+        DLModel model = DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build();
 
         // Initialize adapter.
         setup("dl.time.ex", model);
