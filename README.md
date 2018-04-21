@@ -45,7 +45,7 @@ $ mvn clean package
 ```
 **NOTE**: if data probe build failed clear Maven local cache and re-run the command:
 ```shell
-$ mvn dependency:purge-local-repository -DactTransitively=false -DreResolve=false --fail-at-end
+$ rm -rf ~/.m2/repository/com/datalingvo/
 $ mvn clean package
 ```
 Start data probe using the following Maven command:
