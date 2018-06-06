@@ -8,7 +8,7 @@
  *                                      |___/
  */
 
-package com.datalingvo.examples.time;
+package com.datalingvo.examples.lessons.lesson7;
 
 import com.datalingvo.*;
 import com.datalingvo.examples.misc.geo.cities.*;
@@ -23,22 +23,21 @@ import java.util.*;
 import static java.time.format.FormatStyle.*;
 
 /**
- * Time example model provider.
- * <p>
- * This example answers the questions about current time, either local or at some city.
- * It provides HTML response with time and timezone information as well as Google map
- * of the location (default or provided by the user).
+ * `Lesson 7` model provider.
  */
 @DLActiveModelProvider
-public class TimeProvider extends DLSingleModelProviderAdapter {
+public class TimeProvider7 extends DLSingleModelProviderAdapter {
+    static private Map<City, CityData> citiesData = CitiesDataProvider.get();
+
     // Medium data formatter.
     static private final DateTimeFormatter FMT = DateTimeFormatter.ofLocalizedDateTime(MEDIUM);
 
-    // Map of cities and their geo and timezone information.
-    static private Map<City, CityData> citiesData = CitiesDataProvider.get();
+    // CSS formatting styles.
+    static private final String CSS1= "style='display: inline-block; min-width: 100px'";
+    static private final String CSS2 = "style='font-weight: 200'";
 
     /**
-     * Gets multipart query result.
+     * Gets formatted query result.
      *
      * @param city Detected city.
      * @param cntry Detected country.
@@ -46,12 +45,14 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
      * @param lat City latitude.
      * @param lon City longitude.
      */
-    private static DLQueryResult formatResult(String city, String cntry, String tmz, double lat, double lon) {
+    private static DLQueryResult formatResult(
+        String city,
+        String cntry,
+        String tmz,
+        double lat,
+        double lon) {
         String cityFmt = WordUtils.capitalize(city);
         String cntrFmt = WordUtils.capitalize(cntry);
-
-        String css1 = "style='display: inline-block; min-width: 100px'";
-        String css2 = "style='font-weight: 200'";
 
         // Multipart result consists of HTML fragment and Google static map fragment.
         return DLQueryResult.jsonMultipart(
@@ -59,15 +60,15 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
             DLQueryResult.html(
                 String.format(
                     "<b %s>Time:</b> <span style='color: #F1C40F'>%s</span><br/>" +
-                    "<b %s>City:</b> <span %s>%s</span><br/>" +
-                    "<b %s>Country:</b> <span %s>%s</span><br/>" +
-                    "<b %s>Timezone:</b> <span %s>%s</span><br/>" +
-                    "<b %s>Local Time:</b> <span %s>%s</span>",
-                    css1, ZonedDateTime.now(ZoneId.of(tmz)).format(FMT),
-                    css1, css2, cityFmt,
-                    css1, css2, cntrFmt,
-                    css1, css2, tmz,
-                    css1, css2, ZonedDateTime.now().format(FMT)
+                        "<b %s>City:</b> <span %s>%s</span><br/>" +
+                        "<b %s>Country:</b> <span %s>%s</span><br/>" +
+                        "<b %s>Timezone:</b> <span %s>%s</span><br/>" +
+                        "<b %s>Local Time:</b> <span %s>%s</span>",
+                    CSS1, ZonedDateTime.now(ZoneId.of(tmz)).format(FMT),
+                    CSS1, CSS2, cityFmt,
+                    CSS1, CSS2, cntrFmt,
+                    CSS1, CSS2, tmz,
+                    CSS1, CSS2, ZonedDateTime.now().format(FMT)
                 )
             ),
             // Google static map fragment.
@@ -97,7 +98,7 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
-     * Callback on local time intent match.
+     * Callback on local intent match.
      *
      * @param ctx Token solver context.
      * @return Query result.
@@ -117,31 +118,33 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
     }
 
     /**
-     * Callback on remote time intent match.
+     * Callback on remote intent match.
      *
      * @param ctx Token solver context.
      * @return Query result.
      */
     private DLQueryResult onRemoteMatch(DLTokenSolverContext ctx) {
-        // 'dl:geo' is mandatory.
-        // Only one 'dl:geo' token is allowed, so we don't have to check for it.
+        // Note that 'dl:geo' is mandatory token in this example and only one is allowed.
         DLToken geoTok = ctx.getTokens().get(1).get(0);
 
-        // GEO token metadata.
-        DLMetadata meta = geoTok.getMetadata();
+        DLMetadata geoMeta = geoTok.getMetadata();
 
-        // 'GEO_COUNTRY' and 'GEO_CITY' is mandatory metadata of 'dl:geo' token.
-        String city = meta.getString("GEO_CITY");
-        String cntry = meta.getString("GEO_COUNTRY");
+        String city = geoMeta.getString("GEO_CITY");
+        String cntry = geoMeta.getString("GEO_COUNTRY");
 
         CityData data = citiesData.get(new City(city, cntry));
 
-        if (data != null)
-            return formatResult(city, cntry, data.getTimezone(), data.getLatitude(), data.getLongitude());
-        else
-            // We don't have timezone mapping for parsed GEO location.
-            // Instead of defaulting to a local time - we reject with a specific error message for cleaner UX.
+        // We don't have timezone mapping for parsed GEO location.
+        if (data == null)
             throw new DLRejection(String.format("No timezone mapping for %s, %s.", city, cntry));
+
+        return formatResult(
+            city,
+            cntry,
+            data.getTimezone(),
+            data.getLatitude(),
+            data.getLongitude()
+        );
     }
 
     /**
@@ -149,42 +152,37 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
      *
      * @throws DLException If any errors occur.
      */
-    TimeProvider() throws DLException {
-        String path = DLModelBuilder.classPathFile("time_model.json");
+    TimeProvider7() throws DLException {
+        String path = DLModelBuilder.classPathFile("lessons/time_model7.json");
 
-        DLTokenSolver solver = new DLTokenSolver(
-            "time-solver",
-            // Allow for multi matches. If two intents match - pick any random one...
-            true,
-            // Custom not-found function with tailored rejection message.
-            () -> { throw new DLRejection("Are you asking about time?<br>Check spelling and city name too."); }
-        );
-
-        // NOTE:
-        // We need to have two intents vs. one intent with an optional GEO. The reason is that
-        // first intent isn't using the conversation context to make sure we can always ask
-        // for local time **no matter** what was asked before... Note that non-conversational
-        // intent always "wins" over the conversational one given otherwise equal weight because
-        // non-conversational intent is more specific (i.e. using only the most current user input).
+        DLTokenSolver solver =
+            new DLTokenSolver(
+                "time-solver",
+                true,
+                () -> {
+                    // Custom not-found function with tailored rejection message.
+                    throw new DLRejection("I can't understand your question.");
+                }
+            );
 
         // Check for exactly one 'x:time' token **without** looking into conversation context.
         // That's an indication of asking for local time only.
         solver.addIntent(
-            new NON_CONV_INTENT("id == x:time", 1, 1), // Term idx=0.
+            new NON_CONV_INTENT("id == x:time", 1, 1), 
             this::onLocalMatch
         );
 
-        // Check for exactly one 'x:time' and one 'dl:geo' CITY token **including** conversation
-        // context. This is always remote time.
+        // Check for exactly one 'x:time' token and one 'dl:geo' token.
         solver.addIntent(
-            new CONV_INTENT(
-                new TERM("id == x:time", 1, 1), // Term idx=0.
+            new CONV_INTENT( // --=== THIS IS CHANGED FROM PREVIOUS EXAMPLE ===---
+                new TERM("id == x:time", 1, 1),
                 new TERM(
-                    new AND(                    // Term idx=1.
+                    new AND(
                         "id == dl:geo",
-                        // GEO locations can only be city (we can't get time for country or region or continent).
                         "~GEO_KIND == CITY"
-                    ), 1, 1
+                    ),
+                    1, // --=== THIS IS CHANGED FROM ZERO IN PREVIOUS EXAMPLE ===---
+                    1
                 )
             ),
             this::onRemoteMatch
@@ -193,6 +191,6 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
         DLModel model = DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build();
 
         // Initialize adapter.
-        setup("dl.time.ex", model);
+        setup(model.getDescriptor().getId(), model);
     }
 }

@@ -55,8 +55,8 @@
         {
             "id": "ctrl:subject",
             "group": "subject",
-            "synonyms": [ /* Note the code-based element selector. */
-                "%com.datalingvo.examples.sillyrobot.SillyRobotProvider#selectToken%"
+            "synonyms": [
+                "{`JJ`|`JJR`|`JJS`|`VBG`|*} {`NN`|`NNS`|`NNP`|`NNPS`}"
             ],
             "metadata": { "DESCRIPTION": "Object to control." }
         }

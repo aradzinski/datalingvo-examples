@@ -34,7 +34,7 @@ class EchoProvider extends DLSingleModelProviderAdapter {
       * @param s String to escape.
       * @return Escaped string.
       */
-    // TODO: instead of coding it here - borrow it from some well known library...
+    // TODO: instead of coding it here - you can borrow it from some well known library...
     def escapeJson(s: String): String = {
         val len = s.length
         

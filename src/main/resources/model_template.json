@@ -25,8 +25,7 @@
         "VENDOR_CONTACT": "Support",
         "VENDOR_EMAIL": "info@acme.com",
         "DOCS_URL": "https://www.acme.com/docs",
-        "MAX_GEO_TOKENS": 1,
-        "ALLOW_NO_TOKENS": true
+        "MAX_GEO_TOKENS": 1
     },
     "examples": [
         "Some example question",

@@ -7,7 +7,7 @@
  *   /___,' \__,_|\__\__,_\____/_|_| |_|\__, | \_/ \___/
  *                                      |___/
  *
- * Time example model.
+ * Time example model for lesson 8.
  */
 
 {
@@ -15,19 +15,18 @@
     "name": "Time Example Model",
     "version": "1.0",
     "metadata": {
-        "DESCRIPTION": "Global time example model.",
+        "DESCRIPTION": "Time example model.",
         "VENDOR_NAME": "DataLingvo, Inc",
         "VENDOR_URL": "https://www.datalingvo.com",
         "VENDOR_CONTACT": "Support",
         "VENDOR_EMAIL": "info@datalingvo.com",
-        "DOCS_URL": "https://www.datalingvo.com",
-        "MAX_GEO_TOKENS": 1
+        "DOCS_URL": "https://www.datalingvo.com"
     },
     "examples": [
-        "What time is it now in New York City?",
-        "What's the time in Moscow?",
-        "Show me time of the day in London.",
-        "Give me San Francisco's current date and time.",
+        "Current time in London?",
+        "What time is it now in Moscow?",
+        "What about Mumbai?",
+        "Cool - and in Berlin?",
         "What's the local time?"
     ],
     "macros": [
@@ -48,12 +47,33 @@
         {
             "id": "x:time",
             "synonyms": [
-                "{<CUR>|*} <TIME>",
-                "what <TIME> {is it now|now|is it|*}"
+                "{<CUR>|*} <TIME>"
             ],
             "metadata": {
                 "DESCRIPTION": "Date and/or time token indicator."
             }
         }
+    ],
+    "defaultTrivia": "true",
+    "trivia": [
+        {
+            "inputs": [
+                "{are|r} {you|u} ready"
+            ],
+            "responses": [
+                "Ready.",
+                "I am always ready.",
+                "Sure."
+            ]
+        }
+    ],
+    "additionalStopwords": [
+        "wow", "cool"
+    ],
+    "excludedStopwords": [
+
+    ],
+    "suspiciousWords": [
+        "dog", "cat"
     ]
 }

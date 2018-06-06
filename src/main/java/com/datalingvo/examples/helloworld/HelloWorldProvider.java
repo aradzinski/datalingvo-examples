@@ -30,7 +30,7 @@ public class HelloWorldProvider extends DLSingleModelProviderAdapter {
      *
      * @throws DLException If any errors occur.
      */
-    public HelloWorldProvider() throws DLException {
+    HelloWorldProvider() throws DLException {
         // Initialize adapter.
         setup(
             MODEL_ID,

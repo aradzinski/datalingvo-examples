@@ -314,7 +314,7 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     /**
      * Initializes model provider.
      */
-    public WeatherProvider() {
+    WeatherProvider() {
         String modelPath = DLModelBuilder.classPathFile("weather_model.json");
 
         DLTokenSolver solver = new DLTokenSolver("solver", false, () -> { throw new DLCuration(); });
