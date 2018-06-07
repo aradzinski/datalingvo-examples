@@ -13,6 +13,7 @@ package com.datalingvo.examples.misc.geo.cities;
 import com.datalingvo.DLException;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -42,7 +43,7 @@ public class CitiesDataProvider {
 
         try {
             return Files.
-                lines(Paths.get(url.getFile())).
+                lines(Paths.get(new File(url.getFile()).getAbsolutePath())).
                 filter(p -> !p.startsWith("#")).
                 map(String::trim).
                 filter(p -> !p.isEmpty()).
