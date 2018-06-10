@@ -154,7 +154,6 @@ class EchoProvider extends DLSingleModelProviderAdapter {
     }
 
     setup(
-        MODEL_ID,
         // Using inline JSON model.
         DLModelBuilder.newJsonStringModel(
             s"""

@@ -46,6 +46,6 @@ public class TimeProvider3 extends DLSingleModelProviderAdapter {
         DLModel model = DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build();
     
         // Initialize adapter.
-        setup(model.getDescriptor().getId(), model);
+        setup(model);
     }
 }

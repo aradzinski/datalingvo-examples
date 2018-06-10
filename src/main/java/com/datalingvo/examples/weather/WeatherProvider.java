@@ -325,6 +325,6 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
         solver.addIntent(makeMatch("wt:fcast"), this::onForecastMatch);
         solver.addIntent(makeMatch("wt:curr"), this::onCurrentMatch);
 
-        setup("dl.weather.ex", DLModelBuilder.newJsonModel(modelPath).setQueryFunction(solver::solve).build());
+        setup(DLModelBuilder.newJsonModel(modelPath).setQueryFunction(solver::solve).build());
     }
 }

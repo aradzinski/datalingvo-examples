@@ -63,7 +63,6 @@ class WhereAmIProvider extends DLSingleModelProviderAdapter {
     )
     
     setup(
-        "dl.whereami.ex",
         DLModelBuilder.newJsonModel(DLModelBuilder.classPathFile("whereami_model.json")).
             setQueryFunction(solver.solve _).
             build()

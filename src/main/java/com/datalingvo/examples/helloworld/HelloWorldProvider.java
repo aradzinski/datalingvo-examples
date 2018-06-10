@@ -22,9 +22,6 @@ import com.datalingvo.mdllib.tools.builder.*;
  */
 @DLActiveModelProvider
 public class HelloWorldProvider extends DLSingleModelProviderAdapter {
-    // Any immutable user defined ID.
-    private static final String MODEL_ID = "dl.helloworld.ex";
-
     /**
      * Initializes provider.
      *
@@ -33,9 +30,8 @@ public class HelloWorldProvider extends DLSingleModelProviderAdapter {
     HelloWorldProvider() throws DLException {
         // Initialize adapter.
         setup(
-            MODEL_ID,
             // Minimally defined model...
-            DLModelBuilder.newModel(MODEL_ID, "HelloWorld Example Model", "1.0")
+            DLModelBuilder.newModel("dl.helloworld.ex", "HelloWorld Example Model", "1.0")
                 // Return HTML result.
                 .setQueryFunction(ctx -> DLQueryResult.html(
                     "Hello World!<br/>" +

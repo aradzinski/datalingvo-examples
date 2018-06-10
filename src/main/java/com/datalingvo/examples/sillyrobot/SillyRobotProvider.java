@@ -126,10 +126,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
         intentMaker.accept("stop", this::doStop);
 
         // Load model form JSON configuration and set query function implementation based
-        // on intent-based token solver.
-        DLModel model = DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build();
-
-        // Initialize adapter with constructed model.
-        setup("dl.control.ex", model);
+        // on intent-based token solver. Initialize adapter with constructed model.
+        setup(DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build());
     }
 }

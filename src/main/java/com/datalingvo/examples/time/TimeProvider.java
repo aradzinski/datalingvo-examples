@@ -190,9 +190,7 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
             this::onRemoteMatch
         );
 
-        DLModel model = DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build();
-
         // Initialize adapter.
-        setup("dl.time.ex", model);
+        setup(DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build());
     }
 }

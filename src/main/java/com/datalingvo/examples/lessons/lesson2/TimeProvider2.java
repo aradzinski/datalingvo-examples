@@ -21,8 +21,6 @@ import com.datalingvo.mdllib.tools.builder.*;
  */
 @DLActiveModelProvider
 public class TimeProvider2 extends DLSingleModelProviderAdapter {
-    private static final String MODEL_ID = "dl.time.ex";
-    
     /**
      * Initializes provider.
      *
@@ -49,9 +47,8 @@ public class TimeProvider2 extends DLSingleModelProviderAdapter {
     
         // Initialize adapter.
         setup(
-            MODEL_ID,
             DLModelBuilder.
-                newModel(MODEL_ID, "Time Example Model", "1.0").
+                newModel("dl.time.ex", "Time Example Model", "1.0").
                 addElement(dateTimeElem).
                 setQueryFunction(solver::solve).
                 build()
