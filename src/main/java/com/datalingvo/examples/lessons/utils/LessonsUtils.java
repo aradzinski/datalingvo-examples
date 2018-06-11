@@ -10,8 +10,9 @@
 
 package com.datalingvo.examples.lessons.utils;
 
-import java.time.*;
-import java.time.format.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Lessons utility class.

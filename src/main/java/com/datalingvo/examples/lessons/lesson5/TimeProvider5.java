@@ -10,14 +10,19 @@
 
 package com.datalingvo.examples.lessons.lesson5;
 
-import com.datalingvo.*;
-import com.datalingvo.examples.lessons.utils.*;
-import com.datalingvo.examples.misc.geo.cities.*;
+import com.datalingvo.DLException;
+import com.datalingvo.examples.lessons.utils.LessonsUtils;
+import com.datalingvo.examples.misc.geo.cities.CitiesDataProvider;
+import com.datalingvo.examples.misc.geo.cities.City;
+import com.datalingvo.examples.misc.geo.cities.CityData;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.*;
-import com.datalingvo.mdllib.tools.builder.*;
-import java.time.*;
-import java.util.*;
+import com.datalingvo.mdllib.DLTokenSolver.AND;
+import com.datalingvo.mdllib.DLTokenSolver.NON_CONV_INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.TERM;
+import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
+
+import java.time.ZoneId;
+import java.util.Map;
 
 /**
  * `Lesson 5` model provider.

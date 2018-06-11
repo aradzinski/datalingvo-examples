@@ -10,17 +10,24 @@
 
 package com.datalingvo.examples.lessons.lesson8;
 
-import com.datalingvo.*;
-import com.datalingvo.examples.misc.geo.cities.*;
+import com.datalingvo.DLException;
+import com.datalingvo.examples.misc.geo.cities.CitiesDataProvider;
+import com.datalingvo.examples.misc.geo.cities.City;
+import com.datalingvo.examples.misc.geo.cities.CityData;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.*;
-import com.datalingvo.mdllib.tools.builder.*;
-import org.apache.commons.lang3.text.*;
-import java.time.*;
-import java.time.format.*;
-import java.util.*;
+import com.datalingvo.mdllib.DLTokenSolver.AND;
+import com.datalingvo.mdllib.DLTokenSolver.CONV_INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.NON_CONV_INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.TERM;
+import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
+import org.apache.commons.lang3.text.WordUtils;
 
-import static java.time.format.FormatStyle.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+
+import static java.time.format.FormatStyle.MEDIUM;
 
 /**
  * `Lesson 8` model provider.

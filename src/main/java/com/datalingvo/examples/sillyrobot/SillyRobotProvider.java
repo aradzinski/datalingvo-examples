@@ -10,13 +10,17 @@
 
 package com.datalingvo.examples.sillyrobot;
 
-import com.datalingvo.*;
+import com.datalingvo.DLException;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.*;
-import com.datalingvo.mdllib.tools.builder.*;
-import org.apache.commons.lang3.*;
-import java.util.*;
-import java.util.function.*;
+import com.datalingvo.mdllib.DLTokenSolver.CONV_INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.IntentCallback;
+import com.datalingvo.mdllib.DLTokenSolver.TERM;
+import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.BiConsumer;
 
 /**
  * Silly Robot example model provider.

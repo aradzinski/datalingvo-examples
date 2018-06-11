@@ -10,8 +10,9 @@
 
 package com.datalingvo.examples.weather;
 
-import com.datalingvo.*;
-import com.datalingvo.probe.dev.*;
+import com.datalingvo.DLException;
+import com.datalingvo.probe.dev.DLProbeConfig;
+import com.datalingvo.probe.dev.DLProbeDevApp;
 
 /**
  * In-process probe runner for this example.

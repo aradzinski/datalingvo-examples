@@ -12,7 +12,7 @@ package com.datalingvo.examples.echo
 
 import com.datalingvo.mdllib._
 import com.datalingvo.mdllib.tools.builder.DLModelBuilder
-import com.datalingvo.mdllib.tools.scala.DLScalaSupport._ /* IDEA wrongly marks it as unused. */
+import com.datalingvo.mdllib.tools.scala.DLScalaSupport._
 
 import scala.collection.JavaConverters._
 

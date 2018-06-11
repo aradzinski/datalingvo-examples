@@ -10,10 +10,10 @@
 
 package com.datalingvo.examples.whereami
 
+import com.datalingvo.mdllib.DLTokenSolver._
 import com.datalingvo.mdllib._
 import com.datalingvo.mdllib.tools.builder.DLModelBuilder
-import com.datalingvo.mdllib.tools.scala.DLScalaSupport._ /* IDEA wrongly marks it as unused. */
-import com.datalingvo.mdllib.DLTokenSolver._
+import com.datalingvo.mdllib.tools.scala.DLScalaSupport._
 
 /**
   * "Where Am I" example model provider.

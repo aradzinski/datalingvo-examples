@@ -10,19 +10,30 @@
 
 package com.datalingvo.examples.weather.apixu;
 
-import com.datalingvo.*;
-import com.datalingvo.examples.weather.apixu.beans.*;
-import com.datalingvo.mdllib.*;
-import com.google.gson.*;
-import org.apache.commons.lang3.tuple.*;
-import java.io.*;
-import java.net.*;
-import java.time.*;
-import java.time.format.*;
-import java.util.*;
-import java.util.stream.*;
+import com.datalingvo.DLException;
+import com.datalingvo.examples.weather.apixu.beans.CurrentResponse;
+import com.datalingvo.examples.weather.apixu.beans.DayInfo;
+import com.datalingvo.examples.weather.apixu.beans.DaysList;
+import com.datalingvo.examples.weather.apixu.beans.RangeResponse;
+import com.datalingvo.mdllib.DLRejection;
+import com.google.gson.Gson;
+import org.apache.commons.lang3.tuple.Pair;
 
-import static java.time.temporal.ChronoUnit.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.zip.GZIPInputStream;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 /**
  * Weather data provider using https://www.apixu.com service.
@@ -86,10 +97,17 @@ public class ApixuWeatherService {
 
         String url = "http://api.apixu.com/v1/" + method + ".json?" + pLine;
 
-        try (InputStream in = new URL(url).openConnection().getInputStream()) {
-            return gson.fromJson(new BufferedReader(new InputStreamReader(in)), respClass);
+        try {
+            URLConnection conn = new URL(url).openConnection();
+
+            try (InputStream in = conn.getInputStream()) {
+                InputStream stream = conn.getContentEncoding().equals("gzip") ? new GZIPInputStream(in) : in;
+
+                return gson.fromJson(new BufferedReader(new InputStreamReader(stream)), respClass);
+            }
         }
-        catch (IOException e) {
+        // IO, encoding errors.
+        catch (Exception e) {
             e.printStackTrace(System.err);
 
             throw new DLRejection("Unable to answer due to weather data provider (APIXU) failure.");

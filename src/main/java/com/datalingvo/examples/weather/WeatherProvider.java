@@ -10,16 +10,25 @@
 
 package com.datalingvo.examples.weather;
 
-import com.datalingvo.examples.weather.apixu.*;
+import com.datalingvo.examples.weather.apixu.ApixuWeatherService;
 import com.datalingvo.examples.weather.apixu.beans.*;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.*;
-import com.datalingvo.mdllib.tools.builder.*;
-import org.apache.commons.lang3.tuple.*;
-import java.text.*;
-import java.time.*;
-import java.util.*;
-import java.util.stream.*;
+import com.datalingvo.mdllib.DLTokenSolver.CONV_INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.TERM;
+import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Weather example model provider.
