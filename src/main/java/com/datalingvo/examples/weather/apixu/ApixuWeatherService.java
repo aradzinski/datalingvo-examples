@@ -101,7 +101,10 @@ public class ApixuWeatherService {
             URLConnection conn = new URL(url).openConnection();
 
             try (InputStream in = conn.getInputStream()) {
-                InputStream stream = conn.getContentEncoding().equals("gzip") ? new GZIPInputStream(in) : in;
+                String enc = conn.getContentEncoding();
+
+                // Default 'unzipped'. APIXU changes format too often, can be changed again.
+                InputStream stream = enc != null && enc.equals("gzip") ? new GZIPInputStream(in) : in;
 
                 return gson.fromJson(new BufferedReader(new InputStreamReader(stream)), respClass);
             }
