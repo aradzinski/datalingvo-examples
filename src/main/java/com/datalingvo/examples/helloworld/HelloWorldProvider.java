@@ -10,9 +10,11 @@
 
 package com.datalingvo.examples.helloworld;
 
-import com.datalingvo.*;
-import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.tools.builder.*;
+import com.datalingvo.DLException;
+import com.datalingvo.mdllib.DLActiveModelProvider;
+import com.datalingvo.mdllib.DLQueryResult;
+import com.datalingvo.mdllib.DLSingleModelProviderAdapter;
+import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
 
 /**
  * Hello World example model provider.
@@ -22,9 +24,6 @@ import com.datalingvo.mdllib.tools.builder.*;
  */
 @DLActiveModelProvider
 public class HelloWorldProvider extends DLSingleModelProviderAdapter {
-    // Any immutable user defined ID.
-    private static final String MODEL_ID = "dl.helloworld.ex";
-
     /**
      * Initializes provider.
      *
@@ -33,9 +32,8 @@ public class HelloWorldProvider extends DLSingleModelProviderAdapter {
     HelloWorldProvider() throws DLException {
         // Initialize adapter.
         setup(
-            MODEL_ID,
             // Minimally defined model...
-            DLModelBuilder.newModel(MODEL_ID, "HelloWorld Example Model", "1.0")
+            DLModelBuilder.newModel("dl.helloworld.ex", "HelloWorld Example Model", "1.0")
                 // Return HTML result.
                 .setQueryFunction(ctx -> DLQueryResult.html(
                     "Hello World!<br/>" +

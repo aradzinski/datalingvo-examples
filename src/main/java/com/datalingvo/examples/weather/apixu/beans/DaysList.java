@@ -10,7 +10,7 @@
 
 package com.datalingvo.examples.weather.apixu.beans;
 
-import com.google.gson.annotations.*;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * REST parsing bean.

@@ -10,14 +10,19 @@
 
 package com.datalingvo.examples.lessons.lesson5;
 
-import com.datalingvo.*;
-import com.datalingvo.examples.lessons.utils.*;
-import com.datalingvo.examples.misc.geo.cities.*;
+import com.datalingvo.DLException;
+import com.datalingvo.examples.lessons.utils.LessonsUtils;
+import com.datalingvo.examples.misc.geo.cities.CitiesDataProvider;
+import com.datalingvo.examples.misc.geo.cities.City;
+import com.datalingvo.examples.misc.geo.cities.CityData;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.*;
-import com.datalingvo.mdllib.tools.builder.*;
-import java.time.*;
-import java.util.*;
+import com.datalingvo.mdllib.DLTokenSolver.AND;
+import com.datalingvo.mdllib.DLTokenSolver.NON_CONV_INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.TERM;
+import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
+
+import java.time.ZoneId;
+import java.util.Map;
 
 /**
  * `Lesson 5` model provider.
@@ -43,12 +48,12 @@ public class TimeProvider5 extends DLSingleModelProviderAdapter {
      */
     private DLQueryResult onMatch(DLTokenSolverContext ctx) {
         // 'dl:geo' is optional here.
-        if (ctx.getTokens().get(1).isEmpty())
+        if (ctx.getIntentTokens().get(1).isEmpty())
             // Get user's timezone from sentence metadata.
             return formatResult(ctx.getSentence().getMetadata().getStringOrElse("TMZ_NAME", "America/Los_Angeles"));
 
         // Note that only one 'dl:geo' token is allowed per model metadata.
-        DLToken geoTok = ctx.getTokens().get(1).get(0);
+        DLToken geoTok = ctx.getIntentTokens().get(1).get(0);
 
         DLMetadata geoMeta = geoTok.getMetadata();
 
@@ -101,6 +106,6 @@ public class TimeProvider5 extends DLSingleModelProviderAdapter {
         DLModel model = DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build();
 
         // Initialize adapter.
-        setup(model.getDescriptor().getId(), model);
+        setup(model);
     }
 }

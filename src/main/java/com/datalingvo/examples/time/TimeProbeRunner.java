@@ -11,7 +11,8 @@
 package com.datalingvo.examples.time;
 
 import com.datalingvo.DLException;
-import com.datalingvo.probe.dev.*;
+import com.datalingvo.probe.dev.DLProbeConfig;
+import com.datalingvo.probe.dev.DLProbeDevApp;
 
 /**
  * In-process probe runner for this example.

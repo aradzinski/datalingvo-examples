@@ -28,7 +28,6 @@ class ChatProvider extends DLSingleModelProviderAdapter {
     
     // Setting up provider adapter.
     setup(
-        MODEL_ID,
         // Using inline JSON model.
         DLModelBuilder.newJsonStringModel(
             // Hand-rolled JSON for simplicity...

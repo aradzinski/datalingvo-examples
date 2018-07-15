@@ -10,16 +10,25 @@
 
 package com.datalingvo.examples.weather;
 
-import com.datalingvo.examples.weather.apixu.*;
+import com.datalingvo.examples.weather.apixu.ApixuWeatherService;
 import com.datalingvo.examples.weather.apixu.beans.*;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.*;
-import com.datalingvo.mdllib.tools.builder.*;
-import org.apache.commons.lang3.tuple.*;
-import java.text.*;
-import java.time.*;
-import java.util.*;
-import java.util.stream.*;
+import com.datalingvo.mdllib.DLTokenSolver.CONV_INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.TERM;
+import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Weather example model provider.
@@ -257,12 +266,12 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
      * @return Query result.
      */
     private DLQueryResult onRangeMatch(DLTokenSolverContext ctx, LocalDate from, LocalDate to) {
-        Pair<LocalDate, LocalDate> date = prepDate(ctx.getTokens().get(1));
+        Pair<LocalDate, LocalDate> date = prepDate(ctx.getIntentTokens().get(1));
 
         if (date == null)
             date = Pair.of(from, to);
 
-        String geo = prepGeo(ctx.getTokens().get(2), ctx.getSentence().getMetadata());
+        String geo = prepGeo(ctx.getIntentTokens().get(2), ctx.getSentence().getMetadata());
 
         return makeRangeResult(srv.getWeather(geo, date));
     }
@@ -296,8 +305,8 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
      * @return Query result.
      */
     private DLQueryResult onCurrentMatch(DLTokenSolverContext ctx) {
-        Pair<LocalDate, LocalDate> date = prepDate(ctx.getTokens().get(1));
-        String geo = prepGeo(ctx.getTokens().get(2), ctx.getSentence().getMetadata());
+        Pair<LocalDate, LocalDate> date = prepDate(ctx.getIntentTokens().get(1));
+        String geo = prepGeo(ctx.getIntentTokens().get(2), ctx.getSentence().getMetadata());
 
         return date != null ? makeRangeResult(srv.getWeather(geo, date)): makeCurrentResult(srv.getCurrentWeather(geo));
     }
@@ -325,6 +334,6 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
         solver.addIntent(makeMatch("wt:fcast"), this::onForecastMatch);
         solver.addIntent(makeMatch("wt:curr"), this::onCurrentMatch);
 
-        setup("dl.weather.ex", DLModelBuilder.newJsonModel(modelPath).setQueryFunction(solver::solve).build());
+        setup(DLModelBuilder.newJsonModel(modelPath).setQueryFunction(solver::solve).build());
     }
 }

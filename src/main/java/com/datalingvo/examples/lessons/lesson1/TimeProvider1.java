@@ -10,18 +10,18 @@
 
 package com.datalingvo.examples.lessons.lesson1;
 
-import com.datalingvo.*;
-import com.datalingvo.examples.lessons.utils.*;
-import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.tools.builder.*;
+import com.datalingvo.DLException;
+import com.datalingvo.examples.lessons.utils.LessonsUtils;
+import com.datalingvo.mdllib.DLActiveModelProvider;
+import com.datalingvo.mdllib.DLQueryResult;
+import com.datalingvo.mdllib.DLSingleModelProviderAdapter;
+import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
 
 /**
  * `Lesson 1` model provider.
  */
 @DLActiveModelProvider
 public class TimeProvider1 extends DLSingleModelProviderAdapter {
-    private static final String MODEL_ID = "dl.time.ex";
-    
     /**
      * Initializes provider.
      *
@@ -30,8 +30,7 @@ public class TimeProvider1 extends DLSingleModelProviderAdapter {
     TimeProvider1() throws DLException {
         // Initialize adapter.
         setup(
-            MODEL_ID,
-            DLModelBuilder.newModel(MODEL_ID, "Time Example Model", "1.0").
+            DLModelBuilder.newModel("dl.time.ex", "Time Example Model", "1.0").
                 setQueryFunction(ctx -> DLQueryResult.text(LessonsUtils.now())).
                 build()
         );

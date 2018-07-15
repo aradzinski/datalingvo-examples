@@ -10,13 +10,17 @@
 
 package com.datalingvo.examples.sillyrobot;
 
-import com.datalingvo.*;
+import com.datalingvo.DLException;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.*;
-import com.datalingvo.mdllib.tools.builder.*;
-import org.apache.commons.lang3.*;
-import java.util.*;
-import java.util.function.*;
+import com.datalingvo.mdllib.DLTokenSolver.CONV_INTENT;
+import com.datalingvo.mdllib.DLTokenSolver.IntentCallback;
+import com.datalingvo.mdllib.DLTokenSolver.TERM;
+import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.BiConsumer;
 
 /**
  * Silly Robot example model provider.
@@ -126,10 +130,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
         intentMaker.accept("stop", this::doStop);
 
         // Load model form JSON configuration and set query function implementation based
-        // on intent-based token solver.
-        DLModel model = DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build();
-
-        // Initialize adapter with constructed model.
-        setup("dl.control.ex", model);
+        // on intent-based token solver. Initialize adapter with constructed model.
+        setup(DLModelBuilder.newJsonModel(path).setQueryFunction(solver::solve).build());
     }
 }
