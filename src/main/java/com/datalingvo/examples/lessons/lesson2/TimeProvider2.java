@@ -10,12 +10,11 @@
 
 package com.datalingvo.examples.lessons.lesson2;
 
-import com.datalingvo.DLException;
-import com.datalingvo.examples.lessons.utils.LessonsUtils;
+import com.datalingvo.*;
+import com.datalingvo.examples.lessons.utils.*;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.INTENT;
-import com.datalingvo.mdllib.tools.builder.DLElementBuilder;
-import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
+import com.datalingvo.mdllib.DLTokenSolver.*;
+import com.datalingvo.mdllib.tools.builder.*;
 
 /**
  * `Lesson 2` model provider.
