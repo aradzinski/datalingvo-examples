@@ -148,6 +148,9 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     private DLQueryResult makeRangeResult(RangeResponse res) {
         Location loc = res.getLocation();
 
+        if (loc == null)
+            throw new DLRejection("Weather service doesn't recognize this location.");
+
         String headers = Arrays.stream(res.getForecast().getForecastDay()).map(day ->
             prepHeader(day.getDate())).collect(Collectors.joining(","));
         String rows = Arrays.stream(res.getForecast().getForecastDay()).map(day ->
@@ -192,6 +195,11 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     private DLQueryResult makeCurrentResult(CurrentResponse res) {
         Location loc = res.getLocation();
         Current cur = res.getCurrent();
+
+        if (loc == null)
+            throw new DLRejection("Weather service doesn't recognize this location.");
+        if (cur == null)
+            throw new DLRejection("Weather service doesn't support this location.");
 
         // Multipart result (HTML block + Google map).
         return DLQueryResult.jsonMultipart(
@@ -283,8 +291,16 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
      * @return Query result.
      */
     private DLQueryResult onForecastMatch(DLTokenSolverContext ctx) {
-        // Look 5 days ahead by default.
-        return onRangeMatch(ctx, LocalDate.now(), LocalDate.now().plusDays(5));
+        try {
+            // Look 5 days ahead by default.
+            return onRangeMatch(ctx, LocalDate.now(), LocalDate.now().plusDays(5));
+        }
+        catch (DLRejection | DLCuration e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new DLRejection("Weather provider error.");
+        }
     }
 
     /**
@@ -294,8 +310,16 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
      * @return Query result.
      */
     private DLQueryResult onHistoryMatch(DLTokenSolverContext ctx) {
-        // Look 5 days back by default.
-        return onRangeMatch(ctx, LocalDate.now().minusDays(5), LocalDate.now());
+        try {
+            // Look 5 days back by default.
+            return onRangeMatch(ctx, LocalDate.now().minusDays(5), LocalDate.now());
+        }
+        catch (DLRejection | DLCuration e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new DLRejection("Weather provider error.");
+        }
     }
 
     /**
@@ -305,16 +329,24 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
      * @return Query result.
      */
     private DLQueryResult onCurrentMatch(DLTokenSolverContext ctx) {
-        Pair<LocalDate, LocalDate> date = prepDate(ctx.getIntentTokens().get(1));
-        String geo = prepGeo(ctx.getIntentTokens().get(2), ctx.getSentence().getMetadata());
+        try {
+            Pair<LocalDate, LocalDate> date = prepDate(ctx.getIntentTokens().get(1));
+            String geo = prepGeo(ctx.getIntentTokens().get(2), ctx.getSentence().getMetadata());
 
-        return date != null ? makeRangeResult(srv.getWeather(geo, date)): makeCurrentResult(srv.getCurrentWeather(geo));
+            return date != null ? makeRangeResult(srv.getWeather(geo, date)) : makeCurrentResult(srv.getCurrentWeather(geo));
+        }
+        catch (DLRejection | DLCuration e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new DLRejection("Weather provider error.");
+        }
     }
 
     // Shortcut method for creating a intent with given weather token.
-    private INTENT makeMatch(String tokId) {
+    private INTENT makeTerms(String tokId) {
         return new CONV_INTENT(
-            new TERM("id == " + tokId, 1, 1),      // Index 0. Mandatory weather token.
+            new TERM("id == " + tokId, 1, 1), // Index 0. Mandatory weather token.
             new TERM("id == dl:date", 0, 1),  // Index 1. Optional date.
             new TERM("id == dl:geo", 0, 1)    // Index 2. Optional location.
         );
@@ -330,9 +362,9 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
 
         // Match exactly one weather token and optional 'dl:geo' and 'dl:date' tokens including
         // looking into conversation context.
-        solver.addIntent(makeMatch("wt:hist"), this::onHistoryMatch);
-        solver.addIntent(makeMatch("wt:fcast"), this::onForecastMatch);
-        solver.addIntent(makeMatch("wt:curr"), this::onCurrentMatch);
+        solver.addIntent(makeTerms("wt:hist"), this::onHistoryMatch);
+        solver.addIntent(makeTerms("wt:fcast"), this::onForecastMatch);
+        solver.addIntent(makeTerms("wt:curr"), this::onCurrentMatch);
 
         setup(DLModelBuilder.newJsonModel(modelPath).setQueryFunction(solver::solve).build());
     }
