@@ -10,24 +10,19 @@
 
 package com.datalingvo.examples.time;
 
-import com.datalingvo.DLException;
-import com.datalingvo.examples.misc.geo.cities.CitiesDataProvider;
-import com.datalingvo.examples.misc.geo.cities.City;
-import com.datalingvo.examples.misc.geo.cities.CityData;
+import com.datalingvo.*;
+import com.datalingvo.examples.misc.geo.cities.*;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.AND;
-import com.datalingvo.mdllib.DLTokenSolver.CONV_INTENT;
-import com.datalingvo.mdllib.DLTokenSolver.NON_CONV_INTENT;
-import com.datalingvo.mdllib.DLTokenSolver.TERM;
-import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
-import org.apache.commons.lang3.text.WordUtils;
+import com.datalingvo.mdllib.intent.*;
+import com.datalingvo.mdllib.intent.DLIntentSolver.*;
+import com.datalingvo.mdllib.tools.builder.*;
+import org.apache.commons.lang3.text.*;
+import java.time.*;
+import java.time.format.*;
+import java.util.*;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
-
-import static java.time.format.FormatStyle.MEDIUM;
+import static com.datalingvo.mdllib.utils.DLTokenUtils.*;
+import static java.time.format.FormatStyle.*;
 
 /**
  * Time example model provider.
@@ -109,17 +104,20 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
      * @param ctx Token solver context.
      * @return Query result.
      */
-    private DLQueryResult onLocalMatch(DLTokenSolverContext ctx) {
-        DLMetadata md = ctx.getSentence().getMetadata();
+    private DLQueryResult onLocalMatch(DLIntentSolverContext ctx) {
+        if (!ctx.isExactMatch())
+            throw new DLRejection("Not exact match.");
+        
+        DLSentence sen = ctx.getQueryContext().getSentence();
 
         // Get local geo data from sentence metadata defaulting to
         // Silicon Valley location in case we are missing that info.
         return formatResult(
-            md.getStringOrElse("CITY", ""),
-            md.getStringOrElse("COUNTRY_NAME", "United States"),
-            md.getStringOrElse("TMZ_NAME", "America/Los_Angeles"),
-            md.getDoubleOrElse("LATITUDE", 37.7749),
-            md.getDoubleOrElse("LONGITUDE", 122.4194)
+            sen.getCityName().orElse(""),
+            sen.getCountryName().orElse("United States"),
+            sen.getTimezoneName().orElse("America/Los_Angeles"),
+            sen.getLatitude().orElse(37.7749),
+            sen.getLongitude().orElse(122.4194)
         );
     }
 
@@ -129,17 +127,14 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
      * @param ctx Token solver context.
      * @return Query result.
      */
-    private DLQueryResult onRemoteMatch(DLTokenSolverContext ctx) {
+    private DLQueryResult onRemoteMatch(DLIntentSolverContext ctx) {
         // 'dl:geo' is mandatory.
         // Only one 'dl:geo' token is allowed, so we don't have to check for it.
         DLToken geoTok = ctx.getIntentTokens().get(1).get(0);
 
-        // GEO token metadata.
-        DLMetadata meta = geoTok.getMetadata();
-
-        // 'GEO_COUNTRY' and 'GEO_CITY' is mandatory metadata of 'dl:geo' token.
-        String city = meta.getString("GEO_CITY");
-        String cntry = meta.getString("GEO_COUNTRY");
+        // Country and city are is mandatory metadata of 'dl:geo' token.
+        String city = getGeoCity(geoTok);
+        String cntry = getGeoCountry(geoTok);
 
         CityData data = citiesData.get(new City(city, cntry));
 
@@ -159,10 +154,8 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
     TimeProvider() throws DLException {
         String path = DLModelBuilder.classPathFile("time_model.json");
 
-        DLTokenSolver solver = new DLTokenSolver(
+        DLIntentSolver solver = new DLIntentSolver(
             "time-solver",
-            // Allow for multi matches. If two intents match - pick any random one...
-            true,
             // Custom not-found function with tailored rejection message.
             () -> { throw new DLRejection("Are you asking about time?<br>Check spelling and city name too."); }
         );
@@ -177,6 +170,7 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
         // Check for exactly one 'x:time' token **without** looking into conversation context.
         // That's an indication of asking for local time only.
         solver.addIntent(
+            "time",
             new NON_CONV_INTENT("id == x:time", 1, 1), // Term idx=0.
             this::onLocalMatch
         );
@@ -184,6 +178,7 @@ public class TimeProvider extends DLSingleModelProviderAdapter {
         // Check for exactly one 'x:time' and one 'dl:geo' CITY token **including** conversation
         // context. This is always remote time.
         solver.addIntent(
+            "c^time|city",
             new CONV_INTENT(
                 new TERM("id == x:time", 1, 1), // Term idx=0.
                 new TERM(

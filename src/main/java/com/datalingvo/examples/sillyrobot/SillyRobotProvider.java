@@ -10,17 +10,16 @@
 
 package com.datalingvo.examples.sillyrobot;
 
-import com.datalingvo.DLException;
+import com.datalingvo.*;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.CONV_INTENT;
-import com.datalingvo.mdllib.DLTokenSolver.IntentCallback;
-import com.datalingvo.mdllib.DLTokenSolver.TERM;
-import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
-import org.apache.commons.lang3.StringUtils;
+import com.datalingvo.mdllib.intent.*;
+import com.datalingvo.mdllib.intent.DLIntentSolver.*;
+import com.datalingvo.mdllib.tools.builder.*;
+import org.apache.commons.lang3.*;
+import java.util.*;
+import java.util.function.*;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.BiConsumer;
+import static com.datalingvo.mdllib.utils.DLTokenUtils.*;
 
 /**
  * Silly Robot example model provider.
@@ -50,8 +49,8 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
      * @param ctx Solver context.
      * @return Subject of the input string.
      */
-    private String getSubject(DLTokenSolverContext ctx) {
-        return ctx.getToken(1, 0).getNormalizedText();
+    private String getSubject(DLIntentSolverContext ctx) {
+        return getNormalizedText(ctx.getIntentTokens().get(1).get(0));
     }
 
     /**
@@ -60,7 +59,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
      * @param ctx Solver context.
      * @return Query result.
      */
-    private DLQueryResult doState(DLTokenSolverContext ctx) {
+    private DLQueryResult doState(DLIntentSolverContext ctx) {
         // Subject of the sentence.
         String subj = getSubject(ctx);
 
@@ -74,7 +73,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
      * @param ctx Solver context.
      * @return Query result.
      */
-    private DLQueryResult doStart(DLTokenSolverContext ctx) {
+    private DLQueryResult doStart(DLIntentSolverContext ctx) {
         // Subject of the sentence.
         String subj = getSubject(ctx);
 
@@ -88,7 +87,7 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
      * @param ctx Solver context.
      * @return Query result.
      */
-    private DLQueryResult doStop(DLTokenSolverContext ctx) {
+    private DLQueryResult doStop(DLIntentSolverContext ctx) {
         // Subject of the sentence.
         String subj = getSubject(ctx);
 
@@ -105,12 +104,13 @@ public class SillyRobotProvider extends DLSingleModelProviderAdapter {
         String path = DLModelBuilder.classPathFile("silly_robot_model.json");
 
         // Create default token solver for intent-based matching.
-        DLTokenSolver solver = new DLTokenSolver();
+        DLIntentSolver solver = new DLIntentSolver();
 
         // Lambda for adding intent to the solver.
         BiConsumer<String, IntentCallback> intentMaker =
             (id, f/* Callback. */) ->
                 solver.addIntent(
+                    id + "|subject",
                     new CONV_INTENT(
                         // Term idx=0:
                         // A non-interactive term that is either 'state', 'start' or 'stop'.

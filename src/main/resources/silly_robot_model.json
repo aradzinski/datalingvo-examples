@@ -13,14 +13,12 @@
     "id": "dl.control.ex",
     "name": "Silly Robot Example Model",
     "version": "1.0",
-    "metadata": {
-        "DESCRIPTION": "Silly Robot example model.",
-        "VENDOR_NAME": "DataLingvo, Inc",
-        "VENDOR_URL": "https://www.datalingvo.com",
-        "VENDOR_CONTACT": "Support",
-        "VENDOR_EMAIL": "info@datalingvo.com",
-        "DOCS_URL": "https://www.datalingvo.com"
-    },
+    "description": "Silly Robot example model.",
+    "vendorName": "DataLingvo, Inc",
+    "vendorUrl": "https://www.datalingvo.com",
+    "vendorContact": "Support",
+    "vendorEmail": "info@datalingvo.com",
+    "docsUrl": "https://www.datalingvo.com",
     "examples": [
         "Turn on the radio",
         "Turn off the radio",
@@ -30,35 +28,35 @@
     "elements": [
         {
             "id": "ctrl:start",
+            "description": "Start command.",
             "group": "operation",
             "synonyms": [
                 "{start|launch|go|{turn|put} on}"
-            ],
-            "metadata": { "DESCRIPTION": "Start command." }
+            ]
         },
         {
             "id": "ctrl:stop",
+            "description": "Stop command.",
             "group": "operation",
             "synonyms": [
                 "{stop|halt|abort|{turn|put} off}"
-            ],
-            "metadata": { "DESCRIPTION": "Stop command." }
+            ]
         },
         {
             "id": "ctrl:state",
+            "description": "State command.",
             "group": "operation",
             "synonyms": [
                 "{state|status|condition|check|verify|review}"
-            ],
-            "metadata": { "DESCRIPTION": "State command." }
+            ]
         },
         {
             "id": "ctrl:subject",
+            "description": "Object to control.",
             "group": "subject",
             "synonyms": [
                 "{`JJ`|`JJR`|`JJS`|`VBG`|*} {`NN`|`NNS`|`NNP`|`NNPS`}"
-            ],
-            "metadata": { "DESCRIPTION": "Object to control." }
+            ]
         }
 
     ],

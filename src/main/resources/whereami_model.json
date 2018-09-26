@@ -13,14 +13,12 @@
     "id": "dl.whereami.ex",
     "name": "Current GEO Location Example Model",
     "version": "1.0",
-    "metadata": {
-        "DESCRIPTION": "Current user GEO-location example model.",
-        "VENDOR_NAME": "DataLingvo, Inc",
-        "VENDOR_URL": "https://www.datalingvo.com",
-        "VENDOR_CONTACT": "Support",
-        "VENDOR_EMAIL": "info@datalingvo.com",
-        "DOCS_URL": "https://www.datalingvo.com"
-    },
+    "description": "Current user GEO-location example model.",
+    "vendorName": "DataLingvo, Inc",
+    "vendorUrl": "https://www.datalingvo.com",
+    "vendorContact": "Support",
+    "vendorEmail": "info@datalingvo.com",
+    "docsUrl": "https://www.datalingvo.com",
     "examples": [
         "Where am I?",
         "What's my current position?"
@@ -28,12 +26,12 @@
     "elements": [
         {
             "id": "wai:where",
+            "description": "Location question.",
             "synonyms": [
                 "where am i",
                 "where i am",
                 "{what is|*} {my|*} {current|actual|*} {geo|geographical|*} {position|location|coordinates|place}"
-            ],
-            "metadata": { "DESCRIPTION": "Location question." }
+            ]
         }
     ],
     "defaultTrivia": "true"

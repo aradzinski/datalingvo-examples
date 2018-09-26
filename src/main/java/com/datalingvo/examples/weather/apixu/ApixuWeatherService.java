@@ -51,8 +51,10 @@ import static java.time.temporal.ChronoUnit.DAYS;
  *    `Gold` and use your own token.
  */
 public class ApixuWeatherService {
-    private static final int SUPPORTED_DAYS_BACK = 30;
-    private static final int SUPPORTED_DAYS_FORWARD = 10;
+    // Plan restrictions.
+    // https://www.apixu.com/pricing.aspx
+    private static final int SUPPORTED_DAYS_BACK = 7;
+    private static final int SUPPORTED_DAYS_FORWARD = 7;
 
     private static final Gson gson = new Gson();
     private final String apiKey;
@@ -97,6 +99,9 @@ public class ApixuWeatherService {
 
         String url = "http://api.apixu.com/v1/" + method + ".json?" + pLine;
 
+        // Ack.
+        System.out.println("APIXU REST: " + url);
+
         try {
             URLConnection conn = new URL(url).openConnection();
 
@@ -113,7 +118,7 @@ public class ApixuWeatherService {
         catch (Exception e) {
             e.printStackTrace(System.err);
 
-            throw new DLRejection("Unable to answer due to weather data provider (APIXU) failure.");
+            throw new DLRejection("Unable to answer due to weather data provider (APIXU) error.");
         }
     }
 
@@ -131,28 +136,33 @@ public class ApixuWeatherService {
      *
      * @param geo Geo location.
      * @param range Date range.
+     * @throws ApixuPeriodException TODO:
      */
-    public RangeResponse getWeather(String geo, Pair<LocalDate, LocalDate> range) {
+    public RangeResponse getWeather(String geo, Pair<LocalDate, LocalDate> range) throws ApixuPeriodException {
         LocalDate from = range.getLeft();
         LocalDate to = range.getRight();
 
         LocalDate now = LocalDate.now();
 
         if (from.isBefore(now.minusDays(SUPPORTED_DAYS_BACK)))
-            from = now.minusDays(SUPPORTED_DAYS_BACK);
+            throw new ApixuPeriodException("Date is out of supported range.<br>Maximum days back is " +
+                SUPPORTED_DAYS_BACK + ".");
 
         if (to.isAfter(now.plusDays(SUPPORTED_DAYS_FORWARD)))
-            to = now.plusDays(SUPPORTED_DAYS_FORWARD);
+            throw new ApixuPeriodException("Date is out of supported range.<br>Maximum days forward is " +
+                SUPPORTED_DAYS_FORWARD + ".");
 
         RangeResponse fullResp = new RangeResponse();
 
         if (from.isBefore(now)) {
+            LocalDate end = to.isBefore(now) ? to : now;
+    
             RangeResponse resp = get(
                 RangeResponse.class,
                 "history",
                 geo,
                 Pair.of("dt", from.format(DateTimeFormatter.ISO_DATE)),
-                Pair.of("end_dt", to.format(DateTimeFormatter.ISO_DATE))
+                Pair.of("end_dt", end.format(DateTimeFormatter.ISO_DATE))
             );
 
             fullResp.setLocation(resp.getLocation());
@@ -166,20 +176,28 @@ public class ApixuWeatherService {
                 geo,
                 Pair.of("days", DAYS.between(now, to))
             );
+            
+            int shift = (int)now.until(from, DAYS);
+            
+            if (shift > 0) {
+                DaysList list = resp.getForecast();
+    
+                list.setForecastDay(Arrays.copyOfRange(list.getForecastDay(), shift, list.getForecastDay().length));
+            }
 
             fullResp.setLocation(resp.getLocation());
 
             if (fullResp.getForecast() == null)
                 fullResp.setForecast(resp.getForecast());
             else {
-                DayInfo[] history = resp.getForecast().getForecastDay();
+                DayInfo[] history = fullResp.getForecast().getForecastDay();
                 DayInfo[] future = resp.getForecast().getForecastDay();
-
+    
                 DayInfo[] fullData = new DayInfo[history.length + future.length];
 
                 System.arraycopy(history, 0, fullData, 0, history.length);
                 System.arraycopy(future, 0, fullData, history.length, future.length);
-
+                
                 DaysList days = new DaysList();
 
                 days.setForecastDay(fullData);

@@ -11,11 +11,16 @@
 package com.datalingvo.examples.timer;
 
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.*;
+import com.datalingvo.mdllib.intent.*;
+import com.datalingvo.mdllib.intent.DLIntentSolver.*;
 import com.datalingvo.mdllib.tools.builder.*;
+import com.datalingvo.mdllib.utils.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
+
+import static com.datalingvo.mdllib.utils.DLTokenUtils.*;
+import static java.time.temporal.ChronoUnit.MILLIS;
 
 /**
  * Timer example model provider.
@@ -30,83 +35,33 @@ import java.util.*;
  */
 @DLActiveModelProvider
 public class TimerProvider extends DLSingleModelProviderAdapter {
-    private static final DateTimeFormatter FMT = DateTimeFormatter.
-        ofPattern("'<code><b>'HH'</b>h' '<b>'mm'</b>m' '<b>'ss'</b>s</code>'").
-        withZone(ZoneId.of("UTC"));
+    private static final DateTimeFormatter FMT =
+        DateTimeFormatter.ofPattern("'<b>'HH'</b>h' '<b>'mm'</b>m' '<b>'ss'</b>s'").withZone(ZoneId.systemDefault());
     
-    private final Timer timer = new Timer();
+    private Timer timer = new Timer();
     
-    /**
-     * Initializes model provider.
-     */
     TimerProvider() {
-        String modelPath = DLModelBuilder.classPathFile("timer_model.json");
-        
-        DLTokenSolver solver = new DLTokenSolver();
-
         // Add a wide-catch intent. Note that terms in the intent will be matched
         // in any order and this intent can match some unusual grammar input
-        // like "2 secs and 3 mins set the timer". For the sake of simplicity
+        // like "2 secs and 3mins set the timer". For the sake of simplicity
         // we allow such idiosyncratic input.
+        DLIntentSolver solver = new DLIntentSolver(null, () -> { throw new DLCuration(); });
+        
         solver.addIntent(
+            "timer|num{1+}",
             new NON_CONV_INTENT(
                 new TERM("id == x:timer", 1, 1),
-                new TERM("id == x:hour", 0, 1),
-                new TERM("id == x:minute", 0, 1),
-                new TERM("id == x:second", 0, 1),
                 new TERM(
-                    new AND(
-                        new RULE("id == dl:num"),
-                        // We are looking for a simple numeric value.
-                        new RULE("~NUM_TYPE == value"),
-                        // This will ensure that every number matched will have associated
-                        // token, i.e. no dangling numbers are allowed for a match. All dangling
-                        // numbers will not be matched and will lead to rejection.
-                        new RULE("~NUM_INDEXES != null")
-                    ),
+                    new AND("id == dl:num", "~NUM_UNITTYPE == datetime", "~NUM_ISEQUALCONDITION == true"),
                     0,
-                    3
+                    7 // Supported numeric `datetime` unit types.
                 )
             ),
             this::onMatch
         );
-        
-        setup(DLModelBuilder.newJsonModel(modelPath).setQueryFunction(solver::solve).build());
-    }
     
-    /**
-     * Finds numeric value.
-     *
-     * @param ctx Context.
-     * @param fieldNumIdx Numeric field index.
-     * @return Numeric value.
-     * @param nums Numeric values collection.
-     */
-    private static int getValue(DLTokenSolverContext ctx, int fieldNumIdx, List<DLToken> nums) {
-        List<DLToken> numFields = ctx.getIntentTokens().get(fieldNumIdx);
-        
-        // Either zero or one.
-        assert numFields.size() <= 1;
-        
-        // If field not found its value is zero.
-        if (numFields.isEmpty())
-            return 0;
-        else {
-            DLToken numField = numFields.get(0);
-            int numFieldIdx = numField.getTokenIndex();
-
-            // Tries to find reference to given field.
-            for (DLToken num : nums) {
-                @SuppressWarnings("unchecked")
-                List<Integer> idxs = (List<Integer>) num.getMetadata().get("NUM_INDEXES");
-
-                if (idxs.contains(numFieldIdx))
-                    return num.getMetadata().getInteger("NUM_VALUE");
-            }
-
-            // Gets default value (like 'an hour', 'a minute' or 'a second').
-            return 1;
-        }
+        setup(DLModelBuilder.newJsonModel(DLModelBuilder.classPathFile("timer_model.json")).
+            setQueryFunction(solver::solve).build());
     }
     
     /**
@@ -115,25 +70,60 @@ public class TimerProvider extends DLSingleModelProviderAdapter {
      * @param ctx Token solver context.
      * @return Query result.
      */
-    private DLQueryResult onMatch(DLTokenSolverContext ctx) {
-        List<DLToken> nums = ctx.getIntentTokens().get(4);
-    
-        int ms =
-            getValue(ctx, 1, nums) * 60 * 60 * 1000 + // Hours (index 1).
-            getValue(ctx, 2, nums) * 60 * 1000 +      // Minutes (index 2).
-            getValue(ctx, 3, nums) * 1000;            // Seconds (index 3).
+    private DLQueryResult onMatch(DLIntentSolverContext ctx) {
+        if (!ctx.isExactMatch())
+            throw new DLRejection("Not exact match.");
         
+        List<DLToken> nums = ctx.getIntentTokens().get(1);
+    
+        long unitsCnt = nums.stream().map(DLTokenUtils::getNumUnit).distinct().count();
+        
+        if (unitsCnt != nums.size())
+            throw new DLRejection("Ambiguous units.");
+    
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime dt = now;
+    
+        for (DLToken num : nums) {
+            String unit = getNumUnit(num);
+    
+            // Skips possible fractional to simplify.
+            long v = (long)getNumFrom(num);
+            
+            if (v <= 0)
+                throw new DLRejection("Value must be positive: " + unit);
+    
+            switch (unit) {
+                case "second": { dt = dt.plusSeconds(v); break; }
+                case "minute": { dt = dt.plusMinutes(v); break; }
+                case "hour": { dt = dt.plusHours(v); break; }
+                case "day": { dt = dt.plusDays(v); break; }
+                case "week": { dt = dt.plusWeeks(v); break; }
+                case "month": { dt = dt.plusMonths(v); break; }
+                case "year": { dt = dt.plusYears(v); break; }
+        
+                default:
+                    // It shouldn't be assert, because 'datetime' unit can be extended.
+                    throw new DLRejection("Unsupported time unit: " + unit);
+            }
+        }
+    
+        long ms = now.until(dt, MILLIS);
+        
+        assert ms >= 0;
+    
         timer.schedule(
             new TimerTask() {
                 @Override
                 public void run() {
-                    // Timer is up...
-                    System.out.println("BEEP BEEP BEEP for: " + ctx.getSentence().getMetadata().getString("NORMTEXT"));
+                    System.out.println(
+                        "BEEP BEEP BEEP for: " + ctx.getQueryContext().getSentence().getNormalizedText() + ""
+                    );
                 }
             },
             ms
         );
-        
-        return DLQueryResult.html("Timer set for: " + FMT.format(Instant.ofEpochMilli(ms)));
+    
+        return DLQueryResult.html("Timer set for: " + FMT.format(dt));
     }
 }

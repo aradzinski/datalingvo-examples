@@ -14,15 +14,13 @@
     "id": "dl.time.ex",
     "name": "Time Example Model",
     "version": "1.0",
-    "metadata": {
-        "DESCRIPTION": "Global time example model.",
-        "VENDOR_NAME": "DataLingvo, Inc",
-        "VENDOR_URL": "https://www.datalingvo.com",
-        "VENDOR_CONTACT": "Support",
-        "VENDOR_EMAIL": "info@datalingvo.com",
-        "DOCS_URL": "https://www.datalingvo.com",
-        "MAX_GEO_TOKENS": 1
-    },
+    "description": "Global time example model.",
+    "vendorName": "DataLingvo, Inc",
+    "vendorUrl": "https://www.datalingvo.com",
+    "vendorContact": "Support",
+    "vendorEmail": "info@datalingvo.com",
+    "docsUrl": "https://www.datalingvo.com",
+    "maxGeoTokens": 1,
     "examples": [
         "What time is it now in New York City?",
         "What's the time in Moscow?",
@@ -47,13 +45,11 @@
     "elements": [
         {
             "id": "x:time",
+            "description": "Date and/or time token indicator.",
             "synonyms": [
                 "{<CUR>|*} <TIME>",
                 "what <TIME> {is it now|now|is it|*}"
-            ],
-            "metadata": {
-                "DESCRIPTION": "Date and/or time token indicator."
-            }
+            ]
         }
     ]
 }

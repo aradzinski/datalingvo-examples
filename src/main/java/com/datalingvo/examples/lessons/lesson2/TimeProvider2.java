@@ -13,7 +13,8 @@ package com.datalingvo.examples.lessons.lesson2;
 import com.datalingvo.*;
 import com.datalingvo.examples.lessons.utils.*;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.*;
+import com.datalingvo.mdllib.intent.*;
+import com.datalingvo.mdllib.intent.DLIntentSolver.*;
 import com.datalingvo.mdllib.tools.builder.*;
 
 /**
@@ -30,10 +31,9 @@ public class TimeProvider2 extends DLSingleModelProviderAdapter {
         DLElement dateTimeElem =
             DLElementBuilder.newElement("x:time").addSynonyms("time", "date").build();
     
-        DLTokenSolver solver =
-            new DLTokenSolver(
+        DLIntentSolver solver =
+            new DLIntentSolver(
                 "time-solver",
-                true,
                 () -> {
                     // Custom not-found function with tailored rejection message.
                     throw new DLRejection("I can't understand your question.");
@@ -41,7 +41,7 @@ public class TimeProvider2 extends DLSingleModelProviderAdapter {
             );
         
         solver.addIntent(
-            new INTENT(false, false, false, 3, new DLTokenSolver.TERM("id == x:time", 1, 1)),
+            new INTENT(false, false, new DLIntentSolver.TERM("id == x:time", 1, 1)),
             ctx -> DLQueryResult.text(LessonsUtils.now())
         );
     

@@ -13,7 +13,8 @@ package com.datalingvo.examples.lessons.lesson3;
 import com.datalingvo.DLException;
 import com.datalingvo.examples.lessons.utils.LessonsUtils;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.NON_CONV_INTENT;
+import com.datalingvo.mdllib.intent.*;
+import com.datalingvo.mdllib.intent.DLIntentSolver.NON_CONV_INTENT;
 import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
 
 /**
@@ -27,10 +28,9 @@ public class TimeProvider3 extends DLSingleModelProviderAdapter {
      * @throws DLException If any errors occur.
      */
     TimeProvider3() throws DLException {
-        DLTokenSolver solver =
-            new DLTokenSolver(
+        DLIntentSolver solver =
+            new DLIntentSolver(
                 "time-solver",
-                true,
                 () -> {
                     // Custom not-found function with tailored rejection message.
                     throw new DLRejection("I can't understand your question.");
@@ -38,6 +38,7 @@ public class TimeProvider3 extends DLSingleModelProviderAdapter {
         );
         
         solver.addIntent(
+            "time",
             new NON_CONV_INTENT("id == x:time", 1, 1),
             ctx -> DLQueryResult.text(LessonsUtils.now())
         );

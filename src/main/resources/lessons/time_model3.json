@@ -14,14 +14,12 @@
     "id": "dl.time.ex",
     "name": "Time Example Model",
     "version": "1.0",
-    "metadata": {
-        "DESCRIPTION": "Time example model.",
-        "VENDOR_NAME": "DataLingvo, Inc",
-        "VENDOR_URL": "https://www.datalingvo.com",
-        "VENDOR_CONTACT": "Support",
-        "VENDOR_EMAIL": "info@datalingvo.com",
-        "DOCS_URL": "https://www.datalingvo.com"
-    },
+    "description": "Time example model.",
+    "vendorName": "DataLingvo, Inc",
+    "vendorUrl": "https://www.datalingvo.com",
+    "vendorContact": "Support",
+    "vendorEmail": "info@datalingvo.com",
+    "docsUrl": "https://www.datalingvo.com",
     "examples": [
         "Current time?",
         "What time is it now?",
@@ -44,12 +42,10 @@
     "elements": [
         {
             "id": "x:time",
+            "description": "Date and/or time token indicator.",
             "synonyms": [
                 "{<CUR>|*} <TIME>"
-            ],
-            "metadata": {
-                "DESCRIPTION": "Date and/or time token indicator."
-            }
+            ]
         }
     ],
     "defaultTrivia": "true",

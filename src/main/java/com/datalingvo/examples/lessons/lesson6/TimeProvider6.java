@@ -10,23 +10,19 @@
 
 package com.datalingvo.examples.lessons.lesson6;
 
-import com.datalingvo.DLException;
-import com.datalingvo.examples.misc.geo.cities.CitiesDataProvider;
-import com.datalingvo.examples.misc.geo.cities.City;
-import com.datalingvo.examples.misc.geo.cities.CityData;
+import com.datalingvo.*;
+import com.datalingvo.examples.misc.geo.cities.*;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.AND;
-import com.datalingvo.mdllib.DLTokenSolver.NON_CONV_INTENT;
-import com.datalingvo.mdllib.DLTokenSolver.TERM;
-import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
-import org.apache.commons.lang3.text.WordUtils;
+import com.datalingvo.mdllib.intent.*;
+import com.datalingvo.mdllib.intent.DLIntentSolver.*;
+import com.datalingvo.mdllib.tools.builder.*;
+import org.apache.commons.lang3.text.*;
+import java.time.*;
+import java.time.format.*;
+import java.util.*;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
-
-import static java.time.format.FormatStyle.MEDIUM;
+import static com.datalingvo.mdllib.utils.DLTokenUtils.*;
+import static java.time.format.FormatStyle.*;
 
 /**
  * `Lesson 6` model provider.
@@ -56,7 +52,8 @@ public class TimeProvider6 extends DLSingleModelProviderAdapter {
         String cntry,
         String tmz,
         double lat,
-        double lon) {
+        double lon
+    ) {
         String cityFmt = WordUtils.capitalize(city);
         String cntrFmt = WordUtils.capitalize(cntry);
 
@@ -66,10 +63,10 @@ public class TimeProvider6 extends DLSingleModelProviderAdapter {
             DLQueryResult.html(
                 String.format(
                     "<b %s>Time:</b> <span style='color: #F1C40F'>%s</span><br/>" +
-                        "<b %s>City:</b> <span %s>%s</span><br/>" +
-                        "<b %s>Country:</b> <span %s>%s</span><br/>" +
-                        "<b %s>Timezone:</b> <span %s>%s</span><br/>" +
-                        "<b %s>Local Time:</b> <span %s>%s</span>",
+                    "<b %s>City:</b> <span %s>%s</span><br/>" +
+                    "<b %s>Country:</b> <span %s>%s</span><br/>" +
+                    "<b %s>Timezone:</b> <span %s>%s</span><br/>" +
+                    "<b %s>Local Time:</b> <span %s>%s</span>",
                     CSS1, ZonedDateTime.now(ZoneId.of(tmz)).format(FMT),
                     CSS1, CSS2, cityFmt,
                     CSS1, CSS2, cntrFmt,
@@ -109,29 +106,28 @@ public class TimeProvider6 extends DLSingleModelProviderAdapter {
      * @param ctx Token solver context.
      * @return Query result.
      */
-    private DLQueryResult onMatch(DLTokenSolverContext ctx) {
+    private DLQueryResult onMatch(DLIntentSolverContext ctx) {
         // 'dl:geo' is optional here.
         if (ctx.getIntentTokens().get(1).isEmpty()) {
-            DLMetadata md = ctx.getSentence().getMetadata();
+            DLSentence sen = ctx.getQueryContext().getSentence();
 
             // Get local geo data from sentence metadata defaulting to
             // Silicon Valley location in case we are missing that info.
             return formatResult(
-                md.getStringOrElse("CITY", ""),
-                md.getStringOrElse("COUNTRY_NAME", "United States"),
-                md.getStringOrElse("TMZ_NAME", "America/Los_Angeles"),
-                md.getDoubleOrElse("LATITUDE", 37.7749),
-                md.getDoubleOrElse("LONGITUDE", 122.4194)
+                sen.getCityName().orElse(""),
+                sen.getCountryName().orElse("United States"),
+                sen.getTimezoneName().orElse("America/Los_Angeles"),
+                sen.getLatitude().orElse(37.7749),
+                sen.getLongitude().orElse(122.4194)
             );
         }
 
         // Note that only one 'dl:geo' token is allowed per model metadata.
         DLToken geoTok = ctx.getIntentTokens().get(1).get(0);
 
-        DLMetadata geoMeta = geoTok.getMetadata();
-
-        String city = geoMeta.getString("GEO_CITY");
-        String cntry = geoMeta.getString("GEO_COUNTRY");
+        // Country and city are is mandatory metadata of 'dl:geo' token.
+        String city = getGeoCity(geoTok);
+        String cntry = getGeoCountry(geoTok);
 
         CityData data = citiesData.get(new City(city, cntry));
 
@@ -156,10 +152,9 @@ public class TimeProvider6 extends DLSingleModelProviderAdapter {
     TimeProvider6() throws DLException {
         String path = DLModelBuilder.classPathFile("lessons/time_model6.json");
 
-        DLTokenSolver solver =
-            new DLTokenSolver(
+        DLIntentSolver solver =
+            new DLIntentSolver(
                 "time-solver",
-                true,
                 () -> {
                     // Custom not-found function with tailored rejection message.
                     throw new DLRejection("I can't understand your question.");
@@ -168,6 +163,7 @@ public class TimeProvider6 extends DLSingleModelProviderAdapter {
 
         // Check for exactly one 'x:time' token. 'dl:geo' is optional.
         solver.addIntent(
+            "time|city?",
             new NON_CONV_INTENT(
                 new TERM("id == x:time", 1, 1),
                 new TERM(

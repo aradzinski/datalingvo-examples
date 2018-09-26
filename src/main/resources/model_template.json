@@ -15,18 +15,13 @@
     "id": "user.defined.id", /* --==MANDATORY==-- */
     "name": "User Defined Name", /* --==MANDATORY==-- */
     "version": "1.0", /* --==MANDATORY==-- */
-
-    /* See model's metadata for exhaustive set of metadata properties. */
-    "metadata": {
-        /* Few examples. */
-        "DESCRIPTION": "Short model description.",
-        "VENDOR_NAME": "ACME Inc.",
-        "VENDOR_URL": "https://www.acme.com",
-        "VENDOR_CONTACT": "Support",
-        "VENDOR_EMAIL": "info@acme.com",
-        "DOCS_URL": "https://www.acme.com/docs",
-        "MAX_GEO_TOKENS": 1
-    },
+    "description": "Short model description.",
+    "vendorName": "ACME Inc.",
+    "vendorUrl": "https://www.acme.com",
+    "vendorContact": "Support",
+    "vendorEmail": "info@acme.com",
+    "docsUrl": "https://www.acme.com/docs",
+    "maxGeoTokens": 1,
     "examples": [
         "Some example question",
         "Another good example of the command"
@@ -45,6 +40,7 @@
             "group": "default",
             "type": "STRING",
             "parentId": null,
+            "description": "Short description for this element.",
             "excludedSynonyms": [
 
             ],
@@ -54,9 +50,6 @@
             ],
             "relations": {
 
-            },
-            "metadata": {
-                "DESCRIPTION": "Short description for this element."
             },
             "values": [
 

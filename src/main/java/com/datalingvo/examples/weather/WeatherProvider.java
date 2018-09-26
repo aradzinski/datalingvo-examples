@@ -10,30 +10,26 @@
 
 package com.datalingvo.examples.weather;
 
-import com.datalingvo.examples.weather.apixu.ApixuWeatherService;
+import com.datalingvo.examples.weather.apixu.*;
 import com.datalingvo.examples.weather.apixu.beans.*;
 import com.datalingvo.mdllib.*;
-import com.datalingvo.mdllib.DLTokenSolver.CONV_INTENT;
-import com.datalingvo.mdllib.DLTokenSolver.INTENT;
-import com.datalingvo.mdllib.DLTokenSolver.TERM;
-import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
-import org.apache.commons.lang3.tuple.Pair;
+import com.datalingvo.mdllib.intent.*;
+import com.datalingvo.mdllib.intent.DLIntentSolver.*;
+import com.datalingvo.mdllib.tools.builder.*;
+import com.datalingvo.mdllib.utils.*;
+import org.apache.commons.lang3.tuple.*;
+import java.text.*;
+import java.time.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import static com.datalingvo.mdllib.utils.DLTokenUtils.*;
 
 /**
  * Weather example model provider.
  * <p>
- * This is relatively complete weather service with elaborative HTML output and a non-trivial
+ * This is relatively complete weather service with elaborate HTML output and a non-trivial
  * intent matching logic. It uses https://www.apixu.com REST service for the actual
  * weather information.
  */
@@ -48,10 +44,13 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     private final static DateFormat inFmt = new SimpleDateFormat("yyyy-MM-dd");
     // We'll use string substitution here for '___' piece...
     private final static DateFormat outFmt = new SimpleDateFormat("EE'<br/><span style=___>'MMM dd'</span>'");
-
     // Base CSS.
     private static final String CSS = "style='display: inline-block; min-width: 120px'";
-
+    // Maximum free words left before auto-curation.
+    private static final int MAX_FREE_WORDS = 4;
+    // Keywords for 'local' weather.
+    private static final Set<String> LOCAL_WORDS = new HashSet<>(Arrays.asList("my", "local", "hometown"));
+    
     /**
      * A shortcut to convert millis to the local date object.
      *
@@ -111,8 +110,6 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
                 "</center>\"";
         }
         catch (ParseException e) {
-            // No-op.
-
             return date;
         }
     }
@@ -128,13 +125,17 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
         String css2 = "font-size: 100%; color: #fff; font-weight: 400; letter-spacing: 0.05em";
 
         return String.format("\"" +
-            "<center><img style='margin-bottom: 5px;' title='%s' src='%s'><br/>" +
-            "<span style='%s font-wei'>%s F <span style='font-size: 80%%'> - %s F</span></span><br/>" +
-            "<span style='%s'>Humidity %d%%</span><br/>" +
-            "<span style='%s'>Wind %s mph</span></center>\"",
+            "<center>" +
+                "<img style='margin-bottom: 5px;' title='%s' src='%s'><br/>" +
+                "<span style='%s'>%s F <span style='font-size: 80%%'> - %s F</span></span><br/>" +
+                "<span style='%s'>Humidity %d%%</span><br/>" +
+                "<span style='%s'>Rain %s in</span><br/>" +
+                "<span style='%s'>Wind %s mph</span>" +
+            "</center>\"",
             day.getCondition().getText(), day.getCondition().getIcon(),
             css2, Math.round(day.getMaxTempF()), Math.round(day.getMinTempF()),
             css1, day.getAvgHumidity(),
+            css1, Math.round(day.getTotalPrecipIn()),
             css1, Math.round(day.getMaxWindMph())
         );
     }
@@ -158,16 +159,16 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
 
         // Multipart result (HTML block + HTML table + Google map).
         return DLQueryResult.jsonMultipart(
-            // HTML fragment.
+            // 1. HTML fragment.
             DLQueryResult.html(
                 String.format(
                     "<b %s>City:</b> <span style='color: #F1C40F'>%s</span><br/>" +
                     "<b %s>Local Time:</b> %s",
-                    CSS, loc.getName(),
+                    CSS, loc.getName() + ", " + loc.getRegion(),
                     CSS, loc.getLocaltime()
                 )
             ),
-            // HTML table fragment.
+            // 2. HTML table fragment.
             DLQueryResult.jsonTable(
                 String.format(
                     "{" +
@@ -181,7 +182,7 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
                     rows
                 )
             ),
-            // Static Google map.
+            // 3. Static Google map.
             makeMap(loc.getLatitude(), loc.getLongitude())
         );
     }
@@ -203,85 +204,135 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
 
         // Multipart result (HTML block + Google map).
         return DLQueryResult.jsonMultipart(
-            // HTML block fragment.
+            // 1. HTML block fragment.
             DLQueryResult.html(
                 String.format(
                     "<div style='font-weight: 200; letter-spacing: 0.02em'>" +
                         "<b %s>Conditions:</b> <b><span style='color: #F1C40F'>%s, %s F</span></b><br/>" +
                         "<b %s>City:</b> %s<br/>" +
                         "<b %s>Humidity:</b> %d%%<br/>" +
+                        "<b %s>Rain:</b> %s in<br/>" +
                         "<b %s>Wind:</b> %s %s mph<br/>" +
                         "<b %s>Local Time:</b> %s<br/>" +
                     "</div>",
                     CSS, cur.getCondition().getText(), Math.round(cur.getTempF()),
-                    CSS, loc.getName(),
+                    CSS, loc.getName() + ", " + loc.getRegion(),
                     CSS, cur.getHumidity(),
+                    CSS, Math.round(cur.getPrecipIn()),
                     CSS, cur.getWindDir(), cur.getWindMph(),
                     CSS, loc.getLocaltime()
                 )
             ),
-            // Google map fragment.
+            // 2. Google map fragment.
             makeMap(loc.getLatitude(), loc.getLongitude())
         );
     }
 
     /**
-     * Extracts date range from given list of tokens.
+     * Extracts date range from given solver context.
      *
-     * @param toks 'dl:date' tokens.
+     * @param ctx Solver context.
      * @return Pair of dates or {@code null} if not found.
      */
-    private Pair<LocalDate, LocalDate> prepDate(List<DLToken> toks) {
-        if (!toks.isEmpty()) {
-            DLMetadata meta = toks.get(0).getMetadata();
+    private Pair<LocalDate, LocalDate> prepDate(DLIntentSolverContext ctx) {
+        List<DLToken> toks = ctx.getIntentTokens().get(1);
 
-            return Pair.of(toLocalDate(meta.getLong("DATE_FROM")), toLocalDate(meta.getLong("DATE_TO")));
+        if (toks.size() > 1)
+            throw new DLRejection("Only one date is supported.");
+
+        if (toks.size() == 1) {
+            DLToken tok = toks.get(0);
+
+            return Pair.of(toLocalDate(getDateFrom(tok)), toLocalDate(getDateTo(tok)));
         }
-        else
-            return null;
+
+        // No date found - return 'null'.
+        return null;
     }
 
     /**
-     * Extracts geo location suitable for APIXU service.
+     * Extracts geo location (city) from given solver context that is suitable for APIXU service.
      *
-     * @param toks 'dl:geo' tokens.
-     * @param senMeta Sentence metadata.
+     * @param ctx Solver context.
      * @return Geo location.
      */
-    private String prepGeo(List<DLToken> toks, DLMetadata senMeta) throws DLRejection {
-        Optional<DLToken> cityOpt =
-            toks.stream().filter(g -> g.getMetadata().get("GEO_KIND").equals("CITY")).findAny();
+    private String prepGeo(DLIntentSolverContext ctx) throws DLRejection {
+        List<DLToken> geoToks = ctx.getIntentTokens().get(2); // Can be empty...
+        DLSentence sen = ctx.getQueryContext().getSentence();
+        List<DLToken> allToks = ctx.getVariant().getTokens();
 
-        if (cityOpt.isPresent()) {
-            DLMetadata cityMeta = cityOpt.get().getMetadata();
+        // Common lambda for getting current user city.
+        Supplier<String> curCityFn = () -> {
+            // Try current user location.
+            if (sen.getLatitude().isPresent() && sen.getLongitude().isPresent())
+                // APIXU weather service understands this format too.
+                return sen.getLatitude().get() + "," + sen.getLongitude().get();
+            else
+                throw new DLRejection("City cannot be determined.");
+        };
 
-            return cityMeta.getString("GEO_CITY") + ',' + cityMeta.getString("GEO_COUNTRY");
+        // Manually process request for local weather. We need to separate between 'local Moscow weather'
+        // and 'local weather' which are different. Basically, if there is word 'local/my/hometown' in the user
+        // input and there is no city in the current sentence - this is a request for the weather at user's
+        // current location, i.e. we should implicitly assume user's location and clear conversion context.
+        // In all other cases - we take location from either current sentence or conversation STM.
+
+        // NOTE: we don't do this separation on intent level as it is easier to do it here instead of
+        // creating more intents with almost identical callbacks.
+
+        boolean hasLocalWord = allToks.stream().anyMatch(t -> LOCAL_WORDS.contains(getNormalizedText(t)));
+
+        if (hasLocalWord && geoToks.isEmpty()) {
+            // Because we implicitly assume user's current city at this point we need to clear
+            // 'dl:geo' tokens from conversation context since they would no longer be valid.
+            ctx.getQueryContext().getConversationContext().clear(DLTokenUtils::isGeo);
+
+            // Return user current city.
+            return curCityFn.get();
         }
-
-        if (!toks.isEmpty())
-            throw new DLRejection("Only cities can be used for location. Misspelled name?");
         else
-            // Weather service understands this format too.
-            return senMeta.getDouble("LATITUDE") + "," + senMeta.getDouble("LONGITUDE");
+            return geoToks.size() == 1 ? getGeoCity(geoToks.get(0)) : curCityFn.get();
     }
 
     /**
      * Makes query result for given date range.
      *
      * @param ctx Token solver context.
-     * @param from From date.
-     * @param to To date.
+     * @param from Default from date.
+     * @param to Default to date.
      * @return Query result.
      */
-    private DLQueryResult onRangeMatch(DLTokenSolverContext ctx, LocalDate from, LocalDate to) {
-        Pair<LocalDate, LocalDate> date = prepDate(ctx.getIntentTokens().get(1));
+    private DLQueryResult onRangeMatch(DLIntentSolverContext ctx, LocalDate from, LocalDate to) {
+        Pair<LocalDate, LocalDate> date = prepDate(ctx);
 
         if (date == null)
+            // If we don't have the date in the sentence or conversation STM - use provided range.
             date = Pair.of(from, to);
 
-        String geo = prepGeo(ctx.getIntentTokens().get(2), ctx.getSentence().getMetadata());
+        String geo = prepGeo(ctx);
 
-        return makeRangeResult(srv.getWeather(geo, date));
+        try {
+            return makeRangeResult(srv.getWeather(geo, date));
+        }
+        catch (ApixuPeriodException e) {
+            throw new DLRejection(e.getMessage());
+        }
+    }
+
+    /**
+     * Strict check for an exact match (i.e. no dangling unused system or user defined tokens) and
+     * maximum number of free words left unmatched. In both cases user input will go into curation.
+     *
+     * @param ctx Solver context.
+     */
+    private void checkMatch(DLIntentSolverContext ctx) {
+        // Send for curation if intent match is not exact ("dangling" tokens remain).
+        if (!ctx.isExactMatch())
+            throw new DLCuration("Intent match was not exact.");
+        
+        // Send for curation if there are too many free words left unmatched.
+        if (ctx.getVariant().stream(DLTokenUtils::isFreeWord).count() > MAX_FREE_WORDS)
+            throw new DLCuration("Too many free words.");
     }
 
     /**
@@ -290,7 +341,9 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
      * @param ctx Token solver context.
      * @return Query result.
      */
-    private DLQueryResult onForecastMatch(DLTokenSolverContext ctx) {
+    private DLQueryResult onForecastMatch(DLIntentSolverContext ctx) {
+        checkMatch(ctx);
+        
         try {
             // Look 5 days ahead by default.
             return onRangeMatch(ctx, LocalDate.now(), LocalDate.now().plusDays(5));
@@ -299,7 +352,7 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
             throw e;
         }
         catch (Exception e) {
-            throw new DLRejection("Weather provider error.");
+            throw new DLRejection("Weather provider error.", e);
         }
     }
 
@@ -309,7 +362,9 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
      * @param ctx Token solver context.
      * @return Query result.
      */
-    private DLQueryResult onHistoryMatch(DLTokenSolverContext ctx) {
+    private DLQueryResult onHistoryMatch(DLIntentSolverContext ctx) {
+        checkMatch(ctx);
+
         try {
             // Look 5 days back by default.
             return onRangeMatch(ctx, LocalDate.now().minusDays(5), LocalDate.now());
@@ -318,7 +373,7 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
             throw e;
         }
         catch (Exception e) {
-            throw new DLRejection("Weather provider error.");
+            throw new DLRejection("Weather provider error.", e);
         }
     }
 
@@ -328,27 +383,42 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
      * @param ctx Token solver context.
      * @return Query result.
      */
-    private DLQueryResult onCurrentMatch(DLTokenSolverContext ctx) {
-        try {
-            Pair<LocalDate, LocalDate> date = prepDate(ctx.getIntentTokens().get(1));
-            String geo = prepGeo(ctx.getIntentTokens().get(2), ctx.getSentence().getMetadata());
+    private DLQueryResult onCurrentMatch(DLIntentSolverContext ctx) {
+        checkMatch(ctx);
 
-            return date != null ? makeRangeResult(srv.getWeather(geo, date)) : makeCurrentResult(srv.getCurrentWeather(geo));
+        try {
+            Pair<LocalDate, LocalDate> date = prepDate(ctx);
+            String geo = prepGeo(ctx);
+    
+            return date != null ?
+                makeRangeResult(srv.getWeather(geo, date)) :
+                makeCurrentResult(srv.getCurrentWeather(geo));
+        }
+        catch (ApixuPeriodException e) {
+            throw new DLRejection(e.getMessage());
         }
         catch (DLRejection | DLCuration e) {
             throw e;
         }
         catch (Exception e) {
-            throw new DLRejection("Weather provider error.");
+            throw new DLRejection("Weather provider error.", e);
         }
     }
 
-    // Shortcut method for creating a intent with given weather token.
-    private INTENT makeTerms(String tokId) {
+    /**
+     * Shortcut for creating a conversational intent with given weather token.
+     *
+     * @param weatherTokId Specific weather token ID.
+     * @return Newly created intent.
+     */
+    private INTENT makeTerms(String weatherTokId) {
         return new CONV_INTENT(
-            new TERM("id == " + tokId, 1, 1), // Index 0. Mandatory weather token.
-            new TERM("id == dl:date", 0, 1),  // Index 1. Optional date.
-            new TERM("id == dl:geo", 0, 1)    // Index 2. Optional location.
+            new TERM("id == " + weatherTokId, 1, 1),     // Index 0: mandatory 'weather' token.
+            new TERM("id == dl:date", 0, 1),           // Index 1: optional date.
+            new TERM(                                  // Index 2: optional city.
+                new AND("id == dl:geo", "~GEO_KIND == CITY"),
+                0, 1
+            )
         );
     }
 
@@ -358,14 +428,22 @@ public class WeatherProvider extends DLSingleModelProviderAdapter {
     WeatherProvider() {
         String modelPath = DLModelBuilder.classPathFile("weather_model.json");
 
-        DLTokenSolver solver = new DLTokenSolver("solver", false, () -> { throw new DLCuration(); });
+        // If no intent is matched respond with some helpful message...
+        DLIntentSolver solver = new DLIntentSolver("solver", () -> {
+            throw new DLRejection(
+                "Weather request is ambiguous.<br>" +
+                "Note: only one optional <b>city</b> and one optional <b>date</b> or <b>date range</b> are allowed.");
+        });
 
-        // Match exactly one weather token and optional 'dl:geo' and 'dl:date' tokens including
-        // looking into conversation context.
-        solver.addIntent(makeTerms("wt:hist"), this::onHistoryMatch);
-        solver.addIntent(makeTerms("wt:fcast"), this::onForecastMatch);
-        solver.addIntent(makeTerms("wt:curr"), this::onCurrentMatch);
+        // Match exactly one of weather tokens and optional 'dl:geo' and 'dl:date' tokens.
+        solver.addIntent("hist|date?|city?", makeTerms("wt:hist"), this::onHistoryMatch);
+        solver.addIntent("fcast|date?|city?", makeTerms("wt:fcast"), this::onForecastMatch);
+        solver.addIntent("curr|date?|city?", makeTerms("wt:curr"), this::onCurrentMatch);
 
-        setup(DLModelBuilder.newJsonModel(modelPath).setQueryFunction(solver::solve).build());
+        setup(DLModelBuilder
+            .newJsonModel(modelPath)
+            .setQueryFunction(solver::solve)
+            .build()
+        );
     }
 }

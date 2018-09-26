@@ -36,15 +36,13 @@ class ChatProvider extends DLSingleModelProviderAdapter {
                |    "id": "$MODEL_ID",
                |    "name": "Chat Example Model",
                |    "version": "1.0",
-               |    "metadata": {
-               |        "DESCRIPTION": "Chat example model.",
-               |        "VENDOR_NAME": "DataLingvo, Inc",
-               |        "VENDOR_URL": "https://www.datalingvo.com",
-               |        "VENDOR_CONTACT": "Support",
-               |        "VENDOR_EMAIL": "info@datalingvo.com",
-               |        "DOCS_URL": "https://www.datalingvo.com",
-               |        "ALLOW_NO_USER_TOKENS": true
-               |    },
+               |    "description": "Chat example model.",
+               |    "vendorName": "DataLingvo, Inc",
+               |    "vendorUrl": "https://www.datalingvo.com",
+               |    "vendorContact": "Support",
+               |    "vendorEmail": "info@datalingvo.com",
+               |    "docsUrl": "https://www.datalingvo.com",
+               |    "allowNoUserTokens": true,
                |    "examples": [
                |        "Hey, any plans this evening?",
                |        "Wanna see Warriors tonight?"

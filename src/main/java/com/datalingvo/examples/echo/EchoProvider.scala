@@ -10,11 +10,14 @@
 
 package com.datalingvo.examples.echo
 
+import java.util.Optional
+
 import com.datalingvo.mdllib._
 import com.datalingvo.mdllib.tools.builder.DLModelBuilder
 import com.datalingvo.mdllib.tools.scala.DLScalaSupport._
 
 import scala.collection.JavaConverters._
+import scala.collection.Seq
 
 /**
   * Echo example model provider.
@@ -72,14 +75,28 @@ class EchoProvider extends DLSingleModelProviderAdapter {
       * @param v Value to convert.
       * @return Converted value.
       */
-    private def mkJsonVal(v: java.io.Serializable): String =
-        if (v == null)
+    private def mkJsonVal(v: Any): String = {
+        val x = v match {
+            case opt: Optional[_] ⇒ opt.get
+            case _ ⇒ v
+        }
+        
+        if (x == null)
             "null"
-        else if (v.isInstanceOf[java.lang.Number] || v.isInstanceOf[java.lang.Boolean])
-            v.toString
+        else if (x.isInstanceOf[java.lang.Number] || x.isInstanceOf[java.lang.Boolean])
+            x.toString
         else
-            s""""${escapeJson(v.toString)}""""
-    
+            s""""${escapeJson(x.toString)}""""
+    }
+
+    /**
+      * Represents JSON values as JSON array.
+      *
+      * @param jss JSON values.
+      * @return JSON array.
+      */
+    private def mkJsonVals(jss: Seq[String]): String = s"[${jss.mkString(",")}]"
+
     /**
       * Converts Java map into JSON value.
       *
@@ -105,8 +122,8 @@ class EchoProvider extends DLSingleModelProviderAdapter {
         s"""
            | {
            |    "name": ${mkJsonVal(ds.getName)},
-           |    "config": ${mkJsonVal(ds.getConfig)},
-           |    "metadata": ${mkMapJson(ds.getMetadata.asScala.toMap)}
+           |    "description": ${mkJsonVal(ds.getDescription)},
+           |    "config": ${mkJsonVal(ds.getConfig)}
            | }
          """.stripMargin
     }
@@ -128,7 +145,6 @@ class EchoProvider extends DLSingleModelProviderAdapter {
            |    "value": ${mkJsonVal(tok.getValue)},
            |    "group": ${mkJsonVal(tok.getGroup)},
            |    "isUserDefined": ${mkJsonVal(tok.isUserDefined)},
-           |    "isFreeWord": ${mkJsonVal(tok.isFreeWord)},
            |    "metadata": ${mkMapJson(tok.getMetadata.asScala.toMap)}
            | }
          """.stripMargin
@@ -145,10 +161,30 @@ class EchoProvider extends DLSingleModelProviderAdapter {
         // Hand-rolled JSON for simplicity...
         s"""
            | {
-           |    "metadata": ${mkMapJson(sen.getMetadata.asScala.toMap)},
-           |    "tokens": [
-           |        ${sen.getTokens.asScala.map(mkTokenJson).mkString(",")}
-           |    ]
+           |    "normalizedText": ${mkJsonVal(sen.getNormalizedText)},
+           |    "srvReqId": ${mkJsonVal(sen.getServerRequestId)},
+           |    "receiveTimestamp": ${mkJsonVal(sen.getReceiveTimestamp)},
+           |    "userFirstName": ${mkJsonVal(sen.getUserFirstName)},
+           |    "userLastName": ${mkJsonVal(sen.getUserLastName)},
+           |    "userEmail": ${mkJsonVal(sen.getUserEmail)},
+           |    "isUserAdmin": ${mkJsonVal(sen.isUserAdmin)},
+           |    "userCompany": ${mkJsonVal(sen.getUserCompany)},
+           |    "userSignupDate": ${mkJsonVal(sen.getUserSignupDate)},
+           |    "userTotalQs": ${mkJsonVal(sen.getUserTotalQs)},
+           |    "userLastQTstamp": ${mkJsonVal(sen.getUserLastQTimestamp)},
+           |    "countryName": ${mkJsonVal(sen.getCountryName)},
+           |    "countryCode": ${mkJsonVal(sen.getCountryCode)},
+           |    "regionName": ${mkJsonVal(sen.getRegionName)},
+           |    "cityName": ${mkJsonVal(sen.getCityName)},
+           |    "metroCode": ${mkJsonVal(sen.getMetroCode)},
+           |    "origin": ${mkJsonVal(sen.getOrigin)},
+           |    "remoteAddress": ${mkJsonVal(sen.getRemoteAddress)},
+           |    "timezoneName": ${mkJsonVal(sen.getTimezoneName)},
+           |    "timezoneAbbr": ${mkJsonVal(sen.getTimezoneAbbreviation)},
+           |    "latitude": ${mkJsonVal(sen.getLatitude)},
+           |    "longitude": ${mkJsonVal(sen.getLongitude)},
+           |    "variants":
+           |        ${mkJsonVals(sen.variants().asScala.map(p ⇒ mkJsonVals(p.getTokens.asScala.map(mkTokenJson))))}
            | }
          """.stripMargin
     }
@@ -161,16 +197,14 @@ class EchoProvider extends DLSingleModelProviderAdapter {
               |    "id": "$MODEL_ID",
               |    "name": "Echo Example Model",
               |    "version": "1.0",
-              |    "metadata": {
-              |        "DESCRIPTION": "Echo example model.",
-              |        "VENDOR_NAME": "DataLingvo, Inc",
-              |        "VENDOR_URL": "https://www.datalingvo.com",
-              |        "VENDOR_CONTACT": "Support",
-              |        "VENDOR_EMAIL": "info@datalingvo.com",
-              |        "DOCS_URL": "https://www.datalingvo.com",
-              |        "ALLOW_NO_USER_TOKENS": true
-              |    },
-              |    "defaultTrivia": "false"
+              |    "description": "Echo example model.",
+              |    "vendorName": "DataLingvo, Inc",
+              |    "vendorUrl": "https://www.datalingvo.com",
+              |    "vendorContact": "Support",
+              |    "vendorEmail": "info@datalingvo.com",
+              |    "docsUrl": "https://www.datalingvo.com",
+              |    "allowNoUserTokens": true,
+              |    "defaultTrivia": false
               | }
             """.stripMargin)
             .setQueryFunction((ctx: DLQueryContext) ⇒ {
@@ -179,7 +213,6 @@ class EchoProvider extends DLSingleModelProviderAdapter {
                     s"""
                        |{
                        |    "srvReqId": ${mkJsonVal(ctx.getServerRequestId)},
-                       |    "modelMetadata": ${mkMapJson(ctx.getModelMetadata.asScala.toMap)},
                        |    "dataSource": ${mkDataSourceJson(ctx)},
                        |    "sentence": ${mkSentenceJson(ctx)},
                        |    "hint": ${mkJsonVal(ctx.getHint)}

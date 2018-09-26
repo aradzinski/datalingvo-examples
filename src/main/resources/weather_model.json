@@ -13,16 +13,14 @@
     "id": "dl.weather.ex",
     "name": "Weather Example Model",
     "version": "1.0",
-    "metadata": {
-        "DESCRIPTION": "Weather example model.",
-        "VENDOR_NAME": "DataLingvo, Inc",
-        "VENDOR_URL": "https://www.datalingvo.com",
-        "VENDOR_CONTACT": "Support",
-        "VENDOR_EMAIL": "info@datalingvo.com",
-        "DOCS_URL": "https://www.datalingvo.com",
-        "MAX_GEO_TOKENS": 1,
-        "MAX_DATE_TOKENS": 1
-    },
+    "description": "Weather example model.",
+    "vendorName": "DataLingvo, Inc",
+    "vendorUrl": "https://www.datalingvo.com",
+    "vendorContact": "Support",
+    "vendorEmail": "info@datalingvo.com",
+    "docsUrl": "https://www.datalingvo.com",
+    "macGeoTokens": 1,
+    "maxDateTokens": 1,
     "examples": [
         "What's the local weather forecast?",
         "What's the weather in Moscow?"
@@ -33,12 +31,20 @@
             "macro": "{of|for|per}"
         },
         {
+            "name": "<CHANCE>",
+            "macro": "{chance|possibility|probability|odds|likelihood|potential|risk|opportunity}"
+        },
+        {
+            "name": "<PHENOMENON>",
+            "macro": "{high sea|severe weather|hail|heat wave|cold wave|derecho|supercell|avalanche|cyclone|wildfire|landslide|firestorm|dust storm|thunder snow|winter storm|cloudburst|shower|condensation|precipitation|drizzle|rainstorm|rain storm|rainfall|rain|storm|sun|sunshine|cloud|hot|cold|dry|wet|wind||hurricane|typhoon|sand-storm|sand storm|tornado|humid|fog|snow|smog|black ice|haze|thundershower|thundersnow|sleet|drought|wildfire|blizzard|avalanche|mist|thunderstorm}"
+        },
+        {
             "name": "<CUR>",
             "macro": "{current|present|moment|now}"
         },
         {
-            "name": "<WEATHER>", /* Note the often misspelling in the synonyms. */
-            "macro": "{weather {condition|temp|tempreture|temperature|data|*}|condition|temp|tempreture|temperature}"
+            "name": "<WEATHER>",
+            "macro": "{weather {condition|temp|temperature|data|*}|condition|temp|temperature}"
         },
         {
             "name": "<FORECAST>",
@@ -52,26 +58,28 @@
     "elements": [
         {
             "id": "wt:hist",
+            "description": "Past weather conditions.",
             "synonyms": [
                 "{<WEATHER>|*} <HISTORY>",
-                "<HISTORY> {<OF>|*} <WEATHER>"
-            ],
-            "metadata": { "DESCRIPTION": "Past weather conditions." }
+                "<HISTORY> {<OF>|*} {<WEATHER>|<PHENOMENON>}"
+            ]
         },
         {
             "id": "wt:curr",
+            "description": "Current weather conditions.",
             "synonyms": [
-                "{<CUR>|*} <WEATHER>"
-            ],
-            "metadata": { "DESCRIPTION": "Current weather conditions." }
+                "{<CUR>|*} {<WEATHER>|<PHENOMENON>}",
+                "<CHANCE> <OF> <PHENOMENON>",
+                "<PHENOMENON> {<CHANCE>|*}"
+            ]
         },
         {
             "id": "wt:fcast",
+            "description": "Future weather forecast.",
             "synonyms": [
-                "{<WEATHER>|*} <FORECAST>",
-                "<FORECAST> {<OF>|*} <WEATHER>"
-            ],
-            "metadata": { "DESCRIPTION": "Future weather forecast." }
+                "{<PHENOMENON>|<WEATHER>|*} <FORECAST>",
+                "<FORECAST> {<OF>|*} {<WEATHER>|<PHENOMENON>}"
+            ]
         }
     ],
     "defaultTrivia": "true"

@@ -36,12 +36,9 @@ public class SillyRobotProbeRunner {
      * @param args Command like arguments (none are required).
      */
     public static void main(String[] args) throws DLException {
-        // Create probe configuration with the provider instance.
-        DLProbeConfig cfg = new DLProbeConfig(new SillyRobotProvider());
-
-        // Start probe and wait synchronously for its exit code.
-        int exitCode = DLProbeDevApp.start(cfg);
-
-        System.exit(exitCode);
+        // 1. Create probe configuration with the provider instance.
+        // 2. Start probe.
+        // 3. Wait synchronously for its exit code.
+        System.exit(DLProbeDevApp.start(new DLProbeConfig(new SillyRobotProvider())));
     }
 }

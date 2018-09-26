@@ -10,8 +10,9 @@
 
 package com.datalingvo.examples.whereami
 
-import com.datalingvo.mdllib.DLTokenSolver._
+import com.datalingvo.mdllib.intent.DLIntentSolver._
 import com.datalingvo.mdllib._
+import com.datalingvo.mdllib.intent.{DLIntentSolver, DLIntentSolverContext}
 import com.datalingvo.mdllib.tools.builder.DLModelBuilder
 import com.datalingvo.mdllib.tools.scala.DLScalaSupport._
 
@@ -29,13 +30,13 @@ class WhereAmIProvider extends DLSingleModelProviderAdapter {
       * @param ctx Token solver context.
       * @return Static Google map query result.
       */
-    private def onMatch(ctx: DLTokenSolverContext): DLQueryResult = {
-        val meta = ctx.getSentence.getMetadata
+    private def onMatch(ctx: DLIntentSolverContext): DLQueryResult = {
+        val sen = ctx.getQueryContext.getSentence
         
         // Default to some Silicon Valley location in case user's coordinates
         // cannot be determines.
-        val lat = meta.getDoubleOrElse("LATITUDE", 37.7749)
-        val lon = meta.getDoubleOrElse("LONGITUDE", 122.4194)
+        val lat = sen.getLatitude.orElse(37.7749)
+        val lon = sen.getLongitude.orElse(122.4194)
     
         DLQueryResult.jsonGmap(
             s"""
@@ -57,7 +58,8 @@ class WhereAmIProvider extends DLSingleModelProviderAdapter {
         )
     }
     
-    private val solver = new DLTokenSolver().addIntent(
+    private val solver = new DLIntentSolver().addIntent(
+        "where",
         new CONV_INTENT("id == wai:where", 1, 1),
         onMatch _ // Callback on match.
     )
