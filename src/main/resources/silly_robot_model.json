@@ -55,7 +55,7 @@
             "description": "Object to control.",
             "group": "subject",
             "synonyms": [
-                "{`JJ`|`JJR`|`JJS`|`VBG`|*} {`NN`|`NNS`|`NNP`|`NNPS`}"
+                "{```JJ```|```JJR```|```JJS```|```VBG```|*} {```NN```|```NNS```|```NNP```|```NNPS```}"
             ]
         }
 

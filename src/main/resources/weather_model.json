@@ -19,7 +19,7 @@
     "vendorContact": "Support",
     "vendorEmail": "info@datalingvo.com",
     "docsUrl": "https://www.datalingvo.com",
-    "macGeoTokens": 1,
+    "maxGeoTokens": 1,
     "maxDateTokens": 1,
     "examples": [
         "What's the local weather forecast?",

@@ -30,7 +30,7 @@ import static com.datalingvo.mdllib.utils.DLTokenUtils.*;
  * `Lesson 5` model provider.
  */
 @DLActiveModelProvider
-public class TimeProvider5 extends DLSingleModelProviderAdapter {
+public class TimeProvider5 extends DLModelProviderAdapter {
     static private Map<City, CityData> citiesData = CitiesDataProvider.get();
 
     /**

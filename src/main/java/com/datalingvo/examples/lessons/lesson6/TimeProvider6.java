@@ -28,7 +28,7 @@ import static java.time.format.FormatStyle.*;
  * `Lesson 6` model provider.
  */
 @DLActiveModelProvider
-public class TimeProvider6 extends DLSingleModelProviderAdapter {
+public class TimeProvider6 extends DLModelProviderAdapter {
     static private Map<City, CityData> citiesData = CitiesDataProvider.get();
 
     // Medium data formatter.

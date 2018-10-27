@@ -21,7 +21,7 @@ import com.datalingvo.mdllib.tools.builder.*;
  * `Lesson 2` model provider.
  */
 @DLActiveModelProvider
-public class TimeProvider2 extends DLSingleModelProviderAdapter {
+public class TimeProvider2 extends DLModelProviderAdapter {
     /**
      * Initializes provider.
      *

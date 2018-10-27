@@ -22,7 +22,7 @@ import com.datalingvo.mdllib.tools.scala.DLScalaSupport._ /* NOTE: IDEA wrongly 
   * easy demonstration of Linguist operations.
   */
 @DLActiveModelProvider
-class ChatProvider extends DLSingleModelProviderAdapter {
+class ChatProvider extends DLModelProviderAdapter {
     // Any immutable user defined ID.
     private final val MODEL_ID = "dl.chat.ex"
     

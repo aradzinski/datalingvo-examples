@@ -14,14 +14,14 @@ import com.datalingvo.DLException;
 import com.datalingvo.examples.lessons.utils.LessonsUtils;
 import com.datalingvo.mdllib.DLActiveModelProvider;
 import com.datalingvo.mdllib.DLQueryResult;
-import com.datalingvo.mdllib.DLSingleModelProviderAdapter;
+import com.datalingvo.mdllib.DLModelProviderAdapter;
 import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
 
 /**
  * `Lesson 1` model provider.
  */
 @DLActiveModelProvider
-public class TimeProvider1 extends DLSingleModelProviderAdapter {
+public class TimeProvider1 extends DLModelProviderAdapter {
     /**
      * Initializes provider.
      *

@@ -29,7 +29,7 @@ import static com.datalingvo.mdllib.utils.DLTokenUtils.*;
  * The model will voice-reply the acknowledgement of the operation: "car has been started", etc.
  */
 @DLActiveModelProvider
-public class SillyRobotProvider extends DLSingleModelProviderAdapter {
+public class SillyRobotProvider extends DLModelProviderAdapter {
     // Robot's memory.
     private final Set<String> mem = new HashSet<>();
 

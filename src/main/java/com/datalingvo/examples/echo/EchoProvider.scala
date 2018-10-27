@@ -27,7 +27,7 @@ import scala.collection.Seq
   * and all DataLingvo provided information that a user defined model can operate on.
   */
 @DLActiveModelProvider
-class EchoProvider extends DLSingleModelProviderAdapter {
+class EchoProvider extends DLModelProviderAdapter {
     // Any immutable user defined ID.
     private final val MODEL_ID = "dl.echo.ex"
     

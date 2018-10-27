@@ -34,7 +34,7 @@ import static com.datalingvo.mdllib.utils.DLTokenUtils.*;
  * weather information.
  */
 @DLActiveModelProvider
-public class WeatherProvider extends DLSingleModelProviderAdapter {
+public class WeatherProvider extends DLModelProviderAdapter {
     // It is demo token and its usage has some restrictions (history data contains one day only, etc).
     // Please register your own account at https://www.apixu.com/pricing.aspx and
     // replace this demo token with your own.

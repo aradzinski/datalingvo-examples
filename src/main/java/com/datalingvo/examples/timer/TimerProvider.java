@@ -34,7 +34,7 @@ import static java.time.temporal.ChronoUnit.MILLIS;
  * time (and not only for a duration) and can play with the way the system reacts when the timer is up.
  */
 @DLActiveModelProvider
-public class TimerProvider extends DLSingleModelProviderAdapter {
+public class TimerProvider extends DLModelProviderAdapter {
     private static final DateTimeFormatter FMT =
         DateTimeFormatter.ofPattern("'<b>'HH'</b>h' '<b>'mm'</b>m' '<b>'ss'</b>s'").withZone(ZoneId.systemDefault());
     

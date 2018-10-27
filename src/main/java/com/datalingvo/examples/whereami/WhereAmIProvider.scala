@@ -23,7 +23,7 @@ import com.datalingvo.mdllib.tools.scala.DLScalaSupport._
   * current location responding with a Google map.
   */
 @DLActiveModelProvider
-class WhereAmIProvider extends DLSingleModelProviderAdapter {
+class WhereAmIProvider extends DLModelProviderAdapter {
     /**
       * Callback on matching intent.
       *

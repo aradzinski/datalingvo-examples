@@ -13,7 +13,7 @@ package com.datalingvo.examples.helloworld;
 import com.datalingvo.DLException;
 import com.datalingvo.mdllib.DLActiveModelProvider;
 import com.datalingvo.mdllib.DLQueryResult;
-import com.datalingvo.mdllib.DLSingleModelProviderAdapter;
+import com.datalingvo.mdllib.DLModelProviderAdapter;
 import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
 
 /**
@@ -23,7 +23,7 @@ import com.datalingvo.mdllib.tools.builder.DLModelBuilder;
  * user model that can be defined.
  */
 @DLActiveModelProvider
-public class HelloWorldProvider extends DLSingleModelProviderAdapter {
+public class HelloWorldProvider extends DLModelProviderAdapter {
     /**
      * Initializes provider.
      *

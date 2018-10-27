@@ -32,7 +32,7 @@ import static java.time.format.FormatStyle.*;
  * of the location (default or provided by the user).
  */
 @DLActiveModelProvider
-public class TimeProvider extends DLSingleModelProviderAdapter {
+public class TimeProvider extends DLModelProviderAdapter {
     // Medium data formatter.
     static private final DateTimeFormatter FMT = DateTimeFormatter.ofLocalizedDateTime(MEDIUM);
 
