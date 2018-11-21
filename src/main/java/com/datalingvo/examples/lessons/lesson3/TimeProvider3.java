@@ -38,8 +38,7 @@ public class TimeProvider3 extends DLModelProviderAdapter {
         );
         
         solver.addIntent(
-            "time",
-            new NON_CONV_INTENT("id == x:time", 1, 1),
+            new NON_CONV_INTENT("time", "id == x:time", 1, 1),
             ctx -> DLQueryResult.text(LessonsUtils.now())
         );
 

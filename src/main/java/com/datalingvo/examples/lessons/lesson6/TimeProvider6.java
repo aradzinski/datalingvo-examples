@@ -163,8 +163,8 @@ public class TimeProvider6 extends DLModelProviderAdapter {
 
         // Check for exactly one 'x:time' token. 'dl:geo' is optional.
         solver.addIntent(
-            "time|city?",
             new NON_CONV_INTENT(
+                "time|city?",
                 new TERM("id == x:time", 1, 1),
                 new TERM(
                     new AND(

@@ -170,16 +170,15 @@ public class TimeProvider extends DLModelProviderAdapter {
         // Check for exactly one 'x:time' token **without** looking into conversation context.
         // That's an indication of asking for local time only.
         solver.addIntent(
-            "time",
-            new NON_CONV_INTENT("id == x:time", 1, 1), // Term idx=0.
+            new NON_CONV_INTENT("time", "id == x:time", 1, 1), // Term idx=0.
             this::onLocalMatch
         );
 
         // Check for exactly one 'x:time' and one 'dl:geo' CITY token **including** conversation
         // context. This is always remote time.
         solver.addIntent(
-            "c^time|city",
             new CONV_INTENT(
+                "c^time|city",
                 new TERM("id == x:time", 1, 1), // Term idx=0.
                 new TERM(
                     new AND(                    // Term idx=1.

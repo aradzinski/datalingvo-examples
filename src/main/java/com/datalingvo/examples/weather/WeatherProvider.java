@@ -411,8 +411,9 @@ public class WeatherProvider extends DLModelProviderAdapter {
      * @param weatherTokId Specific weather token ID.
      * @return Newly created intent.
      */
-    private INTENT makeTerms(String weatherTokId) {
+    private INTENT mkIntent(String id, String weatherTokId) {
         return new CONV_INTENT(
+            id,
             new TERM("id == " + weatherTokId, 1, 1),     // Index 0: mandatory 'weather' token.
             new TERM("id == dl:date", 0, 1),           // Index 1: optional date.
             new TERM(                                  // Index 2: optional city.
@@ -436,9 +437,9 @@ public class WeatherProvider extends DLModelProviderAdapter {
         });
 
         // Match exactly one of weather tokens and optional 'dl:geo' and 'dl:date' tokens.
-        solver.addIntent("hist|date?|city?", makeTerms("wt:hist"), this::onHistoryMatch);
-        solver.addIntent("fcast|date?|city?", makeTerms("wt:fcast"), this::onForecastMatch);
-        solver.addIntent("curr|date?|city?", makeTerms("wt:curr"), this::onCurrentMatch);
+        solver.addIntent(mkIntent("hist|date?|city?", "wt:hist"), this::onHistoryMatch);
+        solver.addIntent(mkIntent("fcast|date?|city?", "wt:fcast"), this::onForecastMatch);
+        solver.addIntent(mkIntent("curr|date?|city?", "wt:curr"), this::onCurrentMatch);
 
         setup(DLModelBuilder
             .newJsonModel(modelPath)

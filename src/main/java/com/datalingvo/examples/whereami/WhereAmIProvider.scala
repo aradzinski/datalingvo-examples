@@ -59,8 +59,10 @@ class WhereAmIProvider extends DLModelProviderAdapter {
     }
     
     private val solver = new DLIntentSolver().addIntent(
-        "where",
-        new CONV_INTENT("id == wai:where", 1, 1),
+        new CONV_INTENT(
+            "where",
+            "id == wai:where", 1, 1
+        ),
         onMatch _ // Callback on match.
     )
     

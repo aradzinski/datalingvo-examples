@@ -48,8 +48,8 @@ public class TimerProvider extends DLModelProviderAdapter {
         DLIntentSolver solver = new DLIntentSolver(null, () -> { throw new DLCuration(); });
         
         solver.addIntent(
-            "timer|num{1+}",
             new NON_CONV_INTENT(
+                "timer|num{1+}",
                 new TERM("id == x:timer", 1, 1),
                 new TERM(
                     new AND("id == dl:num", "~NUM_UNITTYPE == datetime", "~NUM_ISEQUALCONDITION == true"),

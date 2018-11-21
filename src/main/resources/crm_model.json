@@ -1,0 +1,396 @@
+/*
+ * 2017 Copyright (C) DataLingvo, Inc. All Rights Reserved.
+ *       ___      _          __ _
+ *      /   \__ _| |_ __ _  / /(_)_ __   __ ___   _____
+ *     / /\ / _` | __/ _` |/ / | | '_ \ / _` \ \ / / _ \
+ *    / /_// (_| | || (_| / /__| | | | | (_| |\ V / (_) |
+ *   /___,' \__,_|\__\__,_\____/_|_| |_|\__, | \_/ \___/
+ *                                      |___/
+ *
+ * CRM example model.
+ */
+
+{
+    "id": "dl.crm.ex",
+    "name": "CRM Example Model",
+    "version": "1.0",
+    "description": "CRM example model.",
+    "vendorName": "DataLingvo, Inc",
+    "vendorUrl": "https://www.datalingvo.com",
+    "vendorContact": "Support",
+    "vendorEmail": "info@datalingvo.com",
+    "docsUrl": "https://www.datalingvo.com",
+    "maxGeoTokens": 1,
+    "examples": [
+        "customer data",
+        "products data",
+        "suppliers data",
+        "orders data",
+        "orders data for september 2016",
+        "campaign data",
+        "campaign data for september 2016",
+        "orders for campaigns",
+        "orders for campaigns for september 2016"
+    ],
+    "macros": [
+        {
+            "name": "<ID>",
+            "macro": "{id|identifier|key}"
+        }
+    ],
+    "elements": [
+        {
+            "id": "x:order",
+            "group": "table",
+            "synonyms": [
+                "order"
+            ],
+            "metadata": {
+                "TABLE": "orders",
+                "DATE_COLUMN": "ORDER_DATE",
+                "SOURCE": "db"
+            }
+        },
+        {
+            "id": "x:orderId",
+            "group": "column",
+            "synonyms": [
+                "order <ID>"
+            ],
+            "parentId": "x:order",
+            "metadata": {
+                "COLUMN": "ID"
+            }
+        },
+        {
+            "id": "x:orderDate",
+            "group": "column",
+            "synonyms": [
+                "order date"
+            ],
+            "parentId": "x:order",
+            "metadata": {
+                "COLUMN": "ORDER_DATE"
+            }
+        },
+        {
+            "id": "x:orderNumber",
+            "group": "column",
+            "synonyms": [
+                "order number"
+            ],
+            "parentId": "x:order",
+            "metadata": {
+                "COLUMN": "ORDER_NUMBER"
+            }
+        },
+        {
+            "id": "x:orderTotalAmount",
+            "group": "column",
+            "synonyms": [
+                "order total amount"
+            ],
+            "parentId": "x:order",
+            "metadata": {
+                "COLUMN": "TOTAL_AMOUNT"
+            }
+        },
+        {
+            "id": "x:orderItem",
+            "group": "table",
+            "synonyms": [
+                "order item"
+            ],
+            "metadata": {
+                "TABLE": "order_items",
+                "SOURCE": "db"
+            }
+        },
+        {
+            "id": "x:orderItemId",
+            "group": "column",
+            "synonyms": [
+                "order item <ID>"
+            ],
+            "parentId": "x:orderItem",
+            "metadata": {
+                "COLUMN": "ID"
+            }
+        },
+        {
+            "id": "x:orderItemQuantity",
+            "group": "column",
+            "synonyms": [
+                "order item quantity"
+            ],
+            "parentId": "x:orderItem",
+            "metadata": {
+                "COLUMN": "QUANTITY"
+            }
+        },
+        {
+            "id": "x:customer",
+            "group": "table",
+            "synonyms": [
+                "customer"
+            ],
+            "metadata": {
+                "TABLE": "customers",
+                "SOURCE": "db"
+            }
+        },
+        {
+            "id": "x:customerId",
+            "group": "column",
+            "synonyms": [
+                "customer <ID>"
+            ],
+            "parentId": "x:customer",
+            "metadata": {
+                "COLUMN": "ID"
+            }
+        },
+        {
+            "id": "x:customerFirstName",
+            "group": "column",
+            "synonyms": [
+                "customer first name"
+            ],
+            "parentId": "x:customer",
+            "metadata": {
+                "COLUMN": "FIRST_NAME"
+            }
+        },
+        {
+            "id": "x:customerLastName",
+            "group": "column",
+            "synonyms": [
+                "customer last name"
+            ],
+            "parentId": "x:customer",
+            "metadata": {
+                "COLUMN": "LAST_NAME"
+            }
+        },
+        {
+            "id": "x:customerCity",
+            "group": "column",
+            "synonyms": [
+                "customer city"
+            ],
+            "parentId": "x:customer",
+            "metadata": {
+                "COLUMN": "CITY"
+            }
+        },
+        {
+            "id": "x:customerCountry",
+            "group": "column",
+            "synonyms": [
+                "customer country"
+            ],
+            "parentId": "x:customer",
+            "metadata": {
+                "COLUMN": "COUNTRY"
+            }
+        },
+        {
+            "id": "x:customerPhone",
+            "group": "column",
+            "synonyms": [
+                "customer phone"
+            ],
+            "parentId": "x:customer",
+            "metadata": {
+                "COLUMN": "PHONE"
+            }
+        },
+        {
+            "id": "x:product",
+            "group": "table",
+            "synonyms": [
+                "product"
+            ],
+            "metadata": {
+                "TABLE": "products",
+                "SOURCE": "db"
+            }
+        },
+        {
+            "id": "x:productId",
+            "group": "column",
+            "synonyms": [
+                "product <ID>"
+            ],
+            "parentId": "x:product",
+            "metadata": {
+                "COLUMN": "ID"
+            }
+        },
+        {
+            "id": "x:productName",
+            "group": "column",
+            "synonyms": [
+                "product name"
+            ],
+            "parentId": "x:product",
+            "metadata": {
+                "COLUMN": "NAME"
+            }
+        },
+        {
+            "id": "x:productUnitPrice",
+            "group": "column",
+            "synonyms": [
+                "product unit price"
+            ],
+            "parentId": "x:product",
+            "metadata": {
+                "COLUMN": "UNIT_PRICE"
+            }
+        },
+        {
+            "id": "x:supplier",
+            "group": "table",
+            "synonyms": [
+                "supplier"
+            ],
+            "metadata": {
+                "TABLE": "suppliers",
+                "SOURCE": "db"
+            }
+        },
+        {
+            "id": "x:supplierId",
+            "group": "column",
+            "synonyms": [
+                "supplier <ID>"
+            ],
+            "parentId": "x:supplier",
+            "metadata": {
+                "COLUMN": "ID"
+            }
+        },
+        {
+            "id": "x:supplierName",
+            "group": "column",
+            "synonyms": [
+                "supplier name"
+            ],
+            "parentId": "x:supplier",
+            "metadata": {
+                "COLUMN": "NAME"
+            }
+        },
+        {
+            "id": "x:supplierCity",
+            "group": "column",
+            "synonyms": [
+                "supplier city"
+            ],
+            "parentId": "x:supplier",
+            "metadata": {
+                "COLUMN": "CITY"
+            }
+        },
+        {
+            "id": "x:supplierCountry",
+            "group": "column",
+            "synonyms": [
+                "supplier country"
+            ],
+            "parentId": "x:supplier",
+            "metadata": {
+                "COLUMN": "COUNTRY"
+            }
+        },
+        {
+            "id": "x:supplierPhone",
+            "group": "column",
+            "synonyms": [
+                "supplier phone"
+            ],
+            "parentId": "x:supplier",
+            "metadata": {
+                "COLUMN": "PHONE"
+            }
+        },
+        {
+            "id": "x:campaign",
+            "group": "table",
+            "synonyms": [
+                "campaign"
+            ],
+            "metadata": {
+                "TABLE": "campaigns",
+                "SOURCE": "excel"
+            }
+        },
+        {
+            "id": "x:campaignId",
+            "group": "column",
+            "synonyms": [
+                "campaign <ID>"
+            ],
+            "parentId": "x:campaign",
+            "metadata": {
+                "COLUMN": "ID"
+            }
+        },
+        {
+            "id": "x:campaignStartDate",
+            "group": "column",
+            "synonyms": [
+                "campaign start date"
+            ],
+            "parentId": "x:campaign",
+            "metadata": {
+                "COLUMN": "START_DATE"
+            }
+        },
+        {
+            "id": "x:campaignEndDate",
+            "group": "column",
+            "synonyms": [
+                "campaign end date"
+            ],
+            "parentId": "x:campaign",
+            "metadata": {
+                "COLUMN": "END_DATE"
+            }
+        },
+        {
+            "id": "x:campaignTotalSpend",
+            "group": "column",
+            "synonyms": [
+                "campaign total spend"
+            ],
+            "parentId": "x:campaign",
+            "metadata": {
+                "COLUMN": "TOTAL_SPEND"
+            }
+        },
+        {
+            "id": "x:campaignTotalType",
+            "group": "column",
+            "synonyms": [
+                "campaign type"
+            ],
+            "parentId": "x:campaign",
+            "metadata": {
+                "COLUMN": "TYPE"
+            }
+        },
+        {
+            "id": "x:campaignDescription",
+            "group": "column",
+            "synonyms": [
+                "campaign description"
+            ],
+            "parentId": "x:campaign",
+            "metadata": {
+                "COLUMN": "DESCRIPTION"
+            }
+        }
+    ]
+}

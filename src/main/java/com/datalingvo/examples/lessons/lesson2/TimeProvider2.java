@@ -41,7 +41,7 @@ public class TimeProvider2 extends DLModelProviderAdapter {
             );
         
         solver.addIntent(
-            new INTENT(false, false, new DLIntentSolver.TERM("id == x:time", 1, 1)),
+            new INTENT(null, false, false, new DLIntentSolver.TERM("id == x:time", 1, 1)),
             ctx -> DLQueryResult.text(LessonsUtils.now())
         );
     

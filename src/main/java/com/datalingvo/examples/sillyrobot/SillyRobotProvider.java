@@ -110,8 +110,8 @@ public class SillyRobotProvider extends DLModelProviderAdapter {
         BiConsumer<String, IntentCallback> intentMaker =
             (id, f/* Callback. */) ->
                 solver.addIntent(
-                    id + "|subject",
                     new CONV_INTENT(
+                        id + "|subject",
                         // Term idx=0:
                         // A non-interactive term that is either 'state', 'start' or 'stop'.
                         // ID of the element should be 'ctrl:start', 'ctrl:state', or 'ctrl:stop'.
